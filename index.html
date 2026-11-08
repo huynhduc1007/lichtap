@@ -88,27 +88,14 @@ textarea{resize:vertical;min-height:64px}
 .how summary{color:var(--accent)}
 .how ul{margin-bottom:8px}
 .how a{color:var(--accent);font-weight:600}
-.mach{margin:4px 0 8px;display:grid;gap:4px}
-.mach svg{width:100%;max-width:380px;height:auto;display:block;background:var(--sunk);border-radius:8px}
+.photo{margin:4px 0 10px;display:grid;gap:4px}
+.photo img{width:100%;height:auto;border-radius:8px;display:block;background:var(--sunk)}
+.photo figcaption{font-size:.72rem;color:var(--muted)}
+.photo figcaption a{color:var(--muted);font-weight:500}
 .mk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;margin:4px 0 10px}
 .mk dt{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;padding-top:3px}
 .mk dd{margin:0}
-.m-floor{stroke:var(--line);stroke-width:2}
-.m-frame{stroke:var(--muted);stroke-width:3;stroke-linecap:round}
-.m-dash{stroke:var(--muted);stroke-width:2;stroke-dasharray:5 4}
-.m-thin{stroke:var(--muted);stroke-width:1.5}
-.m-pad{fill:var(--surface);stroke:var(--muted);stroke-width:2}
-.m-plate{fill:var(--surface);stroke:var(--muted);stroke-width:3}
-.m-dot{fill:var(--muted)}
-.m-cable{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 2}
-.m-fig{stroke:var(--fg);stroke-width:5;stroke-linecap:round}
-.m-head{fill:var(--fg)}
-.m-hd{fill:var(--accent)}
-.m-db{fill:var(--fg)}
-.m-arr{stroke:var(--accent);stroke-width:2.5}
-.m-ahp{fill:var(--accent)}
-.m-lab{fill:var(--accent);font:600 11px var(--f-body)}
-.m-note{fill:var(--muted);font:500 10px var(--f-body)}
+.links{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
 .sets{display:grid;gap:6px}
 .set{display:grid;grid-template-columns:28px 1fr 18px 1fr;gap:6px;align-items:center}
 .set .i{font-family:var(--f-display);color:var(--muted);text-align:center}
@@ -214,6 +201,27 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
         <tbody id="phase-table"></tbody>
       </table></div>
       <p class="small muted">Compound: bài nhiều khớp (squat, press, row, RDL…). Cô lập: bài một khớp (curl, lateral raise, leg curl…), được tập sát giới hạn hơn vì ít mỏi toàn thân và ít rủi ro.</p>
+
+
+      <h2>Khối lượng mỗi nhóm cơ</h2>
+      <p class="small muted">Số set khó mỗi tuần, tuần thường. Set gián tiếp tính ½ (vd row cũng làm tay trước, nên mỗi set row tính ½ set tay trước).</p>
+      <div class="tw"><table>
+        <thead><tr><th>Nhóm cơ</th><th>Trực tiếp</th><th>Tính cả gián tiếp</th></tr></thead>
+        <tbody>
+          <tr><td>Ngực</td><td class="n">10</td><td class="n">10</td></tr>
+          <tr><td>Lưng (xô + lưng giữa)</td><td class="n">12</td><td class="n">13,5</td></tr>
+          <tr><td>Vai giữa</td><td class="n">8</td><td class="n">9,5</td></tr>
+          <tr><td>Vai sau</td><td class="n">5</td><td class="n">8</td></tr>
+          <tr><td>Vai trước</td><td class="n">3</td><td class="n">7</td></tr>
+          <tr><td>Tay trước</td><td class="n">4</td><td class="n">10</td></tr>
+          <tr><td>Tay sau</td><td class="n">4</td><td class="n">9,5</td></tr>
+          <tr><td>Đùi trước</td><td class="n">11</td><td class="n">11</td></tr>
+          <tr><td>Đùi sau</td><td class="n">9</td><td class="n">9</td></tr>
+          <tr><td>Mông</td><td class="n">3</td><td class="n">9</td></tr>
+          <tr><td>Bắp chân</td><td class="n">6</td><td class="n">6</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Mục tiêu khoảng 10 set cho mỗi nhóm cơ lớn, đủ để tăng cơ khi đang ăn thâm hụt. Tuần 7–27/12 thêm 1 set ở bài chính, ngực lên 12 và lưng lên 14. Tuần 9–15/11 bớt 1 set mỗi bài để gân và khớp làm quen lại.</p>
 
       <h2 id="chon-ta">Chọn mức tạ</h2>
       <div class="card" id="guide"></div>
@@ -458,7 +466,6 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
   </div>
 </nav>
 <div class="toast" id="toast" hidden></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="m-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="m-ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs></svg>
 
 <script>
 (function(){
@@ -470,17 +477,17 @@ function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
 /* ---------- program ---------- */
 const PROGRAM={
  UA:{name:'Upper A',sub:'Đẩy/kéo nặng',plate:'blue',ex:[
-  {id:'ua1',name:'Machine chest press',sets:3,reps:'6–8',top:8,rest:'nghỉ 2–3 phút',main:true,yt:'machine chest press proper form',note:'Không hạ quá sâu: dừng khi khuỷu ngang thân.',
+  {id:'ua1',name:'Machine chest press',sets:4,reps:'6–8',top:8,rest:'nghỉ 2–3 phút',main:true,yt:'machine chest press proper form',note:'Không hạ quá sâu: dừng khi khuỷu ngang thân.',
    how:['Chỉnh ghế để tay cầm ngang giữa ngực. Lưng và đầu áp đệm, ép hai bả vai ra sau và xuống, giữ suốt set.','Khuỷu tạo góc khoảng 45–60° với thân, không bè ngang 90°.','Đẩy ra tới gần thẳng tay, không khoá cứng khuỷu, vai không nhô khỏi đệm.','Hạ về 2–3 giây, dừng khi khuỷu ngang thân.'],
    v:{from:'2026-11-16',name:'Bench đòn hoặc machine chest press',yt:'barbell bench press proper form',note:'Bench đòn chỉ khi tuần trước đau ngực 0–1/10. Bắt đầu 60 kg × 8, chạm ngực có kiểm soát, không nảy.',
     how:['Nằm mắt ngay dưới đòn. Bả vai ép ra sau và xuống, ngực ưỡn nhẹ, hai chân đạp chắc xuống sàn.','Tay cầm rộng hơn vai khoảng một nắm tay, cổ tay thẳng trên khuỷu.','Hạ 2 giây, chạm nhẹ vùng dưới ngực, khuỷu khoảng 45–70°. Không nảy đòn.','Đẩy lên và hơi về phía mặt, mông luôn chạm ghế. Dùng thanh an toàn hoặc người canh khi nặng.']}},
-  {id:'ua2',name:'Row có tì ngực',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',main:true,yt:'chest supported row machine form',note:'Chest-supported row hoặc T-bar có đệm, lưng dưới không phải gồng.',
+  {id:'ua2',name:'Row có tì ngực',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',main:true,yt:'chest supported row machine form',note:'Máy bận thì làm Dumbbell chest-supported row trên ghế dốc 30–45°, cùng số set và rep.',
    how:['Ngực tì đệm, chân đặt vững.','Mở đầu bằng kéo bả vai về sau, rồi kéo khuỷu về phía hông.','Dừng 1 giây khi khuỷu ra sau thân, siết lưng giữa.','Duỗi tay về trước 2 giây, để bả vai trượt ra trước cho lưng được giãn.']},
   {id:'ua3',name:'Lat pulldown tay trung tính',sets:3,reps:'8–10',top:10,rest:'nghỉ 2 phút',yt:'neutral grip lat pulldown form',
    how:['Chỉnh đệm đùi cho chặt. Ngả người ra sau khoảng 10–15°, ngực hướng lên.','Kéo tay cầm xuống ngực trên, nghĩ tới việc đưa khuỷu xuống túi quần sau.','Không giật người ra sau để lấy đà.','Lên lại 2 giây tới khi tay gần thẳng và thấy lưng xô được kéo giãn.']},
   {id:'ua4',name:'Machine shoulder press',sets:3,reps:'10–12',top:12,rest:'nghỉ 90 giây',yt:'machine shoulder press proper form',note:'Tạ vừa phải, 10–12 rep để vai trái chịu tải nhẹ hơn. Sáng nay vai trái đau hơn hôm CN thì bỏ bài này.',
    how:['Chỉnh ghế để tay cầm bắt đầu ngang cằm. Máy có tay cầm trung tính (lòng bàn tay hướng vào nhau) thì dùng loại đó.','Lưng áp đệm, siết bụng, không ưỡn lưng dưới.','Đẩy lên tới gần thẳng tay, không nhún vai lên tai.','Hạ 2–3 giây về ngang cằm, không sâu hơn. Vai trái đau quá 3/10 thì giảm tạ hoặc chỉ tập nửa trên biên độ.']},
-  {id:'ua6',name:'Lateral raise tạ đơn',iso:true,sets:3,reps:'12–15',top:15,rest:'chuyển ngay sang EZ curl',ss:'A',yt:'dumbbell lateral raise proper form',
+  {id:'ua6',name:'Lateral raise tạ đơn',iso:true,sets:4,reps:'12–15',top:15,rest:'chuyển ngay sang EZ curl. 2 set cuối làm riêng',ss:'A',yt:'dumbbell lateral raise proper form',
    how:['Đứng thẳng hoặc hơi nghiêng trước, khuỷu hơi cong.','Nâng tay sang ngang và hơi về trước (khoảng 30° trước thân) tới ngang vai.','Dẫn bằng khuỷu, không nhún vai, không đung đưa người.','Hạ chậm 2–3 giây.']},
   {id:'ua7',name:'EZ curl',iso:true,sets:2,reps:'10–12',top:12,rest:'nghỉ 60–90 giây rồi lặp lại cặp',ss:'A',yt:'ez bar curl proper form',
    how:['Đứng thẳng, khuỷu sát thân và đứng yên.','Cuốn tạ lên tới khi cẳng tay gần thẳng đứng, khuỷu không đưa ra trước.','Không ngả lưng lấy đà.','Hạ 2–3 giây tới gần thẳng tay.']},
@@ -506,18 +513,18 @@ const PROGRAM={
    how:['Khuỷu ngay dưới vai, người thẳng từ đầu đến chân.','Đẩy hông lên, không để võng. Thở đều.','Quá khó thì để gối chạm sàn.']}
  ]},
  UB:{name:'Upper B',sub:'Phì đại',plate:'yellow',ex:[
-  {id:'ub1',name:'Incline DB press tay trung tính',sets:3,reps:'8–12',top:12,rest:'nghỉ 2 phút',main:true,yt:'neutral grip incline dumbbell press',note:'Hoặc incline machine press.',
+  {id:'ub1',name:'Incline DB press tay trung tính',sets:4,reps:'8–12',top:12,rest:'nghỉ 2 phút',main:true,yt:'neutral grip incline dumbbell press',note:'Hoặc incline machine press.',
    how:['Ghế dốc 30°, lòng bàn tay hướng vào nhau.','Bả vai ép ra sau và xuống, ngực ưỡn nhẹ, chân đạp sàn.','Hạ 2–3 giây tới khi tạ ngang ngực, khuỷu luôn ở dưới tạ.','Đẩy lên và hơi chụm vào phía trên ngực. Không đập hai tạ vào nhau.']},
   {id:'ub2',name:'1-arm DB row',sets:3,reps:'10–12/bên',top:12,rest:'nghỉ 90 giây',main:true,yt:'one arm dumbbell row proper form',note:'Tì ghế, tay trái trước.',
    how:['Một tay và một gối tì ghế, lưng phẳng song song sàn.','Kéo tạ về phía hông (không kéo lên vai), khuỷu sát thân.','Siết lưng 1 giây ở đỉnh, không xoay người.','Hạ chậm, để vai được kéo giãn xuống dưới.']},
   {id:'ub3',name:'Pull-up có hỗ trợ',sets:3,reps:'8–12',top:12,rest:'nghỉ 2 phút',yt:'assisted pull up machine form',note:'Hoặc lat pulldown tay rộng. Ô kg: ghi mức đỡ của máy.',
    how:['Chọn mức đỡ để đạt đúng dải rep. Tay rộng hơn vai một chút.','Bắt đầu từ tay thẳng, kéo bả vai xuống trước, rồi kéo ngực lên về phía tay cầm.','Cằm qua tay cầm, không vươn cổ.','Xuống chậm 2–3 giây tới gần thẳng tay.']},
-  {id:'ub4',name:'Seated cable row',sets:2,reps:'10–12',top:12,rest:'nghỉ 90 giây',yt:'seated cable row proper form',
-   how:['Ngồi thẳng lưng, gối hơi cong, tay cầm chữ V.','Kéo về bụng trên, khuỷu sát thân, ưỡn ngực, ép bả vai.','Thân giữ yên, không ngả ra sau lấy đà.','Duỗi tay chậm về trước, để bả vai trượt ra trước.']},
-  {id:'ub5',name:'Cable lateral raise 1 tay',iso:true,sets:3,reps:'12–20',top:20,rest:'nghỉ 60 giây',yt:'single arm cable lateral raise',note:'Tay trái trước.',
-   how:['Ròng rọc thấp nhất, đứng nghiêng, tay xa ròng rọc cầm tay cầm (dây chéo trước người).','Nâng tay sang ngang tới ngang vai, khuỷu hơi cong, dẫn bằng khuỷu.','Không nhún vai, không nghiêng người.','Hạ chậm 2–3 giây.']},
+  {id:'ub10',name:'Pec deck fly',iso:true,sets:2,reps:'12–15',top:15,rest:'nghỉ 60 giây',yt:'pec deck machine fly proper form',note:'Biên độ vừa phải: mở tay tới khi tay ngang thân, không kéo ra sau thân.',
+   how:['Chỉnh ghế để tay cầm ngang ngực giữa. Lưng và đầu tựa đệm, bả vai ép ra sau.','Khuỷu hơi cong và giữ nguyên góc đó suốt bài.','Khép tay vào trước ngực, siết ngực 1 giây.','Mở ra chậm 2–3 giây, dừng khi tay ngang thân. Không mở quá sâu để tránh kéo căng vùng sụn sườn.']},
   {id:'ub6',name:'Rear delt fly máy',iso:true,sets:2,reps:'15',top:15,rest:'nghỉ 60 giây',yt:'reverse pec deck rear delt fly',
    how:['Ngồi quay mặt vào đệm máy pec deck, tay cầm ngang vai.','Mở tay ra sau theo vòng cung, khuỷu hơi cong, tới khi tay ngang thân.','Không ép bả vai quá mạnh, để vai sau làm việc.','Về chậm.']},
+  {id:'ub5',name:'Cable lateral raise 1 tay',iso:true,sets:4,reps:'12–20',top:20,rest:'nghỉ 60 giây',yt:'single arm cable lateral raise',note:'Tay trái trước.',
+   how:['Ròng rọc thấp nhất, đứng nghiêng, tay xa ròng rọc cầm tay cầm (dây chéo trước người).','Nâng tay sang ngang tới ngang vai, khuỷu hơi cong, dẫn bằng khuỷu.','Không nhún vai, không nghiêng người.','Hạ chậm 2–3 giây.']},
   {id:'ub7',name:'Incline DB curl',iso:true,sets:2,reps:'10–15',top:15,rest:'chuyển ngay sang bài sau',ss:'A',yt:'incline dumbbell curl proper form',
    how:['Ghế dốc 45–60°, lưng tựa, tay buông thẳng phía sau thân.','Cuốn tạ lên, khuỷu không đưa ra trước.','Hạ hết biên độ trong 3 giây. Tư thế này kéo giãn bắp tay tốt.']},
   {id:'ub8',name:'Overhead cable triceps extension',iso:true,sets:2,reps:'10–15',top:15,rest:'nghỉ 60 giây rồi lặp lại cặp',ss:'A',yt:'overhead cable triceps extension rope',
@@ -551,122 +558,57 @@ const PROGRAM={
   {id:'fb5',name:'Lateral raise',iso:true,sets:2,reps:'12–15',top:15,rest:'nghỉ 60 giây',how:['Kỹ thuật như ở Upper A.']}
  ]}
 };
-/* ---------- máy: sơ đồ + nhận diện ---------- */
+/* ---------- máy: ảnh thật + nhận diện ---------- */
+const PHOTO={"ua1": {"f": "ua1.jpg", "w": 640, "h": 427, "a": "Tyler Read", "l": "CC BY 2.0", "p": "https://commons.wikimedia.org/wiki/File:Girl_doing_chest_press_machine_exercise.jpg"}, "ua1v": {"f": "ua1v.jpg", "w": 640, "h": 427, "a": "Lance Cpl. Ronald W. Stauffer", "l": "Public domain", "p": "https://commons.wikimedia.org/wiki/File:Bench_press_1.jpg"}, "ua3": {"f": "ua3.jpg", "w": 512, "h": 384, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:PulldownMachineExercise.JPG"}, "ua4": {"f": "ua4.jpg", "w": 576, "h": 400, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:ShoulderPressMachineExercise.JPG"}, "ua6": {"f": "ua6.jpg", "w": 576, "h": 472, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:DumbbellLateralRaise.JPG"}, "ua8": {"f": "ua8.jpg", "w": 512, "h": 512, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:CableMachinePushdown.JPG"}, "la1": {"f": "la1.jpg", "w": 332, "h": 515, "a": "Matus", "l": "CC BY 3.0", "p": "https://commons.wikimedia.org/wiki/File:Powerrack.jpg"}, "la4": {"f": "la4.jpg", "w": 512, "h": 384, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:LegExtensionMachineExercise.JPG"}, "ub1": {"f": "ub1.jpg", "w": 640, "h": 457, "a": "U.S. Navy photo by Mass Communication Specialist Seaman Jeff", "l": "Public domain", "p": "https://commons.wikimedia.org/wiki/File:US_Navy_070227-N-0998G-003_Operations_Specialist_3rd_Class_Greg_Ivy,_a_native_of_Sacramento,_Calif.,_incline_presses_two_30-pound_dumbbells_as_Quartermaster_Seaman_Julian_Marulanda,_a_native_of_Bridgeport,_Conn.,_acts_as_spotte.jpg"}, "ub2": {"f": "ub2.jpg", "w": 512, "h": 364, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:DumbbellBentOverRow.JPG"}, "ub6": {"f": "ub6.jpg", "w": 482, "h": 640, "a": "Aliva Sahoo", "l": "CC BY-SA 4.0", "p": "https://commons.wikimedia.org/wiki/File:Pec_deck_Fly.jpg"}, "lb1": {"f": "lb1.jpg", "w": 455, "h": 640, "a": "Wikideas1", "l": "CC0", "p": "https://commons.wikimedia.org/wiki/File:Back_extension_bench.webp"}, "lb2": {"f": "lb2.jpg", "w": 640, "h": 427, "a": "OliverSeitz", "l": "Public domain", "p": "https://commons.wikimedia.org/wiki/File:Shirtless_man_with_abs_-_Nawid_collection_31.jpg"}, "lb4": {"f": "lb4.jpg", "w": 640, "h": 320, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:LyingLegCurlMachineExercise.JPG"}, "lb5": {"f": "lb5.jpg", "w": 640, "h": 384, "a": "George Stepanek", "l": "CC BY-SA 3.0", "p": "https://commons.wikimedia.org/wiki/File:SeatedCalfRaiseMachineExercise.JPG"}};
 const MACH={
- ua1:{n:'Máy đẩy ngực ngồi (Seated Chest Press), loại chốt tạ hoặc gắn bánh tạ',
-  id:'Ghế ngồi, lưng dựng gần thẳng. Hai tay cầm ngang giữa ngực, đẩy thẳng ra trước theo phương ngang. Trong ảnh YouTube bạn gửi, máy ở ảnh 1, 2, 3, 5 đều là loại này.',
-  no:'Máy đẩy chếch lên (Incline press, như ảnh 4: ghế ngả, tay cầm cao) dành cho Upper B. Máy Pec deck / Butterfly (khép tay theo vòng cung) là bài ép ngực, không phải bài đẩy.',
-  alt:'Phòng có nhiều máy loại này thì ưu tiên máy có tay cầm dọc (lòng bàn tay hướng vào nhau). Máy Hammer Strength đẩy ngang, đẩy từng tay cũng được.',
-  d:{parts:[['stack',8,30,24,122],['line',32,22,32,152],['line',32,22,152,22],['line',152,22,152,74],['pad',50,48,10,62,-6],['pad',52,108,54,9],['line',79,117,79,152],['hd',152,80]],
-   fig:{H:[70,40],S:[70,56],P:[76,104],K:[120,106],A:[124,148],E:[110,74],W:[150,80]},arr:[[162,96,204,96,'đẩy ra trước',183,114,'middle']]}},
- ua1v:{n:'Ghế bench phẳng có trụ đỡ đòn (Flat Bench Press)',id:'Ghế nằm phẳng, hai trụ đỡ đòn ở đầu ghế.',alt:'Tạ nặng thì cần người canh hoặc thanh an toàn. Không có thì tiếp tục dùng máy đẩy ngực ngồi.',
-  d:{parts:[['line',60,40,60,104],['line',60,40,70,40],['pad',40,104,110,9],['line',56,113,56,152],['line',136,113,136,152],['plate',80,48,22]],
-   fig:{H:[56,96],S:[72,98],P:[122,98],K:[158,100],A:[164,150],E:[76,74],W:[80,50]},arr:[[116,76,116,42,'đẩy lên',122,60,'start']]}},
- ua2:{n:'Máy row ngồi có đệm tì ngực (Seated Row Machine, hoặc Hammer Strength Iso-Lateral Row)',
-  id:'Ngồi, ngực tì vào miếng đệm dựng đứng phía trước. Tay cầm nằm trước đệm, kéo về phía bụng và ngực. Không có dây cáp chạy dưới sàn.',
-  no:'Seated cable row (ghế dài sát sàn, đạp chân vào bàn đạp, kéo dây cáp, không có đệm ngực) là bài của Upper B.',
-  alt:'Không có máy này thì dùng T-bar row có đệm: nằm sấp trên đệm nghiêng, kéo đòn gắn bánh tạ.',
-  d:{parts:[['stack',208,30,24,122],['line',208,22,140,22],['line',140,22,140,152],['line',108,78,140,78],['pad',98,54,10,46],['line',180,22,166,68],['pad',42,108,50,9],['line',67,117,67,152],['hd',164,72]],
-   fig:{H:[92,44],S:[86,58],P:[66,104],K:[110,106],A:[116,148],E:[124,66],W:[162,72]},arr:[[196,96,150,96,'kéo về',173,114,'middle']]}},
- ua3:{n:'Máy Lat pulldown',id:'Ghế có đệm chặn đùi, dây cáp đi xuống từ ròng rọc trên cao. Thay thanh dài bằng tay cầm song song (2 tay cầm dọc).',no:'Không phải máy kéo xà có hỗ trợ (quỳ trên bệ).',alt:'Không có tay cầm song song thì dùng thanh thẳng, cầm ngửa rộng bằng vai.',
-  d:{parts:[['stack',208,30,24,122],['line',208,10,120,10],['pul',120,16],['cable',120,22,114,60],['pad',124,94,28,8],['line',152,98,208,98],['pad',76,110,46,9],['line',99,119,99,152],['hd',114,64]],
-   fig:{H:[92,50],S:[92,66],P:[98,106],K:[138,106],A:[142,148],E:[96,100],W:[114,64]},arr:[[136,28,136,56,'kéo xuống',142,44,'start']]}},
- ua4:{n:'Máy đẩy vai ngồi (Shoulder Press Machine)',id:'Ghế lưng cao dựng đứng, tay cầm ngang vai hoặc cằm, đẩy thẳng lên trên đầu.',no:'Máy đẩy ngực ngồi trông giống nhưng đẩy ra trước, không đẩy lên.',alt:'Máy có cả tay cầm ngang và tay cầm dọc thì dùng tay cầm dọc.',
-  d:{parts:[['stack',208,30,24,122],['line',208,22,102,22],['line',102,22,102,42],['pad',54,28,10,84],['pad',56,110,50,9],['line',81,119,81,152],['hd',102,46]],
-   fig:{H:[74,40],S:[74,56],P:[78,106],K:[120,108],A:[124,148],E:[94,80],W:[100,46]},arr:[[126,64,126,30,'đẩy lên',132,50,'start']]}},
- ua5:{n:'Trạm cáp (cable station) + dây thừng',id:'Cột có cục tạ và ròng rọc chỉnh được độ cao. Đặt ròng rọc ngang mắt, gắn dây thừng hai đầu có núm.',alt:'Hết dây thừng thì dùng 2 tay cầm đơn.',
-  d:{parts:[['stack',210,30,24,122],['line',206,10,206,152],['pul',198,40],['cable',192,40,132,40],['hd',130,40]],
-   fig:{H:[84,30],S:[84,48],P:[82,94],K:[84,122],A:[82,150],E:[108,50],W:[130,40]},arr:[[172,26,142,26,'kéo về trán',157,18,'middle']]}},
- ua6:{n:'Tạ đơn (dumbbell)',id:'Tập ở khu tạ đơn, bắt đầu khoảng 5–8 kg.'},
- ua7:{n:'Thanh EZ',id:'Thanh tạ ngắn uốn lượn hình sóng, thường gắn sẵn tạ hoặc lắp bánh tạ nhỏ.',alt:'Không có thì dùng tạ đơn.'},
- ua8:{n:'Trạm cáp + dây thừng hoặc thanh thẳng ngắn',id:'Ròng rọc đặt cao nhất. Tập ngay sau face pull ở cùng trạm.',
-  d:{parts:[['stack',210,30,24,122],['line',206,8,206,152],['pul',198,14],['cable',194,18,168,92],['hd',168,96]],
-   fig:{H:[138,34],S:[136,50],P:[134,94],K:[136,122],A:[134,150],E:[140,78],W:[166,96]},arr:[[186,62,186,100,'ép xuống',192,132,'end']]}},
- la1:{n:'Khung squat (Power rack / Squat rack)',id:'Khung có móc đỡ đòn và thanh an toàn hai bên.',no:'Hạn chế dùng Smith machine (đòn chạy trên ray) cho bài này.',alt:'Đặt thanh an toàn thấp hơn đáy squat khoảng 5 cm. Lưng còn ê thì dùng máy Hack squat (đứng tựa lưng vào đệm nghiêng, vai đỡ dưới đệm).',
-  d:{parts:[['line',30,8,30,152],['line',214,8,214,152],['dash',30,92,214,92],['txt',34,104,'thanh an toàn','start'],['plate',122,64,22]],
-   fig:{H:[134,54],S:[124,70],P:[104,116],K:[148,114],A:[126,150],E:[106,86],W:[122,66]},arr:[[190,112,190,70,'đứng lên',190,62,'middle']]}},
- la2:{n:'Ghế phẳng + đòn có đệm mút, hoặc máy Hip thrust',id:'Lưng trên tựa mép ghế, đòn có đệm đặt ngang hông.',alt:'Phòng có máy Hip thrust (ngồi, đai hoặc đệm đè ngang hông) thì dùng máy cho nhanh.',
-  d:{parts:[['pad',28,100,62,12],['line',38,112,38,152],['line',80,112,80,152],['plate',128,78,20]],
-   fig:{H:[76,90],S:[90,98],P:[128,96],K:[166,96],A:[168,150],E:[110,90],W:[128,80]},arr:[[124,144,124,108,'đẩy',130,134,'start']]}},
- la3:{n:'Máy cuốn đùi sau ngồi (Seated Leg Curl)',id:'Ngồi, chân duỗi thẳng ra trước. Đệm đè trên đùi, đệm tròn nằm sau cổ chân. Cuốn gót xuống dưới ghế.',no:'Leg extension có đệm tròn nằm trước cổ chân. Nhiều phòng có máy 2 trong 1, chỉnh vị trí đệm là đổi bài.',
-  d:{parts:[['pad',46,46,10,62,-10],['pad',50,106,62,9],['line',80,115,80,152],['pad',100,88,34,8],['line',132,104,178,112],['roll',178,112,7]],
-   fig:{H:[66,40],S:[66,56],P:[74,102],K:[132,102],A:[174,104],E:[86,80],W:[104,92]},arr:[[194,122,172,144,'cuốn xuống',166,148,'end']]}},
- la4:{n:'Máy đá đùi trước (Leg Extension)',id:'Ngồi, gối gập 90°, đệm tròn nằm trước cổ chân. Đá chân lên tới gần thẳng.',
-  d:{parts:[['pad',46,46,10,62,-10],['pad',50,106,62,9],['line',80,115,80,152],['line',126,104,138,140],['roll',140,142,7]],
-   fig:{H:[66,40],S:[66,56],P:[74,102],K:[126,102],A:[128,138],E:[82,82],W:[96,104],F:[6,8]},arr:[[156,136,180,104,'đá lên',184,122,'start']]}},
- la5:{n:'Máy nhón bắp chân đứng (Standing Calf Raise)',id:'Đứng dưới hai đệm đè vai, mũi chân trên bậc, gót thả tự do.',alt:'Không có máy thì đặt mũi chân lên bàn đạp máy leg press và nhón bằng cổ chân.',
-  d:{parts:[['line',40,20,40,152],['line',40,45,96,45],['pad',96,40,22,10],['pad',116,140,40,12]],
-   fig:{H:[120,30],S:[110,52],P:[112,88],K:[114,116],A:[116,138],E:[98,64],W:[100,46],F:[14,0]},arr:[[176,136,176,104,'nhón lên',180,122,'start']]}},
- la6:{n:'Trạm cáp, tay cầm đơn',id:'Ròng rọc đặt ngang ngực.'},
- la7:{n:'Thảm',id:'Không cần máy.'},
- ub1:{n:'Ghế dốc chỉnh được + tạ đơn',id:'Chỉnh lưng ghế lên khoảng 30° (thường nấc 2 hoặc 3).',alt:'Hoặc máy đẩy ngực dốc (Incline press, như ảnh 4 bạn gửi).',
-  d:{parts:[['poly','112,112 42,72 38,79 108,119'],['pad',108,112,42,9],['line',124,121,124,152],['line',54,84,54,152],['db',72,22]],
-   fig:{H:[58,70],S:[70,78],P:[114,104],K:[156,108],A:[162,148],E:[72,50],W:[72,24]},arr:[[96,60,96,24,'đẩy lên',102,44,'start']]}},
- ub2:{n:'Ghế phẳng + tạ đơn'},
- ub3:{n:'Máy kéo xà có hỗ trợ (Assisted Pull-up / Dip)',id:'Máy có bệ để quỳ gối, xà kéo ở trên cao. Cục tạ càng nặng thì máy đỡ càng nhiều, tức là bài càng nhẹ.',alt:'Không có thì dùng Lat pulldown, tay cầm rộng.',
-  d:{parts:[['line',150,4,150,152],['line',70,6,150,6],['pad',98,128,36,8],['line',134,132,150,132],['hd',112,8]],
-   fig:{H:[100,38],S:[112,48],P:[116,92],K:[120,126],A:[94,130],E:[110,28],W:[112,8],F:[-8,0]},arr:[[80,100,80,60,'kéo người lên',74,80,'end']]}},
- ub4:{n:'Máy kéo cáp ngồi (Seated Cable Row)',id:'Ghế dài thấp sát sàn, bàn đạp chân phía trước, dây cáp từ ròng rọc thấp. Gắn tay cầm chữ V. Không có đệm ngực.',no:'Máy row có đệm tì ngực là bài của Upper A.',
-  d:{parts:[['stack',210,30,24,122],['pul',204,140],['pad',30,114,110,8],['line',44,122,44,152],['line',126,122,126,152],['pad',162,106,8,40,-15],['cable',198,140,102,96]],
-   fig:{H:[86,50],S:[84,66],P:[80,110],K:[130,96],A:[164,124],E:[64,92],W:[100,94],F:[4,-10]},arr:[[160,70,120,70,'kéo về bụng',140,62,'middle']]}},
- ub5:{n:'Trạm cáp, tay cầm đơn',id:'Ròng rọc đặt thấp nhất, đứng nghiêng, tay xa máy cầm tay cầm.'},
- ub6:{n:'Máy Pec deck dùng ngồi ngược (Reverse Pec Deck / Rear Delt)',id:'Máy ép ngực kiểu cánh bướm. Ngồi quay mặt vào đệm (ngực tì đệm), chỉnh tay cầm ra trước ngang vai, rồi mở tay sang hai bên theo vòng cung.',no:'Ngồi đúng chiều (lưng tựa đệm, khép tay vào) là bài ép ngực.',
-  d:{parts:[['line',170,8,170,152],['line',170,20,150,20],['line',150,20,150,52],['pad',98,50,10,48],['line',108,74,170,74],['pad',44,108,48,9],['line',68,117,68,152],['hd',150,56]],
-   fig:{H:[90,40],S:[86,56],P:[70,104],K:[112,108],A:[116,148],E:[118,58],W:[148,56]},arr:[[150,36,104,36,'mở tay',127,28,'middle']]}},
- ub7:{n:'Ghế dốc 45–60° + tạ đơn'},
- ub8:{n:'Trạm cáp + dây thừng',id:'Ròng rọc đặt ngang ngực hoặc cao hơn, quay lưng về máy.'},
- ub9:{n:'Thảm + tạ đơn 2–4 kg'},
- lb1:{n:'Ghế lưng 45° (45° Back Extension / Hyperextension)',id:'Khung nghiêng 45°, đệm đỡ ngay dưới hông, chỗ chặn gót chân.',no:'Ghế Roman chair nằm ngang 90° cũng dùng được nhưng nặng hơn.',
-  d:{parts:[['line',66,152,162,88],['pad',134,92,24,10,-34],['pad',62,126,8,22,-34]],
-   fig:{H:[184,54],S:[174,64],P:[136,92],K:[106,114],A:[78,134],E:[164,80],W:[176,72],F:[8,-6]},arr:[[204,70,190,118,'gập xuống, lên',236,138,'end']]}},
- lb1v:{n:'Đòn + bánh tạ, lấy đòn từ khung squat',id:'Đặt móc ngang giữa đùi để lấy đòn khi đang đứng, không kéo đòn từ sàn.',
-  d:{parts:[['plate',132,112,22]],
-   fig:{H:[146,64],S:[134,72],P:[94,94],K:[114,120],A:[108,150],E:[134,92],W:[132,112]},arr:[[164,84,164,120,'hạ sát đùi',170,104,'start']]}},
- lb2:{n:'Máy đạp đùi 45° (Leg Press)',id:'Ngồi ngả lưng, đạp bàn đạp chạy trên ray chếch lên 45°, gắn bánh tạ hai bên.',no:'Hack squat là máy đứng, vai đỡ dưới đệm. Máy leg press ngồi ngang loại chốt tạ cũng dùng được.',
-  d:{parts:[['line',96,150,214,34],['line',136,86,164,114],['poly','44,104 78,130 74,136 40,110'],['line',70,134,70,152]],
-   fig:{H:[36,88],S:[46,100],P:[80,126],K:[116,94],A:[148,104],E:[66,118],W:[88,130],F:[4,-4]},arr:[[178,84,206,56,'đẩy',212,76,'start']]}},
- lb3:{n:'Ghế phẳng + tạ đơn'},
- lb4:{n:'Máy cuốn đùi sau nằm (Lying Leg Curl)',id:'Nằm sấp trên ghế, đệm tròn đè sau cổ chân, cuốn gót lên về phía mông.',alt:'Không có máy nằm thì làm thêm 1 set ở máy cuốn đùi ngồi.',
-  d:{parts:[['pad',28,104,150,9],['line',48,113,48,152],['line',160,113,160,152],['line',170,104,198,92],['roll',200,90,7]],
-   fig:{H:[38,92],S:[54,98],P:[112,98],K:[162,100],A:[198,100],E:[40,116],W:[24,124],F:[2,10]},arr:[[216,98,196,60,'cuốn gót lên',190,54,'end']]}},
- lb5:{n:'Máy nhón bắp chân ngồi (Seated Calf Raise)',id:'Ngồi, đệm đè lên đùi sát gối, mũi chân trên bậc.',alt:'Không có máy thì ngồi ghế, đặt tạ đơn lên đùi, mũi chân kê trên bánh tạ.',
-  d:{parts:[['pad',40,104,50,9],['line',64,113,64,152],['pad',100,88,28,8],['line',128,92,182,92],['line',182,92,182,152],['pad',120,140,40,12]],
-   fig:{H:[60,40],S:[60,56],P:[70,102],K:[118,100],A:[122,138],E:[82,82],W:[104,90],F:[14,0]},arr:[[200,140,200,108,'nhón gót',208,100,'middle']]}},
- lb6:{n:'Thảm'},lb7:{n:'Thảm'}
+ ua1:{n:'Máy đẩy ngực ngồi (Seated Chest Press)',id:'Ghế ngồi lưng dựng gần thẳng, hai tay cầm ngang giữa ngực, đẩy thẳng ra trước theo phương ngang. Ưu tiên máy có tay cầm dọc như trong ảnh.',no:'Máy Incline press (ghế ngả, đẩy chếch lên) dành cho Upper B. Pec deck (khép tay theo vòng cung) là bài ép ngực.',gq:'seated chest press machine'},
+ ua1v:{n:'Ghế bench phẳng có trụ đỡ đòn',id:'Ghế nằm phẳng, hai trụ đỡ đòn ở đầu ghế. Tạ nặng thì cần người canh như trong ảnh.',gq:'flat barbell bench press'},
+ ua2:{n:'Máy row ngồi có đệm tì ngực (Chest-Supported Row Machine)',id:'Ngồi, ngực tì vào miếng đệm dựng đứng phía trước, kéo hai tay cầm về phía bụng. Có thể là máy chốt tạ hoặc máy gắn bánh tạ (Hammer Strength Iso-Lateral Row).',no:'Seated cable row (ghế dài sát sàn, đạp chân, kéo cáp, không có đệm ngực) là bài khác.',alt:'Máy bận hoặc không có: Dumbbell chest-supported row. Chỉnh ghế dốc 30–45°, nằm sấp tì ngực, hai tay cầm tạ đơn kéo lên. Cùng một bài, chỉ khác dụng cụ, đổi 1:1 với cùng số set và rep.',gq:'chest supported row machine'},
+ ua3:{n:'Máy Lat pulldown',id:'Ghế có đệm chặn đùi, cáp từ ròng rọc trên cao. Thay thanh dài bằng tay cầm song song nếu có.',gq:'lat pulldown machine'},
+ ua4:{n:'Máy đẩy vai ngồi (Shoulder Press Machine)',id:'Ghế lưng cao, tay cầm ngang vai hoặc cằm, đẩy thẳng lên.',no:'Máy đẩy ngực ngồi trông giống nhưng đẩy ra trước.',gq:'shoulder press machine'},
+ ua5:{n:'Trạm cáp + dây thừng',id:'Cột có cục tạ, ròng rọc chỉnh độ cao. Đặt ròng rọc ngang mắt, gắn dây thừng.',gq:'cable face pull rope'},
+ ua6:{n:'Tạ đơn',id:'Bắt đầu khoảng 5–8 kg.',gq:'dumbbell lateral raise'},
+ ua7:{n:'Thanh EZ',id:'Thanh tạ ngắn uốn lượn hình sóng. Không có thì dùng tạ đơn.',gq:'EZ bar curl'},
+ ua8:{n:'Trạm cáp + dây thừng hoặc thanh thẳng ngắn',id:'Ròng rọc đặt cao nhất. Tập ngay sau face pull ở cùng trạm.',gq:'cable triceps pushdown'},
+ la1:{n:'Khung squat (Power rack)',id:'Khung có móc đỡ đòn và thanh an toàn hai bên. Đặt thanh an toàn thấp hơn đáy squat khoảng 5 cm.',no:'Hạn chế Smith machine (đòn chạy trên ray) cho bài này.',alt:'Lưng còn ê thì dùng máy Hack squat.',gq:'power rack squat safety bars'},
+ la2:{n:'Ghế phẳng + đòn có đệm mút, hoặc máy Hip thrust',id:'Lưng trên tựa mép ghế, đòn có đệm đặt ngang hông.',gq:'barbell hip thrust bench'},
+ la3:{n:'Máy cuốn đùi sau ngồi (Seated Leg Curl)',id:'Ngồi, chân duỗi thẳng ra trước, đệm đè trên đùi, đệm tròn sau cổ chân, cuốn gót xuống dưới ghế.',no:'Leg extension có đệm tròn trước cổ chân. Nhiều phòng dùng máy 2 trong 1.',gq:'seated leg curl machine'},
+ la4:{n:'Máy đá đùi trước (Leg Extension)',id:'Ngồi, gối gập 90°, đệm tròn trước cổ chân, đá chân lên tới gần thẳng.',gq:'leg extension machine'},
+ la5:{n:'Máy nhón bắp chân đứng (Standing Calf Raise)',id:'Đứng dưới hai đệm đè vai, mũi chân trên bậc.',alt:'Không có máy thì đặt mũi chân lên bàn đạp máy leg press và nhón bằng cổ chân.',gq:'standing calf raise machine'},
+ la6:{n:'Trạm cáp, tay cầm đơn',id:'Ròng rọc ngang ngực.',gq:'pallof press cable'},
+ la7:{n:'Thảm',gq:'side plank'},
+ ub1:{n:'Ghế dốc + tạ đơn',id:'Chỉnh lưng ghế khoảng 30° (thường nấc 2–3). Tạ nặng thì nhờ người canh như trong ảnh.',alt:'Hoặc máy Incline chest press.',gq:'incline dumbbell press'},
+ ub2:{n:'Ghế phẳng + tạ đơn',id:'Trong ảnh là kiểu một tay chống ghế, cũng được. Kiểu một tay một gối tì ghế thì lưng dưới được đỡ tốt hơn.',gq:'one arm dumbbell row bench'},
+ ub3:{n:'Máy kéo xà có hỗ trợ (Assisted Pull-up)',id:'Máy có bệ quỳ gối, xà ở trên cao. Cục tạ càng nặng thì máy đỡ càng nhiều, bài càng nhẹ.',alt:'Không có thì dùng Lat pulldown tay cầm rộng.',gq:'assisted pull up machine'},
+ ub10:{n:'Máy Pec deck (ép ngực cánh bướm)',id:'Ngồi lưng tựa đệm, hai tay cầm hoặc đệm tay hai bên, khép tay vào trước ngực.',no:'Cùng máy với bài Rear delt fly, chỉ khác chiều ngồi.',gq:'pec deck fly machine'},
+ ub5:{n:'Trạm cáp, tay cầm đơn',id:'Ròng rọc đặt thấp nhất, đứng nghiêng, tay xa máy cầm tay cầm.',gq:'single arm cable lateral raise'},
+ ub6:{n:'Máy Pec deck, ngồi ngược (Reverse Pec Deck)',id:'Cùng máy với bài Pec deck fly. Ngồi quay mặt vào đệm, ngực tì đệm, chỉnh tay cầm ra trước ngang vai rồi mở tay sang hai bên.',gq:'reverse pec deck rear delt fly'},
+ ub7:{n:'Ghế dốc 45–60° + tạ đơn',gq:'incline dumbbell curl'},
+ ub8:{n:'Trạm cáp + dây thừng',id:'Ròng rọc đặt ngang ngực hoặc cao hơn, quay lưng về máy.',gq:'overhead cable triceps extension rope'},
+ ub9:{n:'Thảm + tạ đơn 2–4 kg',gq:'side lying dumbbell external rotation'},
+ lb1:{n:'Ghế lưng 45° (45° Back Extension)',id:'Khung nghiêng 45°, đệm đỡ ngay dưới hông, chỗ chặn gót chân.',no:'Ghế Roman chair nằm ngang 90° cũng dùng được nhưng nặng hơn.',gq:'45 degree back extension bench'},
+ lb1v:{n:'Đòn + bánh tạ, lấy đòn từ khung squat',id:'Đặt móc ngang giữa đùi để lấy đòn khi đứng, không kéo đòn từ sàn.',gq:'romanian deadlift barbell'},
+ lb2:{n:'Máy đạp đùi 45° (Leg Press)',id:'Ngồi ngả lưng, đạp bàn đạp chạy trên ray chếch 45°, gắn bánh tạ hai bên.',no:'Hack squat là máy đứng, vai đỡ dưới đệm.',gq:'45 degree leg press machine'},
+ lb3:{n:'Ghế phẳng + tạ đơn',gq:'dumbbell bulgarian split squat'},
+ lb4:{n:'Máy cuốn đùi sau nằm (Lying Leg Curl)',id:'Nằm sấp, đệm tròn sau cổ chân, cuốn gót về phía mông.',alt:'Không có thì làm thêm 1 set ở máy cuốn đùi ngồi.',gq:'lying leg curl machine'},
+ lb5:{n:'Máy nhón bắp chân ngồi (Seated Calf Raise)',id:'Ngồi, đệm đè lên đùi sát gối, mũi chân trên bậc.',alt:'Không có máy thì ngồi ghế, đặt tạ đơn lên đùi, mũi chân kê trên bánh tạ.',gq:'seated calf raise machine'},
+ lb6:{n:'Thảm',gq:'dead bug exercise'},lb7:{n:'Thảm',gq:'mcgill curl up'}
 };
-function svgDraw(d,label){
- const P=['<line class="m-floor" x1="0" y1="152" x2="240" y2="152"/>'];
- const parts=d.parts||[];
- parts.forEach(p=>{const t=p[0];
-  if(t==='stack'){const [,x,y,w,h]=p;P.push('<rect class="m-pad" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="2"/>');for(let yy=y+h-10;yy>y+h*0.45;yy-=9)P.push('<line class="m-thin" x1="'+(x+3)+'" y1="'+yy+'" x2="'+(x+w-3)+'" y2="'+yy+'"/>');}
-  else if(t==='line')P.push('<line class="m-frame" x1="'+p[1]+'" y1="'+p[2]+'" x2="'+p[3]+'" y2="'+p[4]+'"/>');
-  else if(t==='dash')P.push('<line class="m-dash" x1="'+p[1]+'" y1="'+p[2]+'" x2="'+p[3]+'" y2="'+p[4]+'"/>');
-  else if(t==='txt')P.push('<text class="m-note" x="'+p[1]+'" y="'+p[2]+'" text-anchor="'+(p[4]||'start')+'">'+esc(p[3])+'</text>');
-  else if(t==='pad'){const [,x,y,w,h,r]=p;P.push('<rect class="m-pad" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3"'+(r?' transform="rotate('+r+' '+(x+w/2)+' '+(y+h/2)+')"':'')+'/>');}
-  else if(t==='poly')P.push('<polygon class="m-pad" points="'+p[1]+'"/>');
-  else if(t==='roll')P.push('<circle class="m-pad" cx="'+p[1]+'" cy="'+p[2]+'" r="'+p[3]+'"/>');
-  else if(t==='plate')P.push('<circle class="m-plate" cx="'+p[1]+'" cy="'+p[2]+'" r="'+p[3]+'"/><circle class="m-dot" cx="'+p[1]+'" cy="'+p[2]+'" r="3"/>');
-  else if(t==='pul')P.push('<circle class="m-pad" cx="'+p[1]+'" cy="'+p[2]+'" r="6"/>');
-  else if(t==='cable')P.push('<line class="m-cable" x1="'+p[1]+'" y1="'+p[2]+'" x2="'+p[3]+'" y2="'+p[4]+'"/>');
- });
- const f=d.fig;
- if(f){const L=(a,b)=>'<line class="m-fig" x1="'+f[a][0]+'" y1="'+f[a][1]+'" x2="'+f[b][0]+'" y2="'+f[b][1]+'"/>';const F=f.F||[12,0];
-  P.push(L('S','P'),L('P','K'),L('K','A'),'<line class="m-fig" x1="'+f.A[0]+'" y1="'+f.A[1]+'" x2="'+(f.A[0]+F[0])+'" y2="'+(f.A[1]+F[1])+'"/>',L('S','E'),L('E','W'),'<circle class="m-head" cx="'+f.H[0]+'" cy="'+f.H[1]+'" r="9"/>');}
- parts.forEach(p=>{if(p[0]==='hd')P.push('<circle class="m-hd" cx="'+p[1]+'" cy="'+p[2]+'" r="5"/>');else if(p[0]==='db')P.push('<rect class="m-db" x="'+(p[1]-12)+'" y="'+(p[2]-4)+'" width="24" height="8" rx="2"/>');});
- (d.arr||[]).forEach(a=>{const [x1,y1,x2,y2,lab,lx,ly,anc]=a;P.push('<line class="m-arr" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" marker-end="url(#m-ah)"/>');if(lab)P.push('<text class="m-lab" x="'+lx+'" y="'+ly+'" text-anchor="'+(anc||'start')+'">'+esc(lab)+'</text>');});
- return '<svg viewBox="0 0 240 160" role="img" aria-label="'+esc(label||'')+'">'+P.join('')+'</svg>';
-}
+PHOTO.ub10=PHOTO.ub6;
 function howBlock(ex,useV){
- const mk=MACH[ex.id+(useV?'v':'')]||MACH[ex.id];
+ const key=(useV&&MACH[ex.id+'v'])?ex.id+'v':ex.id;
+ const mk=MACH[key]; const ph=PHOTO[key];
  if(!ex.how&&!mk) return '';
  let s='<details class="how"><summary>Máy nào, tập thế nào</summary>';
+ if(ph) s+='<figure class="photo"><img src="img/'+ph.f+'" alt="'+esc(mk?mk.n:ex.name)+'" loading="lazy" width="'+ph.w+'" height="'+ph.h+'"><figcaption>Ảnh: '+esc(ph.a)+' · '+esc(ph.l)+' · <a href="'+ph.p+'" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption></figure>';
  if(mk){
-  if(mk.d) s+='<figure class="mach">'+svgDraw(mk.d,mk.n)+'<figcaption class="small muted">Sơ đồ nhìn ngang. Chấm xanh là tay cầm, mũi tên là hướng lực.</figcaption></figure>';
   s+='<dl class="mk"><dt>Dụng cụ</dt><dd>'+esc(mk.n)+'</dd>'+(mk.id?'<dt>Nhận diện</dt><dd>'+esc(mk.id)+'</dd>':'')+(mk.no?'<dt>Đừng nhầm</dt><dd>'+esc(mk.no)+'</dd>':'')+(mk.alt?'<dt>Thay thế</dt><dd>'+esc(mk.alt)+'</dd>':'')+'</dl>';
  }
  if(ex.how) s+='<p class="eyebrow">Cách tập</p><ul>'+ex.how.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
- if(ex.yt) s+='<a href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.yt)+'" target="_blank" rel="noopener">Xem video mẫu trên YouTube ↗</a>';
- return s+'</details>';
+ s+='<div class="links">';
+ if(mk&&mk.gq) s+='<a href="https://www.google.com/search?tbm=isch&q='+encodeURIComponent(mk.gq)+'" target="_blank" rel="noopener">'+(ph?'Thêm ảnh máy':'Xem ảnh máy thật')+' ↗</a>';
+ if(ex.yt) s+='<a href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.yt)+'" target="_blank" rel="noopener">Video mẫu ↗</a>';
+ return s+'</div></details>';
 }
 const OTHER={
  RUN:{name:'Chạy Zone 2',body:'<p>30–40 phút, tốc độ vẫn nói chuyện được. Nhịp tim khoảng 118–137 bpm.</p><p class="muted small">Chạy nhẹ giữa hai buổi chân để chân kịp hồi phục và gần như không cản trở tăng cơ.</p>'},
