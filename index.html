@@ -238,13 +238,13 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
           <tr><td>Gập gối / duỗi gối</td><td>Leg curl ngồi + nằm / leg extension</td></tr>
           <tr><td>Bắp chân</td><td>Calf raise đứng + ngồi</td></tr>
           <tr><td>Mang vác</td><td>Farmer carry</td></tr>
-          <tr><td>Core chống ưỡn / chống xoay / chống nghiêng</td><td>Dead bug, McGill curl-up / Pallof press / side plank, farmer carry</td></tr>
+          <tr><td>Core chống ưỡn / chống xoay / chống nghiêng</td><td>Dead bug, McGill curl-up / plank chạm vai / side plank, farmer carry</td></tr>
           <tr><td>Vai sau, chóp xoay, bả vai</td><td>Face pull, rear delt fly, external rotation tay trái</td></tr>
           <tr><td>Tay</td><td>EZ curl, incline curl, pushdown, overhead extension</td></tr>
           <tr><td>Tim mạch</td><td>Chạy Zone 2 (T4), cầu lông (CN)</td></tr>
         </tbody>
       </table></div>
-      <p class="small muted">Cố ý không có: deadlift sàn (lưng từng co rút), xoay thân có tạ như woodchop (Pallof đã đủ cho core, ít rủi ro cho lưng), bật nhảy (cầu lông đã có).</p>
+      <p class="small muted">Cố ý không có: deadlift sàn (lưng từng co rút), xoay thân có tạ như woodchop (plank chạm vai đã đủ cho core chống xoay, ít rủi ro cho lưng), bật nhảy (cầu lông đã có).</p>
 
       <h2 id="chon-ta">Chọn mức tạ</h2>
       <div class="card" id="guide"></div>
@@ -532,8 +532,8 @@ const PROGRAM={
    how:['Khớp gối thẳng trục máy, đệm chân ngay trên cổ chân.','Duỗi gối tới gần thẳng, siết đùi trước 1 giây.','Hạ chậm 2–3 giây. Đau phía trước gối thì bỏ bớt phần cuối biên độ.']},
   {id:'la5',name:'Standing calf raise',iso:true,sets:3,reps:'10–15',top:15,rest:'nghỉ 60 giây',yt:'standing calf raise proper form',
    how:['Mũi chân trên bậc, gót thả tự do.','Hạ gót thấp nhất, dừng 1 giây cho bắp chân giãn.','Nhón lên cao nhất, giữ 1 giây. Không nhún nảy.']},
-  {id:'la6',name:'Pallof press',core:true,sets:2,reps:'10/bên',top:10,rest:'nghỉ 45 giây',yt:'pallof press proper form',
-   how:['Đứng nghiêng cạnh ròng rọc đặt ngang ngực, cầm tay cầm sát ngực.','Gồng bụng, đẩy thẳng tay ra trước, không để thân xoay theo dây.','Giữ 2 giây rồi thu về. Đủ rep thì đổi bên.']},
+  {id:'la6',name:'Plank chạm vai',core:true,sets:2,reps:'10/bên',top:10,rest:'nghỉ 45 giây',yt:'plank shoulder tap proper form',note:'Thay Pallof press vì phòng đông, khó có cáp trống. Vai trái đau quá 3/10 thì đổi sang bird dog giữ 3 giây mỗi lần.',
+   how:['Tư thế chống đẩy cao, hai tay ngay dưới vai, chân rộng hơn hông một chút. Chân càng rộng càng dễ.','Gồng bụng, siết mông, người thẳng từ đầu tới gót.','Nhấc một tay chạm vai bên kia thật chậm. Hông không được lắc hay xoay theo.','Đặt tay xuống rồi đổi bên. Mỗi bên 10 lần.']},
   {id:'la7',name:'Side plank',core:true,sets:2,reps:'30 giây/bên',top:30,rest:'nghỉ 45 giây',yt:'side plank proper form',note:'Ghi số giây vào ô rep, bỏ trống ô kg.',
    how:['Khuỷu ngay dưới vai, người thẳng từ đầu đến chân.','Đẩy hông lên, không để võng. Thở đều.','Quá khó thì để gối chạm sàn.']}
  ]},
@@ -607,7 +607,7 @@ const MACH={
  lb9:{n:'2 tạ đơn nặng (hoặc tay cầm farmer)',id:'Cần khoảng 30–40 m đường đi trống trong phòng tập, hoặc đi tại chỗ tính giờ.',gq:'farmers walk dumbbells'},
  la4:{n:'Máy đá đùi trước (Leg Extension)',id:'Ngồi, gối gập 90°, đệm tròn trước cổ chân, đá chân lên tới gần thẳng.',gq:'leg extension machine'},
  la5:{n:'Máy nhón bắp chân đứng (Standing Calf Raise)',id:'Đứng dưới hai đệm đè vai, mũi chân trên bậc.',alt:'Không có máy thì đặt mũi chân lên bàn đạp máy leg press và nhón bằng cổ chân.',gq:'standing calf raise machine'},
- la6:{n:'Trạm cáp, tay cầm đơn',id:'Ròng rọc ngang ngực.',gq:'pallof press cable'},
+ la6:{n:'Thảm, không cần máy',id:'Chỉ cần khoảng 1 × 2 m sàn.',alt:'Có dây kháng lực thì làm Pallof press bằng dây, buộc vào cột hoặc khung squat.',gq:'plank shoulder tap'},
  la7:{n:'Thảm',gq:'side plank'},
  ub1:{n:'Ghế dốc + tạ đơn',id:'Chỉnh lưng ghế khoảng 30° (thường nấc 2–3). Tạ nặng thì nhờ người canh như trong ảnh.',alt:'Hoặc máy Incline chest press.',gq:'incline dumbbell press'},
  ub2:{n:'Ghế phẳng + tạ đơn',id:'Trong ảnh là kiểu một tay chống ghế, cũng được. Kiểu một tay một gối tì ghế thì lưng dưới được đỡ tốt hơn.',gq:'one arm dumbbell row bench'},
