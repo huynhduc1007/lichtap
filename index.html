@@ -745,8 +745,8 @@ function renderToday(){
  const mon=monday(curDate); const vals=[];for(let i=0;i<7;i++){const v=num(S.weights[addDays(mon,i)]);if(!isNaN(v))vals.push(v);}
  $('w-today-avg').textContent=vals.length?('TB tuần này: '+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2)+' kg ('+vals.length+' ngày)'):'Cân mỗi sáng sau khi đi vệ sinh, trước khi ăn uống.';
 
- $('type-chips').innerHTML=CHIP_ORDER.map(t=>{const m=PROGRAM[t]||OTHER[t];const dot=PROGRAM[t]?'<span class="dot plate-'+m.plate+'"></span>':'';
-  return '<button class="chip" data-type="'+t+'" aria-pressed="'+(t===curType)+'">'+dot+esc(m.name.replace(' 40 phút',''))+'</button>';}).join('');
+ $('type-chips').innerHTML=CHIP_ORDER.filter(t=>t!=='FB'||ph.mode==='busy'||d.getDate()<=7||curType==='FB').map(t=>{const m=PROGRAM[t]||OTHER[t];const dot=PROGRAM[t]?'<span class="dot plate-'+m.plate+'"></span>':'';
+  return '<button class="chip" data-type="'+t+'" aria-pressed="'+(t===curType)+'">'+dot+esc(t==='FB'?'Full-body (tuần bận)':m.name)+'</button>';}).join('');
 
  if(!PROGRAM[curType]){ $('session').innerHTML='<div class="card">'+OTHER[curType].body+'</div>'; return; }
  const prog=PROGRAM[curType]; const key=curDate+'|'+curType; const sess=S.sessions[key]||{};
