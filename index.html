@@ -84,6 +84,10 @@ textarea{resize:vertical;min-height:64px}
 .last{font-size:.85rem;background:var(--sunk);border-radius:8px;padding:6px 10px}
 .hint{font-size:.85rem;color:var(--ok);font-weight:600}
 .rir{font-weight:600;color:var(--accent)}
+.how{font-size:.88rem;border-top:1px solid var(--line);padding-top:8px}
+.how summary{color:var(--accent)}
+.how ul{margin-bottom:8px}
+.how a{color:var(--accent);font-weight:600}
 .sets{display:grid;gap:6px}
 .set{display:grid;grid-template-columns:28px 1fr 18px 1fr;gap:6px;align-items:center}
 .set .i{font-family:var(--f-display);color:var(--muted);text-align:center}
@@ -225,7 +229,7 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
         <ul>
           <li>Bạn đánh tay trái, đúng bên vai yếu. Khởi động vai 5 phút trước khi đánh.</li>
           <li>Đến hết 29/11: hạn chế đập cầu liên tục, đánh tối đa 90 phút.</li>
-          <li>Sáng T2 vai trái đau hơn hôm CN thì bỏ landmine press và giảm face pull còn 2 set.</li>
+          <li>Sáng T2 vai trái đau hơn hôm CN thì bỏ machine shoulder press và giảm face pull còn 2 set.</li>
         </ul>
       </div>
 
@@ -243,7 +247,7 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
   <!-- ====== ĂN UỐNG ====== -->
   <div id="v-an-uong" class="view" hidden>
     <section>
-      <div><p class="eyebrow">Mục tiêu hằng ngày · trung bình theo tuần</p><h1>Ăn uống</h1></div>
+      <div><p class="eyebrow">Mục tiêu hằng ngày · tính trung bình theo tuần</p><h1>Ăn uống</h1></div>
       <div class="card">
         <div class="stat">
           <div><span class="small muted">Calo</span><b>~2.200</b><span class="small muted">kcal</span></div>
@@ -251,47 +255,101 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
           <div><span class="small muted">Chất béo</span><b>60–70</b><span class="small muted">g</span></div>
           <div><span class="small muted">Carb</span><b>230–250</b><span class="small muted">g</span></div>
         </div>
-        <p class="small muted">Mục tiêu giảm 0,4–0,6 kg/tuần. Tuần đầu có thể tụt 1–1,5 kg do mất nước, phần đó không phải mỡ.</p>
+        <p class="small muted">Mục tiêu giảm 0,4–0,6 kg/tuần. Số calo dưới đây là ước tính, sai số khoảng 10–15%. Cân nặng thực tế mỗi tuần mới là thước đo cuối cùng.</p>
+      </div>
+
+      <h2>Cân đo thế nào</h2>
+      <div class="card">
+        <ul>
+          <li>Mua 1 cân điện tử nhà bếp (khoảng 100–150k). Chỉ cần cân kỹ <b>2 tuần đầu</b> để quen mắt, sau đó ước lượng.</li>
+          <li><b>Thịt, cá:</b> số gram trong bảng là <b>khối lượng sống</b>. Ăn mâm chung, đã nấu chín: thịt nạc chín ≈ 70% khối lượng sống, cá chín ≈ 80%. Ví dụ 180 g thịt sống ≈ 125 g thịt chín.</li>
+          <li><b>Cơm:</b> số gram là <b>cơm chín</b>. Đơm cái chén bạn hay dùng như bình thường rồi cân 1 lần để biết chén đó bao nhiêu gram. Thường 1 chén vừa ≈ 150–180 g.</li>
+          <li><b>Dầu ăn:</b> 1 muỗng canh ≈ 120 kcal. Đây là phần khó đếm nhất của cơm nhà, nên bảng đã chừa sẵn khoảng 200 kcal dư cho dầu, nước chấm, trái cây.</li>
+        </ul>
       </div>
 
       <h2>Ngày tập</h2>
       <div class="tw"><table>
-        <thead><tr><th>Giờ</th><th>Bữa</th><th>Ăn gì</th><th>Protein</th></tr></thead>
+        <thead><tr><th>Giờ</th><th>Ăn gì</th><th>kcal</th><th>Protein</th></tr></thead>
         <tbody>
-          <tr><td class="n">08:30</td><td>Sáng</td><td>Cà phê đen</td><td class="n">0</td></tr>
-          <tr><td class="n">12:00</td><td>Trưa</td><td>1 chén cơm · 1,5 lòng bàn tay thịt/cá/trứng · ½ đĩa rau · canh</td><td class="n">45–50 g</td></tr>
-          <tr><td class="n">16:30–17:30</td><td>Xế, trước tập</td><td>Tinh bột + đạm, ít dầu: cơm/xôi/bánh mì/khoai + trứng/ức gà/sữa chua Hy Lạp/whey · 1 trái chuối</td><td class="n">35–40 g</td></tr>
-          <tr><td class="n">21:00–21:30</td><td>Tối, sau tập</td><td>Như bữa trưa, đạm 1,5–2 lòng bàn tay</td><td class="n">45–50 g</td></tr>
-          <tr><td class="n">Tuỳ</td><td>Phụ</td><td>Sữa chua / 1 muỗng whey / trái cây</td><td class="n">20–25 g</td></tr>
+          <tr><td class="n">08:30</td><td>Cà phê đen</td><td class="n">0</td><td class="n">0</td></tr>
+          <tr><td class="n">12:00</td><td><b>Trưa:</b> cơm <b>200 g</b> · thịt/cá nạc <b>180 g sống</b> · rau <b>200 g</b> · canh</td><td class="n">~630</td><td class="n">~45 g</td></tr>
+          <tr><td class="n">16:30<br>–17:30</td><td><b>Xế, trước tập</b>, chọn 1:<br>(A) cơm <b>150 g</b> · ức gà <b>130 g sống</b> · 1 trái chuối<br>(B) mang đi: 1 ổ bánh mì · 2 trứng luộc · 1 hũ sữa chua Hy Lạp 100 g</td><td class="n">~450<br>–480</td><td class="n">30–35 g</td></tr>
+          <tr><td class="n">21:00<br>–21:30</td><td><b>Tối, sau tập:</b> cơm <b>200 g</b> · thịt/cá nạc <b>200 g sống</b> · rau <b>200 g</b></td><td class="n">~660</td><td class="n">~49 g</td></tr>
+          <tr><td class="n">Tuỳ</td><td><b>Phụ:</b> 1 muỗng whey pha nước, hoặc 2 hũ sữa chua Hy Lạp</td><td class="n">~150</td><td class="n">20–24 g</td></tr>
+          <tr><td class="n">—</td><td>Dư cho dầu nấu, nước chấm, trái cây</td><td class="n">~200</td><td class="n">—</td></tr>
+          <tr><td></td><td><b>Tổng</b></td><td class="n"><b>~2.150</b></td><td class="n"><b>~155–160 g</b></td></tr>
         </tbody>
       </table></div>
-      <p class="small muted">Ngày nghỉ: cùng khung, bớt ½ chén cơm ở bữa xế hoặc bữa tối.</p>
-
-      <h2>Ăn cơm nhà</h2>
       <div class="card">
-        <ol>
-          <li>Gắp đạm trước, đủ 1,5 lòng bàn tay, rồi mới tới rau và cơm.</li>
-          <li>Cơm cố định <b>1 chén mỗi bữa</b>, dùng đúng một cái chén quen.</li>
-          <li>Ưu tiên luộc, hấp, kho, canh. Ba chỉ và đồ chiên ăn ½ phần, không phải bữa nào cũng có.</li>
-          <li>Nhờ người nhà bớt dầu khi xào. 1 muỗng canh dầu khoảng 120 kcal.</li>
-          <li>Nước chấm, nước kho, nước béo: chấm ít, không chan.</li>
-        </ol>
+        <p><b>Ngày nghỉ</b> (T4, T7, CN): bữa xế bỏ phần cơm hoặc bánh mì, chỉ ăn đạm + trái cây. Tổng khoảng 1.950 kcal.</p>
+        <p class="small muted">Chạy T4 và cầu lông CN tốn thêm khoảng 300–500 kcal, nên hôm đó ăn như ngày tập cũng được.</p>
       </div>
 
-      <h2>Rượu bia và bữa lệch</h2>
+      <h2>Đổi món: phần đạm</h2>
+      <p class="small muted">Mỗi dòng ≈ 30 g protein. Muốn đổi thịt trong bữa, cứ lấy một dòng thay cho một dòng.</p>
+      <div class="tw"><table>
+        <thead><tr><th>Món (sống)</th><th>Lượng</th><th>kcal</th></tr></thead>
+        <tbody>
+          <tr><td>Ức gà bỏ da</td><td class="n">130 g</td><td class="n">~155</td></tr>
+          <tr><td>Tôm bóc vỏ</td><td class="n">150 g</td><td class="n">~135</td></tr>
+          <tr><td>Cá basa, rô phi, cá lóc</td><td class="n">170 g</td><td class="n">~170</td></tr>
+          <tr><td>Thăn heo, bò nạc (thăn, bắp)</td><td class="n">150 g</td><td class="n">~210</td></tr>
+          <tr><td>Đùi gà bỏ da</td><td class="n">160 g</td><td class="n">~215</td></tr>
+          <tr><td>Trứng</td><td class="n">3 quả + 3 lòng trắng</td><td class="n">~260</td></tr>
+          <tr><td>Đậu hũ</td><td class="n">350 g</td><td class="n">~260</td></tr>
+          <tr><td>Cá thu, cá hồi (nhiều béo tốt)</td><td class="n">150 g</td><td class="n">~290</td></tr>
+          <tr><td>Nạc vai heo</td><td class="n">160 g</td><td class="n">~290</td></tr>
+        </tbody>
+      </table></div>
+      <div class="card"><p><b>Thịt nhiều mỡ:</b> 100 g ba chỉ ≈ 500 kcal nhưng chỉ khoảng 9 g protein, gấp 3–4 lần calo của thăn heo. Sườn, da gà, lòng cũng vậy. Có ăn thì tối đa 50 g và bớt 100 g cơm ở bữa đó.</p></div>
+
+      <h2>Đổi món: phần tinh bột</h2>
+      <p class="small muted">Mỗi dòng ≈ 50 g carb, khoảng 200–230 kcal, tương đương 180 g cơm.</p>
+      <div class="tw"><table>
+        <thead><tr><th>Món</th><th>Lượng</th></tr></thead>
+        <tbody>
+          <tr><td>Cơm trắng hoặc gạo lứt (chín)</td><td class="n">180 g</td></tr>
+          <tr><td>Bún tươi</td><td class="n">200 g</td></tr>
+          <tr><td>Bánh phở tươi</td><td class="n">160 g</td></tr>
+          <tr><td>Xôi</td><td class="n">110 g</td></tr>
+          <tr><td>Bánh mì</td><td class="n">1 ổ nhỏ (~80 g)</td></tr>
+          <tr><td>Khoai lang (sống)</td><td class="n">250 g</td></tr>
+          <tr><td>Yến mạch (khô)</td><td class="n">65 g</td></tr>
+          <tr><td>Chuối</td><td class="n">2 trái</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Mì gói không tính là đổi ngang: 1 gói khoảng 350 kcal, trong đó nhiều chất béo.</p>
+
+      <h2>Ăn ngoài (ước tính quán Việt)</h2>
+      <div class="tw"><table>
+        <thead><tr><th>Món</th><th>kcal</th><th>Protein</th><th>Cách chọn</th></tr></thead>
+        <tbody>
+          <tr><td>Phở bò tô thường</td><td class="n">450–550</td><td class="n">25–30 g</td><td>Gọi thêm thịt, ăn bớt bánh, không chan nước béo</td></tr>
+          <tr><td>Bún bò</td><td class="n">550–650</td><td class="n">25–30 g</td><td>Bỏ mỡ nổi, ít chả</td></tr>
+          <tr><td>Cơm gà luộc</td><td class="n">600–700</td><td class="n">35–40 g</td><td>Bỏ da, cơm trắng thay cơm chiên</td></tr>
+          <tr><td>Cơm tấm sườn</td><td class="n">650–750</td><td class="n">30–35 g</td><td>Sườn + trứng, bỏ mỡ hành. Sườn bì chả lên tới 850–1.000</td></tr>
+          <tr><td>Bánh mì thịt</td><td class="n">400–500</td><td class="n">15–20 g</td><td>Thêm 1 hũ sữa chua Hy Lạp hoặc whey cho đủ đạm</td></tr>
+          <tr><td>Bia 330 ml</td><td class="n">~150/lon</td><td class="n">0</td><td>5 lon ≈ 1 bữa chính</td></tr>
+        </tbody>
+      </table></div>
+
+      <h2>Cơm nhà, tiệc, rượu bia</h2>
       <div class="card">
-        <ul>
+        <ol>
+          <li>Gắp đạm trước cho đủ phần, rồi mới tới rau và cơm.</li>
+          <li>Ưu tiên luộc, hấp, kho, canh. Nhờ người nhà bớt dầu khi xào.</li>
+          <li>Nước chấm, nước kho, nước béo: chấm ít, không chan.</li>
           <li>Khoảng 80% bữa theo khung, 20% ăn thoải mái mà không cần bù.</li>
-          <li>Không uống vào tối sau buổi tập chân. Ăn bữa nhiều đạm trước khi uống, xen nước lọc.</li>
-          <li>Hôm sau ăn bình thường và đi bộ nhiều hơn, không nhịn ăn bù.</li>
-        </ul>
+          <li>Bữa nhậu: không uống vào tối sau buổi tập chân. Ăn đồ nướng, luộc trước, hạn chế đồ chiên. Bớt cơm bữa trước đó. Hôm sau ăn bình thường, đi bộ nhiều hơn, không nhịn ăn bù.</li>
+        </ol>
       </div>
 
       <h2>Tuần bận đầu tháng</h2>
       <div class="card">
         <ul>
-          <li>Mang bữa xế lên công ty, ăn lúc 17–18h.</li>
-          <li>Về muộn sau 21h: bữa nhẹ nhiều đạm (thịt/trứng/đậu hũ + rau + ½ chén cơm). Đủ protein là được.</li>
+          <li>Mang bữa xế (B) lên công ty, ăn lúc 17–18h.</li>
+          <li>Về muộn sau 21h: thịt/cá 150–200 g sống + rau + 100 g cơm. Đủ protein là được.</li>
         </ul>
       </div>
 
@@ -390,52 +448,85 @@ function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
 /* ---------- program ---------- */
 const PROGRAM={
  UA:{name:'Upper A',sub:'Đẩy/kéo nặng',plate:'blue',ex:[
-  {id:'ua1',name:'Machine chest press',sets:3,reps:'6–8',top:8,rest:'nghỉ 2–3 phút',main:true,note:'Không hạ quá sâu: dừng khi khuỷu ngang thân.',
-   v:{from:'2026-11-16',name:'Bench đòn hoặc machine chest press',note:'Bench đòn chỉ khi tuần trước đau ngực 0–1/10. Bắt đầu 60 kg × 8, chạm ngực có kiểm soát, không nảy.'}},
-  {id:'ua2',name:'Row có tì ngực',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',main:true,note:'Chest-supported row hoặc T-bar có đệm, lưng dưới không phải gồng.'},
-  {id:'ua3',name:'Lat pulldown tay trung tính',sets:3,reps:'8–10',top:10,rest:'nghỉ 2 phút'},
-  {id:'ua4',name:'Landmine press 1 tay',sets:3,reps:'8–10/bên',top:10,rest:'nghỉ 90 giây',note:'Tay trái trước. Chưa đẩy thẳng qua đầu. Sáng nay vai trái đau hơn hôm CN thì bỏ bài này.'},
-  {id:'ua5',iso:true,name:'Face pull',sets:3,reps:'12–15',top:15,rest:'chuyển ngay bài sau',ss:'A'},
-  {id:'ua6',iso:true,name:'Lateral raise',sets:3,reps:'12–15',top:15,rest:'nghỉ 60–90 giây',ss:'A'},
-  {id:'ua7',iso:true,name:'EZ curl',sets:2,reps:'10–12',top:12,rest:'chuyển ngay bài sau',ss:'B'},
-  {id:'ua8',iso:true,name:'Triceps pushdown',sets:2,reps:'10–12',top:12,rest:'nghỉ 60 giây',ss:'B'}
+  {id:'ua1',name:'Machine chest press',sets:3,reps:'6–8',top:8,rest:'nghỉ 2–3 phút',main:true,yt:'machine chest press proper form',note:'Không hạ quá sâu: dừng khi khuỷu ngang thân.',
+   how:['Chỉnh ghế để tay cầm ngang giữa ngực. Lưng và đầu áp đệm, ép hai bả vai ra sau và xuống, giữ suốt set.','Khuỷu tạo góc khoảng 45–60° với thân, không bè ngang 90°.','Đẩy ra tới gần thẳng tay, không khoá cứng khuỷu, vai không nhô khỏi đệm.','Hạ về 2–3 giây, dừng khi khuỷu ngang thân.'],
+   v:{from:'2026-11-16',name:'Bench đòn hoặc machine chest press',yt:'barbell bench press proper form',note:'Bench đòn chỉ khi tuần trước đau ngực 0–1/10. Bắt đầu 60 kg × 8, chạm ngực có kiểm soát, không nảy.',
+    how:['Nằm mắt ngay dưới đòn. Bả vai ép ra sau và xuống, ngực ưỡn nhẹ, hai chân đạp chắc xuống sàn.','Tay cầm rộng hơn vai khoảng một nắm tay, cổ tay thẳng trên khuỷu.','Hạ 2 giây, chạm nhẹ vùng dưới ngực, khuỷu khoảng 45–70°. Không nảy đòn.','Đẩy lên và hơi về phía mặt, mông luôn chạm ghế. Dùng thanh an toàn hoặc người canh khi nặng.']}},
+  {id:'ua2',name:'Row có tì ngực',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',main:true,yt:'chest supported row machine form',note:'Chest-supported row hoặc T-bar có đệm, lưng dưới không phải gồng.',
+   how:['Ngực tì đệm, chân đặt vững.','Mở đầu bằng kéo bả vai về sau, rồi kéo khuỷu về phía hông.','Dừng 1 giây khi khuỷu ra sau thân, siết lưng giữa.','Duỗi tay về trước 2 giây, để bả vai trượt ra trước cho lưng được giãn.']},
+  {id:'ua3',name:'Lat pulldown tay trung tính',sets:3,reps:'8–10',top:10,rest:'nghỉ 2 phút',yt:'neutral grip lat pulldown form',
+   how:['Chỉnh đệm đùi cho chặt. Ngả người ra sau khoảng 10–15°, ngực hướng lên.','Kéo tay cầm xuống ngực trên, nghĩ tới việc đưa khuỷu xuống túi quần sau.','Không giật người ra sau để lấy đà.','Lên lại 2 giây tới khi tay gần thẳng và thấy lưng xô được kéo giãn.']},
+  {id:'ua4',name:'Machine shoulder press',sets:3,reps:'10–12',top:12,rest:'nghỉ 90 giây',yt:'machine shoulder press proper form',note:'Tạ vừa phải, 10–12 rep để vai trái chịu tải nhẹ hơn. Sáng nay vai trái đau hơn hôm CN thì bỏ bài này.',
+   how:['Chỉnh ghế để tay cầm bắt đầu ngang cằm. Máy có tay cầm trung tính (lòng bàn tay hướng vào nhau) thì dùng loại đó.','Lưng áp đệm, siết bụng, không ưỡn lưng dưới.','Đẩy lên tới gần thẳng tay, không nhún vai lên tai.','Hạ 2–3 giây về ngang cằm, không sâu hơn. Vai trái đau quá 3/10 thì giảm tạ hoặc chỉ tập nửa trên biên độ.']},
+  {id:'ua6',name:'Lateral raise tạ đơn',iso:true,sets:3,reps:'12–15',top:15,rest:'chuyển ngay sang EZ curl',ss:'A',yt:'dumbbell lateral raise proper form',
+   how:['Đứng thẳng hoặc hơi nghiêng trước, khuỷu hơi cong.','Nâng tay sang ngang và hơi về trước (khoảng 30° trước thân) tới ngang vai.','Dẫn bằng khuỷu, không nhún vai, không đung đưa người.','Hạ chậm 2–3 giây.']},
+  {id:'ua7',name:'EZ curl',iso:true,sets:2,reps:'10–12',top:12,rest:'nghỉ 60–90 giây rồi lặp lại cặp',ss:'A',yt:'ez bar curl proper form',
+   how:['Đứng thẳng, khuỷu sát thân và đứng yên.','Cuốn tạ lên tới khi cẳng tay gần thẳng đứng, khuỷu không đưa ra trước.','Không ngả lưng lấy đà.','Hạ 2–3 giây tới gần thẳng tay.']},
+  {id:'ua5',name:'Face pull',iso:true,sets:3,reps:'12–15',top:15,rest:'chuyển ngay sang pushdown',ss:'B',yt:'cable face pull proper form',
+   how:['Ròng rọc cao ngang mắt, dây thừng, cầm sao cho ngón cái hướng về phía bạn.','Kéo dây về phía trán, tách hai tay sang hai bên, khuỷu cao ngang vai.','Cuối động tác xoay tay ra sau như tư thế khoe bắp tay, giữ 1 giây.','Tạ nhẹ, không ngả người ra sau.']},
+  {id:'ua8',name:'Triceps pushdown',iso:true,sets:2,reps:'10–12',top:12,rest:'nghỉ 60 giây rồi lặp lại cặp',ss:'B',yt:'triceps rope pushdown proper form',
+   how:['Ròng rọc cao, dây thừng hoặc thanh thẳng. Khuỷu kẹp sát hông, người hơi nghiêng trước.','Ép tay xuống tới thẳng, siết tay sau 1 giây.','Chỉ cẳng tay di chuyển, khuỷu đứng yên.','Lên lại tới khi cẳng tay qua song song sàn.']}
  ]},
  LA:{name:'Lower A',sub:'Squat',plate:'red',ex:[
-  {id:'la1',name:'Back squat',sets:3,reps:'5–8',top:8,rest:'nghỉ 3 phút',main:true,note:'Tuần đầu 60 kg × 8. Lưng còn ê thì dùng hack squat.'},
-  {id:'la2',name:'Hip thrust',sets:3,reps:'8–10',top:10,rest:'nghỉ 2 phút',main:true},
-  {id:'la3',iso:true,name:'Seated leg curl',sets:3,reps:'10–12',top:12,rest:'nghỉ 90 giây'},
-  {id:'la4',iso:true,name:'Leg extension',sets:2,reps:'12–15',top:15,rest:'nghỉ 60 giây'},
-  {id:'la5',iso:true,name:'Standing calf raise',sets:3,reps:'10–15',top:15,rest:'nghỉ 60 giây',note:'Dừng 1 giây ở điểm duỗi dài nhất.'},
-  {id:'la6',core:true,name:'Pallof press',sets:2,reps:'10/bên',top:10,rest:'nghỉ 45 giây'},
-  {id:'la7',core:true,name:'Side plank',sets:2,reps:'30 giây/bên',top:30,rest:'nghỉ 45 giây',note:'Ghi số giây vào ô rep, bỏ trống ô kg.'}
+  {id:'la1',name:'Back squat',sets:3,reps:'5–8',top:8,rest:'nghỉ 3 phút',main:true,yt:'back squat proper form',note:'Tuần đầu 60 kg × 8. Lưng còn ê thì dùng hack squat.',
+   how:['Đòn đặt trên cơ thang theo kiểu bạn đã quen. Chân rộng bằng vai, mũi chân xoay ra 15–30°.','Hít sâu vào bụng và gồng bụng quanh thân (brace) trước mỗi rep.','Gập hông và gối cùng lúc, gối đi theo hướng mũi chân. Xuống tới đùi song song, sâu hơn nếu lưng vẫn giữ thẳng.','Đẩy cả bàn chân, ngực và hông lên cùng lúc, mông không bật lên trước. Lưng dưới bị cụp ở đáy thì giảm độ sâu.']},
+  {id:'la2',name:'Hip thrust',sets:3,reps:'8–10',top:10,rest:'nghỉ 2 phút',main:true,yt:'barbell hip thrust proper form',
+   how:['Lưng trên (ngay dưới bả vai) tựa ghế, đòn có đệm đặt ngang hông. Bàn chân đặt sao cho ở đỉnh động tác cẳng chân thẳng đứng.','Cằm hơi cúi, mắt nhìn trước, hạ xương sườn xuống.','Đẩy gót, siết mông nâng hông tới khi thân song song sàn. Giữ 1 giây.','Không ưỡn lưng dưới ở đỉnh: lực đến từ hông.']},
+  {id:'la3',name:'Seated leg curl',iso:true,sets:3,reps:'10–12',top:12,rest:'nghỉ 90 giây',yt:'seated leg curl proper form',
+   how:['Chỉnh tựa lưng để khớp gối thẳng trục xoay của máy, đệm đùi ép chặt.','Ngả người hơi về trước để đùi sau được giãn hơn.','Cuốn gót về dưới ghế hết biên độ, giữ 1 giây.','Thả về chậm 2–3 giây.']},
+  {id:'la4',name:'Leg extension',iso:true,sets:2,reps:'12–15',top:15,rest:'nghỉ 60 giây',yt:'leg extension machine proper form',
+   how:['Khớp gối thẳng trục máy, đệm chân ngay trên cổ chân.','Duỗi gối tới gần thẳng, siết đùi trước 1 giây.','Hạ chậm 2–3 giây. Đau phía trước gối thì bỏ bớt phần cuối biên độ.']},
+  {id:'la5',name:'Standing calf raise',iso:true,sets:3,reps:'10–15',top:15,rest:'nghỉ 60 giây',yt:'standing calf raise proper form',
+   how:['Mũi chân trên bậc, gót thả tự do.','Hạ gót thấp nhất, dừng 1 giây cho bắp chân giãn.','Nhón lên cao nhất, giữ 1 giây. Không nhún nảy.']},
+  {id:'la6',name:'Pallof press',core:true,sets:2,reps:'10/bên',top:10,rest:'nghỉ 45 giây',yt:'pallof press proper form',
+   how:['Đứng nghiêng cạnh ròng rọc đặt ngang ngực, cầm tay cầm sát ngực.','Gồng bụng, đẩy thẳng tay ra trước, không để thân xoay theo dây.','Giữ 2 giây rồi thu về. Đủ rep thì đổi bên.']},
+  {id:'la7',name:'Side plank',core:true,sets:2,reps:'30 giây/bên',top:30,rest:'nghỉ 45 giây',yt:'side plank proper form',note:'Ghi số giây vào ô rep, bỏ trống ô kg.',
+   how:['Khuỷu ngay dưới vai, người thẳng từ đầu đến chân.','Đẩy hông lên, không để võng. Thở đều.','Quá khó thì để gối chạm sàn.']}
  ]},
  UB:{name:'Upper B',sub:'Phì đại',plate:'yellow',ex:[
-  {id:'ub1',name:'Incline DB press tay trung tính',sets:3,reps:'8–12',top:12,rest:'nghỉ 2 phút',main:true,note:'Hoặc incline machine press.'},
-  {id:'ub2',name:'1-arm DB row',sets:3,reps:'10–12/bên',top:12,rest:'nghỉ 90 giây',main:true,note:'Tì ghế, tay trái trước.'},
-  {id:'ub3',name:'Pull-up có hỗ trợ',sets:3,reps:'8–12',top:12,rest:'nghỉ 2 phút',note:'Hoặc lat pulldown tay rộng.'},
-  {id:'ub4',name:'Seated cable row',sets:2,reps:'10–12',top:12,rest:'nghỉ 90 giây'},
-  {id:'ub5',iso:true,name:'Cable lateral raise 1 tay',sets:3,reps:'12–20',top:20,rest:'nghỉ 60 giây'},
-  {id:'ub6',iso:true,name:'Rear delt fly máy',sets:2,reps:'15',top:15,rest:'nghỉ 60 giây'},
-  {id:'ub7',iso:true,name:'Incline DB curl',sets:2,reps:'10–15',top:15,rest:'chuyển ngay bài sau',ss:'A'},
-  {id:'ub8',iso:true,name:'Overhead cable triceps extension',sets:2,reps:'10–15',top:15,rest:'nghỉ 60 giây',ss:'A'},
-  {id:'ub9',iso:true,name:'Side-lying external rotation, tay trái',sets:2,reps:'12–15',top:15,rest:'nghỉ 45 giây',note:'Chỉ tay trái, tạ nhẹ, chậm và đều.'}
+  {id:'ub1',name:'Incline DB press tay trung tính',sets:3,reps:'8–12',top:12,rest:'nghỉ 2 phút',main:true,yt:'neutral grip incline dumbbell press',note:'Hoặc incline machine press.',
+   how:['Ghế dốc 30°, lòng bàn tay hướng vào nhau.','Bả vai ép ra sau và xuống, ngực ưỡn nhẹ, chân đạp sàn.','Hạ 2–3 giây tới khi tạ ngang ngực, khuỷu luôn ở dưới tạ.','Đẩy lên và hơi chụm vào phía trên ngực. Không đập hai tạ vào nhau.']},
+  {id:'ub2',name:'1-arm DB row',sets:3,reps:'10–12/bên',top:12,rest:'nghỉ 90 giây',main:true,yt:'one arm dumbbell row proper form',note:'Tì ghế, tay trái trước.',
+   how:['Một tay và một gối tì ghế, lưng phẳng song song sàn.','Kéo tạ về phía hông (không kéo lên vai), khuỷu sát thân.','Siết lưng 1 giây ở đỉnh, không xoay người.','Hạ chậm, để vai được kéo giãn xuống dưới.']},
+  {id:'ub3',name:'Pull-up có hỗ trợ',sets:3,reps:'8–12',top:12,rest:'nghỉ 2 phút',yt:'assisted pull up machine form',note:'Hoặc lat pulldown tay rộng. Ô kg: ghi mức đỡ của máy.',
+   how:['Chọn mức đỡ để đạt đúng dải rep. Tay rộng hơn vai một chút.','Bắt đầu từ tay thẳng, kéo bả vai xuống trước, rồi kéo ngực lên về phía tay cầm.','Cằm qua tay cầm, không vươn cổ.','Xuống chậm 2–3 giây tới gần thẳng tay.']},
+  {id:'ub4',name:'Seated cable row',sets:2,reps:'10–12',top:12,rest:'nghỉ 90 giây',yt:'seated cable row proper form',
+   how:['Ngồi thẳng lưng, gối hơi cong, tay cầm chữ V.','Kéo về bụng trên, khuỷu sát thân, ưỡn ngực, ép bả vai.','Thân giữ yên, không ngả ra sau lấy đà.','Duỗi tay chậm về trước, để bả vai trượt ra trước.']},
+  {id:'ub5',name:'Cable lateral raise 1 tay',iso:true,sets:3,reps:'12–20',top:20,rest:'nghỉ 60 giây',yt:'single arm cable lateral raise',note:'Tay trái trước.',
+   how:['Ròng rọc thấp nhất, đứng nghiêng, tay xa ròng rọc cầm tay cầm (dây chéo trước người).','Nâng tay sang ngang tới ngang vai, khuỷu hơi cong, dẫn bằng khuỷu.','Không nhún vai, không nghiêng người.','Hạ chậm 2–3 giây.']},
+  {id:'ub6',name:'Rear delt fly máy',iso:true,sets:2,reps:'15',top:15,rest:'nghỉ 60 giây',yt:'reverse pec deck rear delt fly',
+   how:['Ngồi quay mặt vào đệm máy pec deck, tay cầm ngang vai.','Mở tay ra sau theo vòng cung, khuỷu hơi cong, tới khi tay ngang thân.','Không ép bả vai quá mạnh, để vai sau làm việc.','Về chậm.']},
+  {id:'ub7',name:'Incline DB curl',iso:true,sets:2,reps:'10–15',top:15,rest:'chuyển ngay sang bài sau',ss:'A',yt:'incline dumbbell curl proper form',
+   how:['Ghế dốc 45–60°, lưng tựa, tay buông thẳng phía sau thân.','Cuốn tạ lên, khuỷu không đưa ra trước.','Hạ hết biên độ trong 3 giây. Tư thế này kéo giãn bắp tay tốt.']},
+  {id:'ub8',name:'Overhead cable triceps extension',iso:true,sets:2,reps:'10–15',top:15,rest:'nghỉ 60 giây rồi lặp lại cặp',ss:'A',yt:'overhead cable triceps extension rope',
+   how:['Quay lưng về ròng rọc, dây thừng sau đầu, người hơi nghiêng trước, chân trụ trước sau.','Khuỷu hướng về trước, gần đầu.','Duỗi tay ra trước và lên tới thẳng, siết 1 giây.','Về chậm để tay sau được giãn. Vai trái khó chịu thì đổi sang pushdown.']},
+  {id:'ub9',name:'Side-lying external rotation, tay trái',iso:true,sets:2,reps:'12–15',top:15,rest:'nghỉ 45 giây',yt:'side lying external rotation dumbbell',note:'Chỉ tay trái, tạ 2–4 kg.',
+   how:['Nằm nghiêng bên phải, tay trái gập 90°, khuỷu kẹp sát hông (kê khăn cuộn giữa khuỷu và thân).','Xoay cẳng tay lên trần, khuỷu không rời hông.','2 giây lên, 2 giây xuống.']}
  ]},
  LB:{name:'Lower B',sub:'Gập hông',plate:'green',ex:[
-  {id:'lb1',name:'45° back extension',sets:3,reps:'12',top:12,rest:'nghỉ 2 phút',main:true,note:'Tạ người. Tuần sau chuyển sang RDL.',
-   v:{from:'2026-11-16',name:'RDL đòn',reps:'6–10',top:10,rest:'nghỉ 2–3 phút',note:'Bắt đầu 50 kg. Mỗi tuần +5 kg nếu lưng vẫn đau tối đa 2/10.'}},
-  {id:'lb2',name:'Leg press',sets:3,reps:'10–12',top:12,rest:'nghỉ 2 phút',main:true,note:'Không để mông nhấc khỏi đệm ở cuối biên độ.'},
-  {id:'lb3',name:'Bulgarian split squat',sets:3,reps:'8–10/chân',top:10,rest:'nghỉ 90 giây'},
-  {id:'lb4',iso:true,name:'Lying leg curl',sets:3,reps:'10–12',top:12,rest:'nghỉ 90 giây'},
-  {id:'lb5',iso:true,name:'Seated calf raise',sets:3,reps:'12–15',top:15,rest:'nghỉ 60 giây'},
-  {id:'lb6',core:true,name:'Dead bug',sets:2,reps:'8/bên',top:8,rest:'nghỉ 45 giây'},
-  {id:'lb7',core:true,name:'McGill curl-up',sets:2,reps:'6 (giữ 8 giây)',top:6,rest:'nghỉ 45 giây'}
+  {id:'lb1',name:'45° back extension',sets:3,reps:'12',top:12,rest:'nghỉ 2 phút',main:true,yt:'45 degree back extension glute form',note:'Tạ người. Tuần sau chuyển sang RDL.',
+   how:['Đệm đặt ngay dưới xương hông để gập được ở hông.','Tay khoanh trước ngực. Hạ người bằng cách gập hông, lưng giữ thẳng.','Lên tới khi người thẳng hàng với chân, siết mông. Không ưỡn quá.'],
+   v:{from:'2026-11-16',name:'RDL đòn',reps:'6–10',top:10,rest:'nghỉ 2–3 phút',yt:'romanian deadlift proper form',note:'Bắt đầu 50 kg. Mỗi tuần +5 kg nếu lưng vẫn đau tối đa 2/10.',
+    how:['Lấy đòn từ rack, đứng thẳng. Chân rộng bằng hông, tay rộng bằng vai.','Gối hơi cong và giữ nguyên góc đó. Đẩy hông ra sau như đóng cửa bằng mông, đòn trượt sát đùi.','Hạ tới khi đùi sau căng mạnh (thường tới giữa ống quyển), lưng vẫn thẳng. Không cố chạm sàn.','Đẩy hông về trước để đứng lên, siết mông. Gồng bụng suốt rep, không giật.']}},
+  {id:'lb2',name:'Leg press',sets:3,reps:'10–12',top:12,rest:'nghỉ 2 phút',main:true,yt:'leg press proper form',
+   how:['Lưng và mông áp sát đệm. Chân rộng bằng vai, đặt giữa bàn đạp.','Hạ chậm tới khi gối khoảng 90°, sâu hơn nếu mông vẫn chưa nhấc khỏi đệm.','Đẩy bằng cả bàn chân, không khoá cứng gối ở trên.']},
+  {id:'lb3',name:'Bulgarian split squat',sets:3,reps:'8–10/chân',top:10,rest:'nghỉ 90 giây',yt:'bulgarian split squat proper form',
+   how:['Mu bàn chân sau đặt lên ghế, chân trước cách ghế khoảng một bước dài.','Người hơi nghiêng trước, hạ thẳng xuống tới khi gối sau gần chạm sàn.','Đẩy bằng cả bàn chân trước, gối trước đi theo hướng mũi chân.','Cầm tạ đơn hai tay, hoặc một tay vịn cột cho thăng bằng.']},
+  {id:'lb4',name:'Lying leg curl',iso:true,sets:3,reps:'10–12',top:12,rest:'nghỉ 90 giây',yt:'lying leg curl proper form',
+   how:['Nằm sấp, gối ngay mép đệm, đệm chân trên gót.','Ép hông xuống đệm, không nhấc mông.','Cuốn gót về mông, giữ 1 giây, hạ 2–3 giây.']},
+  {id:'lb5',name:'Seated calf raise',iso:true,sets:3,reps:'12–15',top:15,rest:'nghỉ 60 giây',yt:'seated calf raise proper form',
+   how:['Đệm ép trên đùi gần gối, mũi chân trên bậc.','Hạ gót thấp nhất, dừng 1 giây. Nhón cao nhất, giữ 1 giây.']},
+  {id:'lb6',name:'Dead bug',core:true,sets:2,reps:'8/bên',top:8,rest:'nghỉ 45 giây',yt:'dead bug exercise proper form',
+   how:['Nằm ngửa, tay thẳng lên trần, hông và gối gập 90°.','Ép lưng dưới xuống sàn suốt bài.','Từ từ duỗi tay trái và chân phải ra xa, thở ra, thu về rồi đổi bên.']},
+  {id:'lb7',name:'McGill curl-up',core:true,sets:2,reps:'6 (giữ 8 giây)',top:6,rest:'nghỉ 45 giây',yt:'mcgill curl up',
+   how:['Nằm ngửa, một chân thẳng, một chân co. Hai tay đặt dưới lưng dưới để giữ đường cong tự nhiên.','Gồng bụng, nhấc đầu và vai lên vài cm như một khối, không gập cổ.','Giữ 8 giây rồi hạ. Đổi chân co giữa các set.']}
  ]},
  FB:{name:'Full-body 40 phút',sub:'Tuần bận',plate:'grey',fixed:true,ex:[
-  {id:'fb1',name:'Squat hoặc leg press',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút'},
-  {id:'fb2',name:'Chest press',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút'},
-  {id:'fb3',name:'Row',sets:3,reps:'8–10',top:10,rest:'nghỉ 90 giây'},
-  {id:'fb4',name:'RDL hoặc hip thrust',sets:2,reps:'8–10',top:10,rest:'nghỉ 2 phút'},
-  {id:'fb5',iso:true,name:'Lateral raise',sets:2,reps:'12–15',top:15,rest:'nghỉ 60 giây'}
+  {id:'fb1',name:'Squat hoặc leg press',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',how:['Kỹ thuật như ở Lower A / Lower B.']},
+  {id:'fb2',name:'Chest press',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',how:['Kỹ thuật như ở Upper A.']},
+  {id:'fb3',name:'Row',sets:3,reps:'8–10',top:10,rest:'nghỉ 90 giây',how:['Row có tì ngực hoặc seated cable row, như ở Upper A / B.']},
+  {id:'fb4',name:'RDL hoặc hip thrust',sets:2,reps:'8–10',top:10,rest:'nghỉ 2 phút',how:['Kỹ thuật như ở Lower A / Lower B.']},
+  {id:'fb5',name:'Lateral raise',iso:true,sets:2,reps:'12–15',top:15,rest:'nghỉ 60 giây',how:['Kỹ thuật như ở Upper A.']}
  ]}
 };
 const OTHER={
@@ -466,7 +557,8 @@ const GUIDE='<p><b>RIR</b> là số rep bạn còn làm thêm được với k�
  '<li>Set 1: chọn mức bạn nghĩ đạt <b>đáy dải rep</b> với RIR mục tiêu. Tập xong tự hỏi: còn làm thêm được mấy rep đẹp?</li>'+
  '<li>Chỉnh set sau: dư hơn mục tiêu từ 2 rep trở lên thì +5–10% tạ. Đúng mục tiêu thì giữ. Thiếu, phải gồng hoặc kỹ thuật vỡ thì −5–10%.</li>'+
  '<li>Ghi lại. Buổi sau bắt đầu từ mức đã chỉnh. Sau 1–2 buổi là chuẩn.</li></ol>'+
- '<p><b>Nghỉ giữa set:</b> ghi ở từng bài. Superset: làm bài A1 xong chuyển ngay sang A2, nghỉ sau khi xong cả cặp. Nghỉ chưa đủ mà set sau tụt quá 2 rep thì nghỉ thêm 30–60 giây.</p>'+
+ '<p><b>Nghỉ giữa set:</b> ghi ở từng bài. Nghỉ chưa đủ mà set sau tụt quá 2 rep thì nghỉ thêm 30–60 giây.</p>'+
+ '<p><b>Superset:</b> làm 1 set bài thứ nhất, chuyển ngay sang 1 set bài thứ hai, nghỉ sau khi xong cả cặp, rồi lặp lại. Chỉ ghép 2 bài cô lập dùng nhóm cơ khác nhau (vai giữa + tay trước, vai sau + tay sau), nên bài này nghỉ trong lúc bài kia làm. Cách này tiết kiệm khoảng 8–10 phút mỗi buổi mà số rep gần như không giảm, để buổi tập vừa 70 phút. Bài compound nặng không bao giờ ghép. Phòng đông, không giữ được 2 máy thì tập từng bài riêng, chỉ dài thêm vài phút.</p>'+
  '<p class="muted small">Người tập lâu năm thường đoán RIR lệch khoảng 1 rep, và đoán chuẩn hơn khi càng gần giới hạn. Thỉnh thoảng ở set cuối bài máy, thử tập tới khi không thêm được để kiểm tra mình đoán đúng không.</p>';
 const RPE=r=>String(r).split('–').map(x=>10-Number(x)).reverse().join('–');
 function rirFor(ex,ph){ if(ex.core) return null; return ex.iso?ph.rirI:ph.rir; }
@@ -559,6 +651,7 @@ function renderToday(){
   h+='<p class="meta">'+n+' × '+esc(ex.reps)+'</p>';
   h+='<div class="row small"><span class="rir">'+(rr?'RIR '+esc(rr)+' <span class="muted">(RPE '+RPE(rr)+')</span>':'Chậm, kiểm soát, không cần sát giới hạn')+'</span><span class="muted">· '+esc(ex.rest)+'</span></div>';
   if(ex.note) h+='<p class="note">'+esc(ex.note)+'</p>';
+  if(ex.how) h+='<details class="how"><summary>Cách tập</summary><ul>'+ex.how.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'+(ex.yt?'<a href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.yt)+'" target="_blank" rel="noopener">Xem video mẫu trên YouTube ↗</a>':'')+'</details>';
   if(last) h+='<p class="last">Lần trước '+dm(last.date)+': <span class="num">'+last.sets.map(fmtSet).join(' · ')+'</span></p>';
   h+=hint+'<div class="sets">';
   for(let i=0;i<rows;i++){const s=logged[i]||['',''];const ph1=last&&last.sets[i]?last.sets[i]:(last&&last.sets.length?last.sets[last.sets.length-1]:['kg','rep']);
