@@ -102,6 +102,10 @@ textarea{resize:vertical;min-height:64px}
 .set .x{text-align:center;color:var(--muted)}
 .set input{text-align:center;font-family:var(--f-display);font-size:1.15rem;font-variant-numeric:tabular-nums;padding:6px}
 .set input::placeholder{color:var(--muted);opacity:.55}
+.exnote textarea{min-height:40px;font-size:.88rem;padding:6px 10px}
+.lastnote{font-size:.82rem;color:var(--muted);font-style:italic}
+.meal{display:grid;grid-template-columns:96px minmax(0,1fr) 38px;gap:6px;align-items:center}
+.meal input[type=time]{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 6px;min-width:0;width:100%;font-family:var(--f-display);font-size:1rem}
 
 /* pain */
 .pain{display:grid;grid-template-columns:90px 1fr 40px;gap:10px;align-items:center}
@@ -175,6 +179,13 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
 
       <div class="chips" id="type-chips" role="group" aria-label="Chọn buổi"></div>
       <div id="session"></div>
+
+      <div class="card" id="meals-card">
+        <p class="eyebrow" id="meals-title">Ăn ngoài hôm nay</p>
+        <div class="stack" id="meals"></div>
+        <button class="btn ghost" id="meal-add">+ Thêm bữa ăn ngoài</button>
+        <p class="small muted">Ghi giờ và món, càng cụ thể càng tốt (vd "phở bò tái, thêm thịt", "2 lon bia"). Tự động lưu, có trong báo cáo tuần.</p>
+      </div>
     </section>
   </div>
 
@@ -463,6 +474,11 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
         <div id="ci-sessions" class="stack small"></div>
       </div>
 
+      <div class="card">
+        <p class="eyebrow">Ăn ngoài trong tuần</p>
+        <div id="ci-meals" class="stack small"></div>
+      </div>
+
       <button class="btn" id="ci-copy">Sao chép báo cáo tuần</button>
       <p class="small muted">Dán báo cáo vào chat với PT mỗi Chủ nhật.</p>
       <textarea id="ci-fallback" hidden rows="10" aria-label="Báo cáo tuần"></textarea>
@@ -493,7 +509,7 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
 <script>
 (function(){
 const K='pt-log-v1';
-let S={sessions:{},weights:{},weeks:{}};
+let S={sessions:{},weights:{},weeks:{},meals:{}};
 try{const raw=localStorage.getItem(K); if(raw){const o=JSON.parse(raw); S=Object.assign(S,o);}}catch(e){}
 function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
 
@@ -704,7 +720,14 @@ const num=v=>{if(v==null||v==='')return NaN;return parseFloat(String(v).replace(
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 /* ---------- log helpers ---------- */
-function hasData(sess){ if(!sess||!sess.ex) return false; return Object.values(sess.ex).some(a=>a.some(s=>s&&(s[0]||s[1]))); }
+function hasData(sess){ if(!sess) return false; if(sess.exNote&&Object.values(sess.exNote).some(x=>x&&x.trim())) return true; if(!sess.ex) return false; return Object.values(sess.ex).some(a=>a.some(s=>s&&(s[0]||s[1]))); }
+function lastNote(exId,ds){
+ const keys=Object.keys(S.sessions).filter(k=>k.split('|')[0]<ds).sort().reverse();
+ for(const k of keys){const n=S.sessions[k].exNote&&S.sessions[k].exNote[exId]; if(n&&n.trim()) return {date:k.split('|')[0],note:n.trim()};}
+ return null;
+}
+const mealsOf=ds=>(S.meals[ds]||[]).filter(m=>m&&(m.t||(m.f&&m.f.trim())));
+const fmtMeal=m=>(m.t||'??:??')+' '+(m.f||'').trim();
 function sessionsInWeek(mon){
  const end=addDays(mon,6);
  return Object.keys(S.sessions).filter(k=>{const d=k.split('|')[0];return d>=mon&&d<=end&&(hasData(S.sessions[k])||S.sessions[k].note);}).sort();
@@ -748,6 +771,7 @@ function renderToday(){
  $('type-chips').innerHTML=CHIP_ORDER.filter(t=>t!=='FB'||ph.mode==='busy'||d.getDate()<=7||curType==='FB').map(t=>{const m=PROGRAM[t]||OTHER[t];const dot=PROGRAM[t]?'<span class="dot plate-'+m.plate+'"></span>':'';
   return '<button class="chip" data-type="'+t+'" aria-pressed="'+(t===curType)+'">'+dot+esc(t==='FB'?'Full-body (tuần bận)':m.name)+'</button>';}).join('');
 
+ renderMeals();
  if(!PROGRAM[curType]){ $('session').innerHTML='<div class="card">'+OTHER[curType].body+'</div>'; return; }
  const prog=PROGRAM[curType]; const key=curDate+'|'+curType; const sess=S.sessions[key]||{};
  let h='<details class="card"><summary>Khởi động 8–10 phút</summary><ol class="small"><li>Xe đạp hoặc đi dốc 3 phút.</li><li>Band external rotation 2×15 (tay trái thêm 1 set), pull-apart ×15, wall slide ×10.</li><li>Cat-camel ×6, giãn gập hông 30 giây/bên, dead bug ×8/bên, bird dog ×8/bên.</li><li>Bài chính: 2–3 set khởi động 50% → 70% → 85%.</li></ol></details>';
@@ -770,7 +794,12 @@ function renderToday(){
   h+=hint+'<div class="sets">';
   for(let i=0;i<rows;i++){const s=logged[i]||['',''];const ph1=last&&last.sets[i]?last.sets[i]:(last&&last.sets.length?last.sets[last.sets.length-1]:['kg','rep']);
    h+='<div class="set"><span class="i">'+(i+1)+'</span><input type="text" inputmode="decimal" id="s-'+ex.id+'-'+i+'-kg" data-ex="'+ex.id+'" data-i="'+i+'" data-f="0" value="'+esc(s[0])+'" placeholder="'+esc(ph1[0]||'kg')+'" aria-label="'+esc(ex.name)+' set '+(i+1)+' kg"><span class="x">×</span><input type="text" inputmode="numeric" id="s-'+ex.id+'-'+i+'-r" data-ex="'+ex.id+'" data-i="'+i+'" data-f="1" value="'+esc(s[1])+'" placeholder="'+esc(ph1[1]||'rep')+'" aria-label="'+esc(ex.name)+' set '+(i+1)+' rep"></div>';}
-  h+='</div></article>';
+  h+='</div>';
+  const ln=lastNote(ex.id,curDate);
+  if(ln) h+='<p class="lastnote">Ghi chú lần trước ('+dm(ln.date)+'): '+esc(ln.note)+'</p>';
+  const en=(sess.exNote&&sess.exNote[ex.id])||'';
+  h+='<div class="field exnote"><label for="en-'+ex.id+'">Ghi chú bài này</label><textarea id="en-'+ex.id+'" data-exnote="'+ex.id+'" rows="1" placeholder="Nấc ghế, máy dùng, cảm giác, đau, đổi bài…">'+esc(en)+'</textarea></div>';
+  h+='</article>';
  });
  h+='</div>';
  const p=sess.pain||{};
@@ -778,7 +807,7 @@ function renderToday(){
  [['vai','Vai trái'],['lung','Lưng dưới'],['nguc','Ngực']].forEach(([k,l])=>{const v=p[k]==null?0:p[k];
   h+='<div class="pain"><label for="pain-'+k+'">'+l+'</label><input type="range" min="0" max="10" step="1" id="pain-'+k+'" data-pain="'+k+'" value="'+v+'"><output class="'+painLvl(v)+'" id="po-'+k+'">'+v+'</output></div>';});
  h+='<p class="small muted" id="pain-advice"></p>';
- h+='<div class="field"><label for="sess-note">Ghi chú buổi tập (bài nào nặng/nhẹ, đổi bài gì…)</label><textarea id="sess-note" data-note="1">'+esc(sess.note||'')+'</textarea></div>';
+ h+='<div class="field"><label for="sess-note">Ghi chú chung cả buổi (năng lượng, phòng đông, thời gian tập…)</label><textarea id="sess-note" data-note="1">'+esc(sess.note||'')+'</textarea></div>';
  h+='<p class="small muted">Tự động lưu trên máy này.</p></div>';
  $('session').innerHTML=h;
  painAdvice();
@@ -790,11 +819,26 @@ function painAdvice(){
  el.className='small '+painLvl(mx);
  el.textContent=mx<=3?'Trong vùng an toàn. Tiếp tục bình thường.':(mx<=5?'Giữ nguyên tạ hoặc giảm 10–20%. Sáng mai theo dõi lại.':'Dừng bài gây đau, thay biến thể và báo PT.');
 }
-function ensureSess(){const k=curDate+'|'+curType;if(!S.sessions[k])S.sessions[k]={ex:{},pain:{},note:''};if(!S.sessions[k].ex)S.sessions[k].ex={};if(!S.sessions[k].pain)S.sessions[k].pain={};return S.sessions[k];}
+function ensureSess(){const k=curDate+'|'+curType;if(!S.sessions[k])S.sessions[k]={ex:{},pain:{},note:''};if(!S.sessions[k].ex)S.sessions[k].ex={};if(!S.sessions[k].pain)S.sessions[k].pain={};if(!S.sessions[k].exNote)S.sessions[k].exNote={};return S.sessions[k];}
+
+/* ăn ngoài theo ngày: S.meals[ngày] = [{t:'12:30', f:'phở bò'}] */
+function renderMeals(){
+ $('meals-title').textContent=curDate===TODAY?'Ăn ngoài hôm nay':'Ăn ngoài '+DOW[parse(curDate).getDay()]+' '+dm(curDate);
+ const list=S.meals[curDate]||[];
+ $('meals').innerHTML=list.length?list.map((m,i)=>'<div class="meal"><input type="time" data-mi="'+i+'" data-mf="t" value="'+esc(m.t||'')+'" aria-label="Giờ ăn"><input type="text" data-mi="'+i+'" data-mf="f" value="'+esc(m.f||'')+'" placeholder="Ăn gì, bao nhiêu" aria-label="Món ăn"><button class="iconbtn" data-mdel="'+i+'" aria-label="Xoá bữa này">×</button></div>').join(''):'<p class="small muted">Hôm nay ăn ở nhà theo khung. Có ăn ngoài thì bấm thêm.</p>';
+}
+$('meal-add').addEventListener('click',()=>{
+ const l=S.meals[curDate]||(S.meals[curDate]=[]);
+ const n=new Date(); l.push({t:curDate===TODAY?pad(n.getHours())+':'+pad(n.getMinutes()):'',f:''}); save(); renderMeals();
+ const ins=$('meals').querySelectorAll('input[data-mf="f"]'); if(ins.length) ins[ins.length-1].focus();
+});
+$('meals').addEventListener('input',e=>{const t=e.target;if(t.dataset.mi==null)return;const l=S.meals[curDate];if(!l||!l[+t.dataset.mi])return;l[+t.dataset.mi][t.dataset.mf]=t.value;save();});
+$('meals').addEventListener('click',e=>{const b=e.target.closest('[data-mdel]');if(!b)return;const l=S.meals[curDate];if(!l)return;l.splice(+b.dataset.mdel,1);if(!l.length)delete S.meals[curDate];save();renderMeals();});
 
 $('session').addEventListener('input',e=>{
  const t=e.target;
- if(t.dataset.ex){const s=ensureSess();const a=s.ex[t.dataset.ex]||(s.ex[t.dataset.ex]=[]);const i=+t.dataset.i;a[i]=a[i]||['',''];a[i][+t.dataset.f]=t.value.trim();save();}
+ if(t.dataset.exnote){const s=ensureSess();const v=t.value;if(v.trim())s.exNote[t.dataset.exnote]=v;else delete s.exNote[t.dataset.exnote];save();}
+ else if(t.dataset.ex){const s=ensureSess();const a=s.ex[t.dataset.ex]||(s.ex[t.dataset.ex]=[]);const i=+t.dataset.i;a[i]=a[i]||['',''];a[i][+t.dataset.f]=t.value.trim();save();}
  else if(t.dataset.pain){const s=ensureSess();const v=+t.value;s.pain[t.dataset.pain]=v;const o=$('po-'+t.dataset.pain);o.textContent=v;o.className=painLvl(v);painAdvice();save();}
  else if(t.dataset.note){const s=ensureSess();s.note=t.value;save();}
 });
@@ -824,6 +868,8 @@ function renderCheckin(){
  const ks=sessionsInWeek(ciMon);
  $('ci-sessions').innerHTML=ks.length?ks.map(k=>{const [ds,t]=k.split('|');const m=PROGRAM[t];const s=S.sessions[k];const nEx=Object.values(s.ex||{}).filter(a=>a.some(x=>x&&(x[0]||x[1]))).length;
   return '<div class="row"><span class="dot plate-'+(m?m.plate:'grey')+'"></span><span>'+DOW[parse(ds).getDay()]+' '+dm(ds)+' · '+esc(m?m.name:t)+'</span><span class="muted">'+nEx+' bài</span></div>';}).join(''):'<p class="muted">Chưa có buổi nào. Ghi set ở mục Hôm nay.</p>';
+ let mh='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const ms=mealsOf(ds);if(ms.length)mh+='<div><b>'+DOW[parse(ds).getDay()]+' '+dm(ds)+'</b><ul>'+ms.map(m=>'<li>'+esc(fmtMeal(m))+'</li>').join('')+'</ul></div>';}
+ $('ci-meals').innerHTML=mh||'<p class="muted">Chưa ghi bữa ăn ngoài nào. Ghi ở mục Hôm nay.</p>';
  $('ci-fallback').hidden=true;
 }
 function statCheckin(){
@@ -849,8 +895,12 @@ function buildReport(){
  L.push('Buổi tập: '+ks.length);
  ks.forEach(k=>{const [ds,t]=k.split('|');const prog=PROGRAM[t];const s=S.sessions[k];const p=s.pain||{};
   L.push('— '+(prog?prog.name:t)+' · '+DOW[parse(ds).getDay()]+' '+dm(ds)+' | đau vai '+(p.vai||0)+', lưng '+(p.lung||0)+', ngực '+(p.nguc||0));
-  if(prog) prog.ex.forEach(ex0=>{const ex=variant(ex0,ds);const arr=(s.ex&&s.ex[ex.id]||[]).filter(x=>x&&(x[0]||x[1]));if(arr.length)L.push('  '+ex.name+': '+arr.map(fmtSet).join(', '));});
-  if(s.note)L.push('  Ghi chú: '+s.note.replace(/\n/g,' '));});
+  if(prog) prog.ex.forEach(ex0=>{const ex=variant(ex0,ds);const arr=(s.ex&&s.ex[ex.id]||[]).filter(x=>x&&(x[0]||x[1]));const en=(s.exNote&&s.exNote[ex.id]||'').trim().replace(/\n/g,' ');
+   if(arr.length||en)L.push('  '+ex.name+': '+(arr.length?arr.map(fmtSet).join(', '):'(không ghi set)')+(en?' | note: '+en:''));});
+  if(s.note)L.push('  Ghi chú buổi: '+s.note.replace(/\n/g,' '));});
+ const ml=[];for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const ms=mealsOf(ds);if(ms.length)ml.push('— '+DOW[parse(ds).getDay()]+' '+dm(ds)+': '+ms.map(m=>fmtMeal(m).replace(/\n/g,' ')).join('; '));}
+ L.push('Ăn ngoài: '+(ml.length?ml.length+' ngày':'không'));
+ ml.forEach(x=>L.push(x));
  L.push('Ngủ TB: '+(wk.sleepH||'–')+' h · chất lượng '+(wk.sleepQ||'–')+'/5');
  L.push('Bước TB: '+(wk.steps||'–'));
  L.push('Stress '+(wk.stress||'–')+' · Năng lượng '+(wk.energy||'–')+' · Đói '+(wk.hunger||'–'));
@@ -872,7 +922,7 @@ $('bk-restore').addEventListener('click',e=>{
  try{o=JSON.parse(raw);}catch(err){toast('Bản sao lưu không đọc được. Hãy dán đúng toàn bộ đoạn đã sao chép.');return;}
  if(!o||typeof o!=='object'||!o.sessions){toast('Đây không phải bản sao lưu của Sổ Tập.');return;}
  if(!armed){armed=true;e.target.textContent='Bấm lần nữa để ghi đè dữ liệu hiện tại';e.target.classList.add('danger');return;}
- S=Object.assign({sessions:{},weights:{},weeks:{}},o);save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
+ S=Object.assign({sessions:{},weights:{},weeks:{},meals:{}},o);save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
  renderToday();renderCheckin();toast('Đã khôi phục dữ liệu.');
 });
 
