@@ -133,6 +133,7 @@ td.n{font-family:var(--f-display);font-variant-numeric:tabular-nums;font-size:1r
 .wgrid .d{display:grid;gap:2px;text-align:center}
 .wgrid .d span{font-size:.72rem;color:var(--muted)}
 .wgrid input{text-align:center;padding:6px 2px;font-family:var(--f-display);font-size:1rem}
+.wgrid.steps input{font-size:.9rem;padding:6px 0}
 .stat{display:flex;gap:16px;flex-wrap:wrap}
 .stat div{display:grid}
 .stat b{font-family:var(--f-display);font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
@@ -174,6 +175,13 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
             <input type="text" inputmode="decimal" id="w-today" placeholder="vd 78.4">
           </div>
           <p class="small muted" id="w-today-avg" style="flex:2 1 160px"></p>
+        </div>
+        <div class="inline">
+          <div class="field">
+            <label for="st-today">Bước chân hôm nay</label>
+            <input type="text" inputmode="numeric" id="st-today" placeholder="ghi cuối ngày">
+          </div>
+          <p class="small muted" id="st-today-avg" style="flex:2 1 160px"></p>
         </div>
       </div>
 
@@ -448,9 +456,14 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
       </div>
 
       <div class="card">
+        <p class="eyebrow">Bước chân</p>
+        <div class="wgrid steps" id="ci-stepgrid"></div>
+        <div class="stat" id="ci-stepstat"></div>
+      </div>
+
+      <div class="card">
         <div class="inline">
           <div class="field"><label for="ci-waist">Vòng eo (cm)</label><input type="text" inputmode="decimal" id="ci-waist" data-wk="waist"></div>
-          <div class="field"><label for="ci-steps">Bước chân TB</label><input type="text" inputmode="numeric" id="ci-steps" data-wk="steps"></div>
         </div>
         <div class="inline">
           <div class="field"><label for="ci-sleepH">Ngủ TB (giờ)</label><input type="text" inputmode="decimal" id="ci-sleepH" data-wk="sleepH"></div>
@@ -509,7 +522,7 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
 <script>
 (function(){
 const K='pt-log-v1';
-let S={sessions:{},weights:{},weeks:{},meals:{}};
+let S={sessions:{},weights:{},weeks:{},meals:{},steps:{}};
 try{const raw=localStorage.getItem(K); if(raw){const o=JSON.parse(raw); S=Object.assign(S,o);}}catch(e){}
 function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
 
@@ -726,6 +739,10 @@ function lastNote(exId,ds){
  for(const k of keys){const n=S.sessions[k].exNote&&S.sessions[k].exNote[exId]; if(n&&n.trim()) return {date:k.split('|')[0],note:n.trim()};}
  return null;
 }
+const stepNum=v=>{const s=String(v==null?'':v).replace(/[^\d]/g,'');return s?parseInt(s,10):NaN;};
+const fmtK=n=>Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+function stepAvg(mon){const v=[];for(let i=0;i<7;i++){const x=stepNum(S.steps[addDays(mon,i)]);if(!isNaN(x))v.push(x);}return v.length?{avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length}:null;}
+function stepAvgText(mon){const a=stepAvg(mon);return a?'TB tuần này: '+fmtK(a.avg)+' bước ('+a.n+' ngày). Mục tiêu 8.000.':'Ghi số bước trên điện thoại/đồng hồ trước khi ngủ.';}
 const mealsOf=ds=>(S.meals[ds]||[]).filter(m=>m&&(m.t||(m.f&&m.f.trim())));
 const fmtMeal=m=>(m.t||'??:??')+' '+(m.f||'').trim();
 function sessionsInWeek(mon){
@@ -767,6 +784,9 @@ function renderToday(){
  $('w-today').previousElementSibling.textContent=curDate===TODAY?'Cân sáng nay (kg)':'Cân sáng '+dm(curDate)+' (kg)';
  const mon=monday(curDate); const vals=[];for(let i=0;i<7;i++){const v=num(S.weights[addDays(mon,i)]);if(!isNaN(v))vals.push(v);}
  $('w-today-avg').textContent=vals.length?('TB tuần này: '+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2)+' kg ('+vals.length+' ngày)'):'Cân mỗi sáng sau khi đi vệ sinh, trước khi ăn uống.';
+ const st=S.steps[curDate]; $('st-today').value=st==null?'':st;
+ $('st-today').previousElementSibling.textContent=curDate===TODAY?'Bước chân hôm nay':'Bước chân '+dm(curDate);
+ $('st-today-avg').textContent=stepAvgText(mon);
 
  $('type-chips').innerHTML=CHIP_ORDER.filter(t=>t!=='FB'||ph.mode==='busy'||d.getDate()<=7||curType==='FB').map(t=>{const m=PROGRAM[t]||OTHER[t];const dot=PROGRAM[t]?'<span class="dot plate-'+m.plate+'"></span>':'';
   return '<button class="chip" data-type="'+t+'" aria-pressed="'+(t===curType)+'">'+dot+esc(t==='FB'?'Full-body (tuần bận)':m.name)+'</button>';}).join('');
@@ -848,6 +868,8 @@ $('w-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.w
  const mon=monday(curDate);const vals=[];for(let i=0;i<7;i++){const x=num(S.weights[addDays(mon,i)]);if(!isNaN(x))vals.push(x);}
  $('w-today-avg').textContent=vals.length?('TB tuần này: '+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2)+' kg ('+vals.length+' ngày)'):'';});
 
+$('st-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.steps[curDate]=v;else delete S.steps[curDate];save();$('st-today-avg').textContent=stepAvgText(monday(curDate));});
+
 /* ---------- LỊCH: phase table ---------- */
 $('phase-table').innerHTML=PHASES.map(p=>'<tr class="'+(TODAY>=p.from&&TODAY<=p.to?'now':'')+'"><td class="n">'+p.wk+'<br><span class="small muted" style="font-family:var(--f-body)">'+dm(p.from)+'–'+dm(p.to)+'</span></td><td>'+esc(p.name)+'</td><td>'+esc(p.setTxt)+'</td><td class="n">'+p.rir+'</td><td class="n">'+p.rirI+'</td></tr>').join('');
 $('guide').innerHTML=GUIDE;
@@ -862,6 +884,9 @@ function renderCheckin(){
  let g='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const d=parse(ds);const v=S.weights[ds];
   g+='<div class="d"><span>'+DOW[d.getDay()]+'</span><input type="text" inputmode="decimal" id="cw-'+i+'" data-wd="'+ds+'" value="'+esc(v==null?'':v)+'" aria-label="Cân '+DOW[d.getDay()]+' '+dm(ds)+'"></div>';}
  $('ci-weights').innerHTML=g;
+ let sg='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const d=parse(ds);const v=S.steps[ds];
+  sg+='<div class="d"><span>'+DOW[d.getDay()]+'</span><input type="text" inputmode="numeric" data-sd="'+ds+'" value="'+esc(v==null?'':v)+'" aria-label="Bước chân '+DOW[d.getDay()]+' '+dm(ds)+'"></div>';}
+ $('ci-stepgrid').innerHTML=sg;
  statCheckin();
  const wk=S.weeks[ciMon]||{};
  document.querySelectorAll('[data-wk]').forEach(el=>{el.value=wk[el.dataset.wk]||'';});
@@ -877,7 +902,12 @@ function statCheckin(){
  let h='<div><span class="small muted">TB tuần</span><b>'+(a?a.avg.toFixed(2):'–')+'</b><span class="small muted">'+(a?a.n+' ngày':'chưa có số')+'</span></div>';
  if(a&&b){const diff=a.avg-b.avg;const pct=diff/b.avg*100;h+='<div><span class="small muted">So tuần trước</span><b>'+(diff>0?'+':'')+diff.toFixed(2)+'</b><span class="small muted">'+(pct>0?'+':'')+pct.toFixed(2)+'%/tuần</span></div>';}
  $('ci-stat').innerHTML=h;
+ const sa=stepAvg(ciMon), sb=stepAvg(addDays(ciMon,-7)), legacy=(S.weeks[ciMon]||{}).steps;
+ let sh='<div><span class="small muted">TB tuần</span><b>'+(sa?fmtK(sa.avg):(legacy||'–'))+'</b><span class="small muted">'+(sa?sa.n+' ngày':'chưa có số')+'</span></div>';
+ if(sa&&sb) sh+='<div><span class="small muted">Tuần trước</span><b>'+fmtK(sb.avg)+'</b><span class="small muted">'+sb.n+' ngày</span></div>';
+ $('ci-stepstat').innerHTML=sh;
 }
+$('ci-stepgrid').addEventListener('input',e=>{const t=e.target;if(!t.dataset.sd)return;const v=t.value.trim();if(v)S.steps[t.dataset.sd]=v;else delete S.steps[t.dataset.sd];save();statCheckin();});
 $('ci-weights').addEventListener('input',e=>{const t=e.target;if(!t.dataset.wd)return;const v=t.value.trim();if(v)S.weights[t.dataset.wd]=v;else delete S.weights[t.dataset.wd];save();statCheckin();});
 document.querySelectorAll('[data-wk]').forEach(el=>el.addEventListener('input',()=>{const w=S.weeks[ciMon]||(S.weeks[ciMon]={});w[el.dataset.wk]=el.value;save();}));
 $('ci-prev').addEventListener('click',()=>{ciMon=addDays(ciMon,-7);renderCheckin();});
@@ -902,7 +932,9 @@ function buildReport(){
  L.push('Ăn ngoài: '+(ml.length?ml.length+' ngày':'không'));
  ml.forEach(x=>L.push(x));
  L.push('Ngủ TB: '+(wk.sleepH||'–')+' h · chất lượng '+(wk.sleepQ||'–')+'/5');
- L.push('Bước TB: '+(wk.steps||'–'));
+ const sa=stepAvg(ciMon);
+ L.push('Bước chân: '+[0,1,2,3,4,5,6].map(i=>{const ds=addDays(ciMon,i);const x=stepNum(S.steps[ds]);return DOW[parse(ds).getDay()]+' '+(isNaN(x)?'–':fmtK(x));}).join(' · '));
+ L.push('Bước TB: '+(sa?fmtK(sa.avg)+' ('+sa.n+' ngày)':(wk.steps||'–')));
  L.push('Stress '+(wk.stress||'–')+' · Năng lượng '+(wk.energy||'–')+' · Đói '+(wk.hunger||'–'));
  L.push('Bám ăn: '+(wk.adherence?wk.adherence+'%':'–')+' · Đủ protein: '+(wk.proteinDays||'–')+'/7 ngày');
  L.push('Rượu bia/bữa lệch: '+(wk.offplan||'không'));
@@ -922,7 +954,7 @@ $('bk-restore').addEventListener('click',e=>{
  try{o=JSON.parse(raw);}catch(err){toast('Bản sao lưu không đọc được. Hãy dán đúng toàn bộ đoạn đã sao chép.');return;}
  if(!o||typeof o!=='object'||!o.sessions){toast('Đây không phải bản sao lưu của Sổ Tập.');return;}
  if(!armed){armed=true;e.target.textContent='Bấm lần nữa để ghi đè dữ liệu hiện tại';e.target.classList.add('danger');return;}
- S=Object.assign({sessions:{},weights:{},weeks:{},meals:{}},o);save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
+ S=Object.assign({sessions:{},weights:{},weeks:{},meals:{},steps:{}},o);save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
  renderToday();renderCheckin();toast('Đã khôi phục dữ liệu.');
 });
 
