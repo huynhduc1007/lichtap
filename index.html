@@ -163,7 +163,11 @@ nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft
             <p class="eyebrow" id="today-label">Hôm nay</p>
             <h1 id="today-title">Buổi tập</h1>
           </div>
-          <input type="date" id="pick-date" aria-label="Ngày tập" style="width:auto">
+          <div class="row" style="gap:6px">
+            <button class="iconbtn" id="day-prev" aria-label="Ngày trước">‹</button>
+            <input type="date" id="pick-date" aria-label="Ngày tập" style="width:auto">
+            <button class="iconbtn" id="day-next" aria-label="Ngày sau">›</button>
+          </div>
         </div>
         <div class="phase" id="phase-box"></div>
       </div>
@@ -781,11 +785,11 @@ function renderToday(){
  $('phase-box').innerHTML=pb;
 
  const w=S.weights[curDate]; $('w-today').value=w==null?'':w;
- $('w-today').previousElementSibling.textContent=curDate===TODAY?'Cân sáng nay (kg)':'Cân sáng '+dm(curDate)+' (kg)';
+ $('w-today').previousElementSibling.textContent='Cân sáng '+DOW[d.getDay()]+' '+dm(curDate)+' (kg)';
  const mon=monday(curDate); const vals=[];for(let i=0;i<7;i++){const v=num(S.weights[addDays(mon,i)]);if(!isNaN(v))vals.push(v);}
  $('w-today-avg').textContent=vals.length?('TB tuần này: '+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2)+' kg ('+vals.length+' ngày)'):'Cân mỗi sáng sau khi đi vệ sinh, trước khi ăn uống.';
  const st=S.steps[curDate]; $('st-today').value=st==null?'':st;
- $('st-today').previousElementSibling.textContent=curDate===TODAY?'Bước chân hôm nay':'Bước chân '+dm(curDate);
+ $('st-today').previousElementSibling.textContent='Bước chân '+DOW[d.getDay()]+' '+dm(curDate);
  $('st-today-avg').textContent=stepAvgText(mon);
 
  $('type-chips').innerHTML=CHIP_ORDER.filter(t=>t!=='FB'||ph.mode==='busy'||d.getDate()<=7||curType==='FB').map(t=>{const m=PROGRAM[t]||OTHER[t];const dot=PROGRAM[t]?'<span class="dot plate-'+m.plate+'"></span>':'';
@@ -864,6 +868,9 @@ $('session').addEventListener('input',e=>{
 });
 $('type-chips').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;curType=b.dataset.type;renderToday();});
 $('pick-date').addEventListener('change',e=>{if(!e.target.value)return;curDate=e.target.value;curType=defaultType(curDate);renderToday();});
+function goDay(n){curDate=addDays(curDate,n);curType=defaultType(curDate);renderToday();}
+$('day-prev').addEventListener('click',()=>goDay(-1));
+$('day-next').addEventListener('click',()=>goDay(1));
 $('w-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.weights[curDate]=v;else delete S.weights[curDate];save();
  const mon=monday(curDate);const vals=[];for(let i=0;i<7;i++){const x=num(S.weights[addDays(mon,i)]);if(!isNaN(x))vals.push(x);}
  $('w-today-avg').textContent=vals.length?('TB tuần này: '+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2)+' kg ('+vals.length+' ngày)'):'';});
