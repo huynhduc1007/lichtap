@@ -728,7 +728,7 @@ const dm=s=>{const d=parse(s);return pad(d.getDate())+'/'+pad(d.getMonth()+1);};
 function monday(ds){const d=parse(ds);d.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(d);}
 function addDays(ds,n){const d=parse(ds);d.setDate(d.getDate()+n);return ymd(d);}
 function isoWeek(ds){const d=parse(ds);const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-day);const y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));return t.getUTCFullYear()+'-W'+pad(Math.ceil(((t-y0)/86400000+1)/7));}
-const TODAY=ymd(new Date());
+let TODAY=ymd(new Date());
 const num=v=>{if(v==null||v==='')return NaN;return parseFloat(String(v).replace(',','.'));};
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -968,6 +968,18 @@ function route(){
  window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route);
+/* trang để mở qua đêm: khi quay lại app mà đã sang ngày mới thì nhảy sang ngày mới */
+function rollDay(){
+ const now=ymd(new Date()); if(now===TODAY) return;
+ const wasToday=curDate===TODAY, wasWeek=ciMon===monday(TODAY);
+ TODAY=now;
+ if(wasToday){curDate=now;curType=defaultType(now);}
+ if(wasWeek) ciMon=monday(now);
+ renderToday(); if(!$('v-check-in').hidden) renderCheckin();
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)rollDay();});
+window.addEventListener('focus',rollDay);
+window.addEventListener('pageshow',rollDay);
 renderToday(); route();
 })();
 </script>
