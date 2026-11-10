@@ -971,7 +971,7 @@ function route(){
  const h=(location.hash||'').slice(1); const v=VIEWS.includes(h)?h:'hom-nay';
  VIEWS.forEach(x=>{$('v-'+x).hidden=(x!==v);});
  document.querySelectorAll('nav.tabs a').forEach(a=>{if(a.dataset.v===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
- if(v==='check-in')renderCheckin();
+ if(v==='check-in')renderCheckin(); else if(v==='hom-nay')renderToday();
  window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route);
