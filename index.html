@@ -4,533 +4,659 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#EEF1F4">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Sổ Tập Recomp</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B0D10" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sổ Tập">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<link rel="icon" href="img/icon-192.png">
+<title>Sổ Tập · Recomp & Half Marathon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: phone-first single column (max 640px), fixed bottom tab bar; only exercise cards are boxed. Session colors follow bumper-plate colors (20 blue, 25 red, 15 yellow, 10 green). */
+/* =========================================================
+   Sổ Tập v2 — design notes
+   - Mobile-first, một cột tối đa 680px. Thanh tab dưới kiểu iOS (mờ nền).
+   - Màu theo vai trò: tạ = xanh dương, chạy = cam, ăn = xanh lá, race = vàng đồng.
+     Màu buổi tạ vẫn theo bánh tạ (UA xanh, LA đỏ, UB vàng, LB xanh lá).
+   - Số liệu dùng Barlow Condensed tabular; chữ dùng Be Vietnam Pro (đủ dấu tiếng Việt).
+   - Thẻ bo 18px, không viền ở light (đổ bóng rất nhẹ), viền mảnh ở dark.
+   ========================================================= */
 :root{
-  --bg:#EEF1F4; --surface:#FFFFFF; --sunk:#E4E9EE; --fg:#14202B; --muted:#5A6977; --line:#D3DAE1;
-  --accent:#1E5AA8; --accent-fg:#FFFFFF; --accent-soft:#DCE7F5;
-  --p-blue:#2C68C9; --p-red:#C8372D; --p-yellow:#C99200; --p-green:#2A8350; --p-grey:#6B7884;
-  --ok:#23784A; --warn:#A86E00; --bad:#BF3328;
+  --bg:#F4F5F7; --surface:#FFFFFF; --sunk:#ECEEF2; --raise:#FFFFFF;
+  --fg:#111418; --fg2:#3A414A; --muted:#6B7480; --line:#E2E5EA; --line2:#D2D7DE;
+  --accent:#0B5FD7; --accent-fg:#FFFFFF; --accent-soft:#E3EDFC;
+  --run:#E8590C; --run-soft:#FDEBDF; --eat:#1F8A4C; --eat-soft:#E1F3E8; --race:#B7791F; --race-soft:#FAF0DC;
+  --p-blue:#2C68C9; --p-red:#C8372D; --p-yellow:#C99200; --p-green:#2A8350; --p-grey:#7A8591;
+  --ok:#1F7A45; --warn:#A86400; --bad:#C0322A;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 2px 8px rgba(16,24,40,.04);
   --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --nav-h:60px;
+  --nav-h:64px; --r:18px; --r-s:12px;
+  color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E141A; --surface:#161F28; --sunk:#1D2832; --fg:#E4EBF2; --muted:#93A3B2; --line:#283541;
-  --accent:#6EA2EE; --accent-fg:#0E141A; --accent-soft:#1C2E46;
+  --bg:#0B0D10; --surface:#15181D; --sunk:#1C2027; --raise:#1C2027;
+  --fg:#ECEFF3; --fg2:#C5CBD3; --muted:#8E97A3; --line:#252A32; --line2:#323843;
+  --accent:#5B9BFF; --accent-fg:#0B0D10; --accent-soft:#16253D;
+  --run:#FF8A4C; --run-soft:#3A2116; --eat:#4CC27F; --eat-soft:#14301F; --race:#E3B356; --race-soft:#33270F;
   --p-blue:#5B8FE6; --p-red:#E2655B; --p-yellow:#E3B53A; --p-green:#4FB27A; --p-grey:#8C99A5;
-  --ok:#5BC08A; --warn:#E3B04A; --bad:#EE7468; color-scheme:dark;}}
-:root[data-theme="dark"]{
-  --bg:#0E141A; --surface:#161F28; --sunk:#1D2832; --fg:#E4EBF2; --muted:#93A3B2; --line:#283541;
-  --accent:#6EA2EE; --accent-fg:#0E141A; --accent-soft:#1C2E46;
-  --p-blue:#5B8FE6; --p-red:#E2655B; --p-yellow:#E3B53A; --p-green:#4FB27A; --p-grey:#8C99A5;
-  --ok:#5BC08A; --warn:#E3B04A; --bad:#EE7468; color-scheme:dark;}
+  --ok:#5BC08A; --warn:#E3B04A; --bad:#EE7468; --shadow:none; color-scheme:dark;}}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  padding-block:16px calc(var(--nav-h) + 28px + env(safe-area-inset-bottom,0px));}
-main{max-width:640px;margin:0 auto;display:grid;gap:18px}
-h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:.01em}
-h1{font-size:2rem}
-h2{font-size:1.45rem}
-h3{font-size:1.2rem}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(var(--nav-h) + 32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  -webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+main{max-width:680px;margin:0 auto}
+.view{display:grid;gap:16px}
+h1,h2,h3{margin:0;line-height:1.15;text-wrap:balance}
+h1{font-family:var(--f-display);font-weight:700;font-size:2.15rem;letter-spacing:.005em}
+h2{font-family:var(--f-display);font-weight:600;font-size:1.4rem;margin-top:8px}
+h3{font-size:1rem;font-weight:600}
 p{margin:0}
-.muted{color:var(--muted)}
-.small{font-size:.85rem}
-.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+a{color:var(--accent)}
+.muted{color:var(--muted)} .small{font-size:.85rem} .xs{font-size:.76rem}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
 .num{font-family:var(--f-display);font-variant-numeric:tabular-nums}
-section{display:grid;gap:12px}
-.stack{display:grid;gap:8px}
+.stack{display:grid;gap:10px} .stack-s{display:grid;gap:6px}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.grow{flex:1 1 auto;min-width:0}
 button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-/* header */
-.top{display:grid;gap:6px}
-.top .row{justify-content:space-between}
-.phase{background:var(--accent-soft);border-radius:10px;padding:10px 12px;display:grid;gap:2px}
-.phase b{font-family:var(--f-display);font-size:1.15rem;font-weight:600}
+/* ---- cards ---- */
+.card{background:var(--surface);border-radius:var(--r);padding:16px;display:grid;gap:12px;box-shadow:var(--shadow);border:1px solid transparent}
+@media (prefers-color-scheme: dark){.card{border-color:var(--line)}}
+.card.flat{box-shadow:none;background:var(--sunk)}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+ul,ol{margin:0;padding-left:1.15em;display:grid;gap:5px}
+details>summary{cursor:pointer;list-style:none;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s;flex:none;margin-right:4px}
+details[open]>summary::after{transform:rotate(-135deg)}
+details[open]>summary{margin-bottom:10px}
 
-/* chips */
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:.88rem;display:inline-flex;align-items:center;gap:6px}
-.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
-.plate-blue{background:var(--p-blue)}.plate-red{background:var(--p-red)}.plate-yellow{background:var(--p-yellow)}.plate-green{background:var(--p-green)}.plate-grey{background:var(--p-grey)}
+/* ---- header ---- */
+.hdr{display:grid;gap:12px;padding-top:4px}
+.hdr .row{justify-content:space-between;align-items:flex-end;flex-wrap:nowrap}
+.daynav{display:flex;gap:6px;align-items:center}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:38px;height:38px;display:grid;place-items:center;flex:none;color:var(--fg)}
+.iconbtn svg{width:18px;height:18px}
+.datepick{position:relative}
+.datepick input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+
+/* week strip (Apple Fitness-like) */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;background:var(--surface);border-radius:var(--r);padding:10px 8px;box-shadow:var(--shadow)}
+@media (prefers-color-scheme: dark){.week{border:1px solid var(--line)}}
+.wd{border:0;background:transparent;display:grid;justify-items:center;gap:4px;padding:4px 0;border-radius:12px}
+.wd .l{font-size:.68rem;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.wd .c{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-size:1.05rem;font-weight:600;position:relative;border:2px solid var(--line2);color:var(--fg)}
+.wd .c.done{color:#fff;border-color:transparent}
+.wd .t{width:6px;height:6px;border-radius:50%}
+.wd[aria-current="date"] .l{color:var(--fg)}
+.wd.sel{background:var(--sunk)}
+.wd .c.today::after{content:"";position:absolute;bottom:-7px;width:4px;height:4px;border-radius:50%;background:var(--fg)}
+
+/* race banner */
+.race-banner{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,var(--race-soft),var(--run-soft));border-radius:var(--r);padding:14px 16px;text-decoration:none;color:var(--fg)}
+.race-banner .big{font-family:var(--f-display);font-size:2.4rem;font-weight:700;line-height:.9;color:var(--race)}
+.race-banner .big small{display:block;font-size:.72rem;font-family:var(--f-body);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.bar{height:6px;background:color-mix(in srgb,var(--fg) 10%,transparent);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--race);border-radius:99px}
+
+/* plan hero */
+.plan{display:grid;gap:10px}
+.pitem{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.pico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none}
+.pico svg{width:22px;height:22px}
+.pitem h3{font-size:1.02rem}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;letter-spacing:.04em;padding:3px 8px;border-radius:999px;background:var(--sunk);color:var(--fg2);white-space:nowrap}
+.tag.run{background:var(--run-soft);color:var(--run)} .tag.lift{background:var(--accent-soft);color:var(--accent)} .tag.race{background:var(--race-soft);color:var(--race)} .tag.ok{background:var(--eat-soft);color:var(--ok)}
+.targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}
+.tgt{background:var(--sunk);border-radius:var(--r-s);padding:8px 10px;display:grid;gap:0}
+.tgt b{font-family:var(--f-display);font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.15}
+.tgt span{font-size:.72rem;color:var(--muted)}
+.callout{border-left:3px solid var(--accent);padding:2px 0 2px 10px;font-size:.88rem;color:var(--fg2)}
+.callout.run{border-color:var(--run)} .callout.warn{border-color:var(--warn)} .callout.bad{border-color:var(--bad)} .callout.eat{border-color:var(--eat)}
+
+/* metrics */
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.metric{display:grid;gap:2px}
+.metric b{font-family:var(--f-display);font-size:1.45rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.05}
+.metric span{font-size:.72rem;color:var(--muted)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 /* inputs */
-.field{display:grid;gap:4px}
-.field label{font-size:.8rem;color:var(--muted)}
-input[type=text],input[type=date],textarea,select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;width:100%}
-textarea{resize:vertical;min-height:64px}
+.field{display:grid;gap:4px;min-width:0}
+.field label{font-size:.78rem;color:var(--muted);font-weight:500}
+input[type=text],input[type=date],input[type=time],input[type=number],textarea,select{background:var(--sunk);border:1px solid transparent;border-radius:var(--r-s);padding:10px 12px;min-width:0;width:100%;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);background:var(--surface)}
+textarea{resize:vertical;min-height:56px}
 .inline{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
-.inline .field{flex:1 1 120px}
+.inline .field{flex:1 1 110px}
+.big-in{font-family:var(--f-display);font-size:1.4rem!important;font-variant-numeric:tabular-nums;padding:8px 12px!important}
+
+/* segmented chips */
+.seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin:0 -16px;padding-left:16px;padding-right:16px}
+.seg::-webkit-scrollbar{display:none}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:.86rem;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.plate-blue{background:var(--p-blue)}.plate-red{background:var(--p-red)}.plate-yellow{background:var(--p-yellow)}.plate-green{background:var(--p-green)}.plate-grey{background:var(--p-grey)}.plate-run{background:var(--run)}.plate-race{background:var(--race)}
 
 /* exercise cards */
-.ex{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px}
+.ex{background:var(--surface);border-radius:var(--r);padding:16px;display:grid;gap:10px;box-shadow:var(--shadow);border:1px solid transparent}
+@media (prefers-color-scheme: dark){.ex{border-color:var(--line)}}
+.ex.complete{border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
 .ex-head{display:flex;justify-content:space-between;gap:10px;align-items:start}
-.ex-head h3{min-width:0}
-.ss{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--muted);flex:none}
-.meta{font-family:var(--f-display);font-size:1.05rem;font-variant-numeric:tabular-nums}
+.ex-head h3{font-size:1.06rem;min-width:0}
+.ex-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ss{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 7px;background:var(--sunk);color:var(--muted);flex:none}
+.prescr{font-family:var(--f-display);font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
 .note{font-size:.86rem;color:var(--muted)}
-.last{font-size:.85rem;background:var(--sunk);border-radius:8px;padding:6px 10px}
-.hint{font-size:.85rem;color:var(--ok);font-weight:600}
+.last{font-size:.84rem;color:var(--fg2);display:flex;gap:6px;flex-wrap:wrap;align-items:baseline}
+.last b{font-weight:600}
+.hint{font-size:.84rem;color:var(--ok);font-weight:600}
 .rir{font-weight:600;color:var(--accent)}
-.how{font-size:.88rem;border-top:1px solid var(--line);padding-top:8px}
-.how summary{color:var(--accent)}
-.how ul{margin-bottom:8px}
-.how a{color:var(--accent);font-weight:600}
-.photo{margin:4px 0 10px;display:grid;gap:4px}
-.photo img{width:100%;height:auto;border-radius:8px;display:block;background:var(--sunk)}
-.photo figcaption{font-size:.72rem;color:var(--muted)}
-.photo figcaption a{color:var(--muted);font-weight:500}
-.mk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;margin:4px 0 10px}
-.mk dt{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;padding-top:3px}
-.mk dd{margin:0}
-.links{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
 .sets{display:grid;gap:6px}
-.set{display:grid;grid-template-columns:28px 1fr 18px 1fr;gap:6px;align-items:center}
-.set .i{font-family:var(--f-display);color:var(--muted);text-align:center}
+.set{display:grid;grid-template-columns:26px minmax(0,1fr) 14px minmax(0,1fr) 44px;gap:6px;align-items:center}
+.set .i{font-family:var(--f-display);color:var(--muted);text-align:center;font-size:1.05rem}
 .set .x{text-align:center;color:var(--muted)}
-.set input{text-align:center;font-family:var(--f-display);font-size:1.15rem;font-variant-numeric:tabular-nums;padding:6px}
-.set input::placeholder{color:var(--muted);opacity:.55}
-.exnote textarea{min-height:40px;font-size:.88rem;padding:6px 10px}
-.lastnote{font-size:.82rem;color:var(--muted);font-style:italic}
-.meal{display:grid;grid-template-columns:96px minmax(0,1fr) 38px;gap:6px;align-items:center}
-.meal input[type=time]{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 6px;min-width:0;width:100%;font-family:var(--f-display);font-size:1rem}
+.set input{text-align:center;font-family:var(--f-display);font-size:1.2rem;font-variant-numeric:tabular-nums;padding:8px 4px}
+.set input::placeholder{color:var(--muted);opacity:.5}
+.set.ok input{background:var(--eat-soft)}
+.chk{width:44px;height:40px;border-radius:var(--r-s);border:1.5px solid var(--line2);background:transparent;display:grid;place-items:center;color:var(--muted)}
+.chk svg{width:18px;height:18px}
+.chk[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#fff}
+.how{font-size:.88rem;border-top:1px solid var(--line);padding-top:10px}
+.how>summary{color:var(--accent);font-weight:600;font-size:.88rem}
+.photo{margin:0 0 10px;display:grid;gap:4px}
+.photo img{width:100%;height:auto;border-radius:var(--r-s);display:block;background:var(--sunk)}
+.photo figcaption{font-size:.7rem;color:var(--muted)}
+.photo figcaption a{color:var(--muted)}
+.mk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;margin:0 0 10px}
+.mk dt{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;padding-top:3px}
+.mk dd{margin:0}
+.links{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.links a{font-weight:600}
+.exnote textarea{min-height:40px;font-size:.88rem;padding:8px 12px}
+.lastnote{font-size:.8rem;color:var(--muted);font-style:italic}
+.meal{display:grid;grid-template-columns:92px minmax(0,1fr) 38px;gap:6px;align-items:center}
+.meal input[type=time]{font-family:var(--f-display);font-size:1rem;padding:9px 6px}
 
 /* pain */
-.pain{display:grid;grid-template-columns:90px 1fr 40px;gap:10px;align-items:center}
+.pain{display:grid;grid-template-columns:96px 1fr 34px;gap:10px;align-items:center}
 .pain input[type=range]{width:100%;accent-color:var(--accent)}
-.pain output{font-family:var(--f-display);font-size:1.25rem;text-align:right}
+.pain output{font-family:var(--f-display);font-size:1.3rem;text-align:right}
 .lvl-ok{color:var(--ok)}.lvl-warn{color:var(--warn)}.lvl-bad{color:var(--bad)}
 
-/* plain card for info blocks */
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:8px}
-ul,ol{margin:0;padding-left:1.2em;display:grid;gap:4px}
-details summary{cursor:pointer;font-weight:600}
-details[open] summary{margin-bottom:8px}
-
 /* tables */
-.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tw{overflow-x:auto;border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);border:1px solid transparent}
+@media (prefers-color-scheme: dark){.tw{border-color:var(--line)}}
+.card .tw{box-shadow:none;border:1px solid var(--line);border-radius:var(--r-s)}
 table{border-collapse:collapse;width:100%;font-size:.88rem}
-th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
 tr:last-child td{border-bottom:0}
-th{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+th{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;background:var(--surface)}
 tr.now td{background:var(--accent-soft)}
-td.n{font-family:var(--f-display);font-variant-numeric:tabular-nums;font-size:1rem;white-space:nowrap}
+td.n{font-family:var(--f-display);font-variant-numeric:tabular-nums;font-size:1.02rem;white-space:nowrap}
 
-/* week grid */
+/* calendar list */
+.cal{display:grid;gap:2px;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+@media (prefers-color-scheme: dark){.cal{border:1px solid var(--line)}}
+.cal-ph{padding:12px 16px 6px;display:grid;gap:2px;background:var(--surface)}
+.cday{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:10px 16px;border:0;background:var(--surface);text-align:left;width:100%;border-top:1px solid var(--line)}
+.cday .d{display:grid;justify-items:center;line-height:1}
+.cday .d b{font-family:var(--f-display);font-size:1.4rem;font-weight:600}
+.cday .d span{font-size:.68rem;color:var(--muted);font-weight:600}
+.cday.today{background:var(--accent-soft)}
+.cday.past{opacity:.72}
+.cday .items{display:grid;gap:3px;min-width:0}
+.cday .it{display:flex;gap:7px;align-items:center;font-size:.9rem;min-width:0}
+.cday .it span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line2);color:transparent;flex:none}
+.st.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.st.miss{border-style:dashed}
+.st svg{width:14px;height:14px}
+
+/* stats & chart */
+.stat{display:flex;gap:20px;flex-wrap:wrap}
+.stat div{display:grid}
+.stat b{font-family:var(--f-display);font-size:1.7rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
 .wgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .wgrid .d{display:grid;gap:2px;text-align:center}
-.wgrid .d span{font-size:.72rem;color:var(--muted)}
-.wgrid input{text-align:center;padding:6px 2px;font-family:var(--f-display);font-size:1rem}
-.wgrid.steps input{font-size:.9rem;padding:6px 0}
-.stat{display:flex;gap:16px;flex-wrap:wrap}
-.stat div{display:grid}
-.stat b{font-family:var(--f-display);font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+.wgrid .d span{font-size:.7rem;color:var(--muted)}
+.wgrid input{text-align:center;padding:8px 2px;font-family:var(--f-display);font-size:1rem}
+.wgrid.steps input{font-size:.88rem;padding:8px 0}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .tip{position:absolute;transform:translate(-50%,-110%);background:var(--fg);color:var(--bg);font-size:.78rem;padding:5px 8px;border-radius:8px;pointer-events:none;white-space:nowrap}
 
-.btn{border:0;border-radius:10px;padding:11px 16px;background:var(--accent);color:var(--accent-fg);font-weight:600}
-.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+/* buttons */
+.btn{border:0;border-radius:var(--r-s);padding:12px 16px;background:var(--accent);color:var(--accent-fg);font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.ghost{background:var(--sunk);color:var(--fg)}
+.btn.run{background:var(--run);color:#fff}
 .btn.danger{background:var(--bad);color:#fff}
-.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:8px;width:38px;height:38px;font-size:1.1rem}
+.btn.sm{padding:8px 12px;font-size:.86rem}
+.btn.block{width:100%}
+.btn svg{width:18px;height:18px}
 
-/* nav */
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+/* bottom nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--surface) 82%,transparent);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);border-top:1px solid var(--line);
   padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-nav.tabs a{display:grid;place-items:center;text-decoration:none;color:var(--muted);font-size:.8rem;font-weight:600;padding:8px 2px;border-radius:8px}
-nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft)}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:.88rem;z-index:30;max-width:calc(100% - 32px)}
-@media (prefers-reduced-motion:no-preference){.chip,.btn,nav.tabs a{transition:background-color .15s,color .15s}}
+nav.tabs .in{max-width:680px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+nav.tabs a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:var(--muted);font-size:.68rem;font-weight:600;padding:6px 2px;border-radius:10px}
+nav.tabs a svg{width:24px;height:24px}
+nav.tabs a[aria-current="page"]{color:var(--accent)}
+nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
+
+/* rest timer */
+.timer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 14px + env(safe-area-inset-bottom,0px));z-index:25;background:var(--fg);color:var(--bg);border-radius:999px;padding:8px 8px 8px 16px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.timer b{font-family:var(--f-display);font-size:1.5rem;font-variant-numeric:tabular-nums;min-width:56px}
+.timer button{border:0;background:color-mix(in srgb,var(--bg) 18%,transparent);color:var(--bg);border-radius:999px;padding:6px 10px;font-size:.82rem;font-weight:600}
+.timer.over{background:var(--ok);color:#fff}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 70px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:12px;font-size:.88rem;z-index:30;max-width:calc(100% - 32px)}
+
+/* nutrition plate */
+.plate{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.plate div{background:var(--sunk);border-radius:var(--r-s);padding:10px;display:grid;gap:2px;align-content:start}
+.plate b{font-size:.95rem}
+.plate span{font-size:.76rem;color:var(--muted)}
+.plate i{font-style:normal;font-size:1.4rem}
+.mode{border-radius:var(--r);padding:14px 16px;display:grid;gap:6px}
+.mode.eat{background:var(--eat-soft)} .mode.run{background:var(--run-soft)} .mode.race{background:var(--race-soft)} .mode.busy{background:var(--sunk)}
+.src{font-size:.74rem;color:var(--muted)}
+@media (max-width:420px){.plate{grid-template-columns:repeat(2,minmax(0,1fr))}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}h1{font-size:1.95rem}}
+@media (prefers-reduced-motion:no-preference){.chip,.btn,nav.tabs a,.chk,.wd{transition:background-color .15s,color .15s,border-color .15s}}
 </style>
-
+</head>
+<body>
 <main>
-  <!-- ====== HÔM NAY ====== -->
-  <div id="v-hom-nay" class="view">
-    <section>
-      <div class="top">
-        <div class="row">
-          <div>
-            <p class="eyebrow" id="today-label">Hôm nay</p>
-            <h1 id="today-title">Buổi tập</h1>
-          </div>
-          <div class="row" style="gap:6px">
-            <button class="iconbtn" id="day-prev" aria-label="Ngày trước">‹</button>
-            <input type="date" id="pick-date" aria-label="Ngày tập" style="width:auto">
-            <button class="iconbtn" id="day-next" aria-label="Ngày sau">›</button>
-          </div>
-        </div>
-        <div class="phase" id="phase-box"></div>
-      </div>
 
-      <div class="card">
-        <div class="inline">
-          <div class="field">
-            <label for="w-today">Cân sáng nay (kg)</label>
-            <input type="text" inputmode="decimal" id="w-today" placeholder="vd 78.4">
-          </div>
-          <p class="small muted" id="w-today-avg" style="flex:2 1 160px"></p>
-        </div>
-        <div class="inline">
-          <div class="field">
-            <label for="st-today">Bước chân hôm nay</label>
-            <input type="text" inputmode="numeric" id="st-today" placeholder="ghi cuối ngày">
-          </div>
-          <p class="small muted" id="st-today-avg" style="flex:2 1 160px"></p>
-        </div>
+<!-- ================= HÔM NAY ================= -->
+<div id="v-hom-nay" class="view">
+  <header class="hdr">
+    <div class="row">
+      <div class="grow">
+        <p class="eyebrow" id="today-label">Hôm nay</p>
+        <h1 id="today-title">Hôm nay</h1>
       </div>
-
-      <div class="chips" id="type-chips" role="group" aria-label="Chọn buổi"></div>
-      <div id="session"></div>
-
-      <div class="card" id="meals-card">
-        <p class="eyebrow" id="meals-title">Ăn ngoài hôm nay</p>
-        <div class="stack" id="meals"></div>
-        <button class="btn ghost" id="meal-add">+ Thêm bữa ăn ngoài</button>
-        <p class="small muted">Ghi giờ và món, càng cụ thể càng tốt (vd "phở bò tái, thêm thịt", "2 lon bia"). Tự động lưu, có trong báo cáo tuần.</p>
+      <div class="daynav">
+        <button class="iconbtn" id="day-prev" aria-label="Ngày trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <label class="iconbtn datepick" aria-label="Chọn ngày"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><input type="date" id="pick-date"></label>
+        <button class="iconbtn" id="day-next" aria-label="Ngày sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
-    </section>
+    </div>
+    <div class="week" id="week-strip" role="group" aria-label="Các ngày trong tuần"></div>
+  </header>
+
+  <a class="race-banner" href="#race" id="race-banner" hidden></a>
+
+  <section class="card plan" id="plan-card"></section>
+
+  <div class="seg" id="type-chips" role="group" aria-label="Đổi buổi"></div>
+  <div id="session" class="stack"></div>
+
+  <section class="card">
+    <div class="card-head"><p class="eyebrow" id="body-title">Cơ thể hôm nay</p><a href="#check-in" class="small">Check-in tuần →</a></div>
+    <div class="duo">
+      <div class="field"><label for="w-today" id="w-label">Cân sáng (kg)</label><input type="text" inputmode="decimal" id="w-today" class="big-in" placeholder="78.4"></div>
+      <div class="field"><label for="st-today" id="st-label">Bước chân</label><input type="text" inputmode="numeric" id="st-today" class="big-in" placeholder="8000"></div>
+    </div>
+    <p class="small muted" id="body-avg"></p>
+  </section>
+
+  <section class="card" id="meals-card">
+    <div class="card-head"><p class="eyebrow" id="meals-title">Ăn ngoài hôm nay</p><button class="btn ghost sm" id="meal-add">+ Thêm</button></div>
+    <div class="stack-s" id="meals"></div>
+    <p class="xs muted">Ghi giờ và món, càng cụ thể càng tốt ("phở bò tái thêm thịt", "2 lon bia"). Có trong báo cáo tuần.</p>
+  </section>
+</div>
+
+<!-- ================= LỊCH ================= -->
+<div id="v-lich" class="view" hidden>
+  <header class="hdr"><div><p class="eyebrow">Block 1 · 09/11/2026 → 03/01/2027</p><h1>Lịch</h1></div></header>
+  <div class="seg" id="cal-range" role="group" aria-label="Khoảng thời gian">
+    <button class="chip" data-r="next" aria-pressed="true">16 ngày tới</button>
+    <button class="chip" data-r="block" aria-pressed="false">Cả Block 1</button>
+  </div>
+  <div id="cal"></div>
+  <p class="xs muted">Bấm vào một ngày để mở buổi đó. Ngày tạ ngoài lịch race tự chọn buổi theo vòng xoay: buổi nào lâu chưa tập nhất thì làm trước, nên lỡ buổi không bị dồn hay bỏ quên.</p>
+
+  <h2>Sổ tay chương trình</h2>
+  <details class="card"><summary>Các giai đoạn</summary>
+    <div class="tw"><table><thead><tr><th>Tuần</th><th>Giai đoạn</th><th>Set</th><th>RIR compound</th><th>RIR cô lập</th></tr></thead><tbody id="phase-table"></tbody></table></div>
+    <p class="small muted">Compound: bài nhiều khớp (squat, press, row, RDL…). Cô lập: bài một khớp (curl, raise, leg curl…), được tập sát giới hạn hơn.</p>
+  </details>
+  <details class="card"><summary>Lịch tuần chuẩn (ngoài giai đoạn race)</summary>
+    <div class="tw"><table><thead><tr><th>Ngày</th><th>Buổi</th><th>Ghi chú</th></tr></thead><tbody>
+      <tr><td>T2 · T3 · T5 · T6</td><td>Tạ (vòng xoay UA → LA → UB → LB)</td><td>19–20h. Buổi lâu chưa tập nhất làm trước</td></tr>
+      <tr><td>T4</td><td>Chạy nhẹ</td><td>30–40 phút, vùng 2 (126–146 bpm)</td></tr>
+      <tr><td>T7</td><td>Nghỉ</td><td>Đi bộ đủ 8k bước. Lỡ 1 buổi tạ thì tập bù hôm nay</td></tr>
+      <tr><td>CN</td><td>Cầu lông</td><td>Khởi động vai trước khi đánh</td></tr>
+    </tbody></table></div>
+    <p class="small muted">5 ngày làm việc đầu tháng: chế độ tối thiểu, không tập bù.</p>
+  </details>
+  <details class="card"><summary>Khối lượng mỗi nhóm cơ</summary>
+    <p class="small muted">Set khó/tuần, tuần thường. Set gián tiếp tính ½.</p>
+    <div class="tw"><table><thead><tr><th>Nhóm cơ</th><th>Trực tiếp</th><th>Cả gián tiếp</th></tr></thead><tbody>
+      <tr><td>Ngực</td><td class="n">10</td><td class="n">10</td></tr>
+      <tr><td><b>Lưng (xô + lưng giữa)</b></td><td class="n"><b>17</b></td><td class="n"><b>18,5</b></td></tr>
+      <tr><td>Vai giữa</td><td class="n">8</td><td class="n">9,5</td></tr>
+      <tr><td>Vai sau</td><td class="n">5</td><td class="n">9,5</td></tr>
+      <tr><td>Vai trước</td><td class="n">3</td><td class="n">7</td></tr>
+      <tr><td>Tay trước</td><td class="n">4</td><td class="n">11,5</td></tr>
+      <tr><td>Tay sau</td><td class="n">4</td><td class="n">9,5</td></tr>
+      <tr><td>Đùi trước</td><td class="n">11</td><td class="n">11</td></tr>
+      <tr><td>Đùi sau</td><td class="n">9</td><td class="n">9</td></tr>
+      <tr><td>Mông</td><td class="n">3</td><td class="n">9</td></tr>
+      <tr><td>Bắp chân</td><td class="n">6</td><td class="n">6</td></tr>
+    </tbody></table></div>
+    <p class="small muted">Số trên là khi tập đủ 4 buổi. Thực tế mấy tuần qua chỉ đủ Upper A + Lower A, nên vòng xoay giúp UB và LB không bị bỏ mãi.</p>
+  </details>
+  <details class="card"><summary>Đủ các kiểu chuyển động</summary>
+    <div class="tw"><table><thead><tr><th>Chuyển động</th><th>Bài trong lịch</th></tr></thead><tbody>
+      <tr><td>Đẩy ngang</td><td>Chest press / bench, incline DB press, pec deck fly</td></tr>
+      <tr><td>Đẩy lên</td><td>Machine shoulder press</td></tr>
+      <tr><td>Kéo ngang</td><td>Row có tì ngực, 1-arm DB row, seated cable row</td></tr>
+      <tr><td>Kéo xuống</td><td>Lat pulldown, pull-up hỗ trợ, straight-arm pulldown</td></tr>
+      <tr><td>Squat</td><td>Back squat, leg press</td></tr>
+      <tr><td>Gập hông</td><td>RDL, hip thrust</td></tr>
+      <tr><td>Một chân</td><td>Bulgarian split squat</td></tr>
+      <tr><td>Gập / duỗi gối</td><td>Leg curl ngồi + nằm / leg extension</td></tr>
+      <tr><td>Bắp chân</td><td>Calf raise đứng + ngồi</td></tr>
+      <tr><td>Mang vác, core</td><td>Farmer carry, dead bug, McGill curl-up, plank chạm vai, side plank</td></tr>
+      <tr><td>Vai sau, chóp xoay</td><td>Face pull, rear delt fly, external rotation tay trái</td></tr>
+      <tr><td>Tim mạch</td><td>Chạy (T4 + lịch race), cầu lông (CN)</td></tr>
+    </tbody></table></div>
+    <p class="small muted">Cố ý không có: deadlift sàn, đẩy tạ qua đầu tự do, xoay thân có tạ, bật nhảy.</p>
+  </details>
+  <details class="card" id="chon-ta"><summary>Chọn mức tạ và đọc RIR</summary><div id="guide" class="stack small"></div></details>
+  <details class="card"><summary>Khởi động 8–10 phút</summary>
+    <ol class="small"><li>Xe đạp hoặc đi dốc 3 phút.</li><li>Vai: band external rotation 2×15 (tay trái thêm 1 set), band pull-apart ×15, wall slide ×10.</li><li>Lưng–hông: cat-camel ×6, giãn gập hông 30 giây/bên, dead bug ×8/bên, bird dog ×8/bên.</li><li>Bài chính: 2–3 set khởi động 50% → 70% → 85%.</li></ol>
+  </details>
+  <details class="card"><summary>Quy tắc đau</summary>
+    <div class="tw"><table><thead><tr><th>Đau 0–10</th><th>Xử lý</th></tr></thead><tbody>
+      <tr><td class="lvl-ok">0–3, sáng hôm sau không tệ hơn</td><td>Tiếp tục, được tăng tạ</td></tr>
+      <tr><td class="lvl-warn">4–5, hoặc sáng hôm sau tệ hơn</td><td>Giữ tạ hoặc giảm 10–20%, giảm biên độ</td></tr>
+      <tr><td class="lvl-bad">Trên 5, hoặc kéo dài quá 24 giờ</td><td>Dừng bài, thay biến thể, báo PT</td></tr>
+    </tbody></table></div>
+    <p class="callout bad"><b>Đau ngực kèm khó thở, lan ra tay hoặc hàm, vã mồ hôi, chóng mặt:</b> dừng tập và đi khám ngay. Áp dụng cả khi chạy.</p>
+  </details>
+  <details class="card"><summary>Tăng tạ</summary>
+    <p>Khi <b>mọi set</b> chạm đỉnh dải rep với RIR đúng và kỹ thuật chuẩn, buổi sau tăng: thân dưới +5 kg, thân trên +2,5 kg, tạ đơn lên bậc kế. Rồi tập lại từ đáy dải.</p>
+    <p class="small muted">Từ nay tới race (6/12), giữ được mức tạ là đủ. Không cố tăng tạ chân.</p>
+  </details>
+  <details class="card"><summary>Cầu lông, ngoài giờ tập</summary>
+    <ul class="small">
+      <li>Bạn đánh tay trái, đúng bên vai yếu. Khởi động vai 5 phút trước khi đánh.</li>
+      <li>CN 22/11, 29/11 và 6/12 là ngày chạy dài và race, nên <b>tạm nghỉ cầu lông đến 13/12</b>. Ngày 13/12 đánh nhẹ, tối đa 60 phút.</li>
+      <li>Bước chân: tiến tới 8.000/ngày. Ngồi làm việc 45–60 phút đứng dậy 2 phút. Ngủ 7–8 tiếng.</li>
+    </ul>
+  </details>
+  <details class="card"><summary>Lịch sử thay đổi</summary>
+    <div class="tw"><table><thead><tr><th>Ngày</th><th>Thay đổi</th></tr></thead><tbody id="changelog"></tbody></table></div>
+  </details>
+</div>
+
+<!-- ================= RACE ================= -->
+<div id="v-race" class="view" hidden>
+  <header class="hdr"><div><p class="eyebrow">Techcombank HCMC International Marathon · 21,1 km</p><h1>Half Marathon 6/12</h1></div></header>
+
+  <section class="card" id="race-hero"></section>
+
+  <section class="card">
+    <div class="card-head"><h3>Thông tin giải</h3></div>
+    <div class="inline">
+      <div class="field"><label for="race-start">Giờ xuất phát 21 km</label><input type="time" id="race-start"></div>
+      <div class="field"><label for="race-goal">Mục tiêu (h:mm)</label><input type="text" id="race-goal" inputmode="numeric" placeholder="3:00"></div>
+    </div>
+    <p class="small muted" id="race-info"></p>
+  </section>
+
+  <h2>Chiến thuật</h2>
+  <section class="card">
+    <div class="stack-s"><div class="row between"><b class="num" style="font-size:1.2rem">Km 1–5</b><span class="tag run">8:45–9:00 /km · HR &lt; 150</span></div><p class="small">Cố tình chậm hơn cảm giác. Đám đông kéo bạn đi nhanh, đừng theo.</p></div>
+    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 6–15</b><span class="tag run">8:30–8:45 /km · HR 150–160</span></div><p class="small">Chạy 5 phút, đi bộ 1 phút. Đi bộ qua mọi trạm nước.</p></div>
+    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 16–21</b><span class="tag run">tự do · HR có thể &gt; 165</span></div><p class="small">Còn sức mới tăng tốc.</p></div>
+  </section>
+  <div class="card">
+    <p class="callout run"><b>Quy tắc trần:</b> nhịp tim vượt 160 trước km 15 thì đi bộ đến khi xuống lại. Nhịp tim quan trọng hơn pace.</p>
+    <p class="callout run"><b>Năng lượng:</b> gel ở <b>km 5, 10, 15</b> (plan cũ là km 7 và 14) + nước điện giải ở trạm có. Lý do: 3 tiếng chạy cần khoảng 30–60 g carb mỗi giờ; 2 gel chỉ được khoảng 15 g/giờ.</p>
+    <p class="src">Nguồn: Thomas, Erdman & Burke 2016 (ACSM/AND/DC position stand); Jeukendrup 2014.</p>
   </div>
 
-  <!-- ====== LỊCH ====== -->
-  <div id="v-lich" class="view" hidden>
-    <section>
-      <div><p class="eyebrow">Block 1 · 09/11/2026 → 03/01/2027</p><h1>Lịch tập</h1></div>
-      <div class="tw"><table>
-        <thead><tr><th>Ngày</th><th>Buổi</th><th>Ghi chú</th></tr></thead>
-        <tbody>
-          <tr><td>T2</td><td><span class="dot plate-blue"></span> Upper A</td><td>Đẩy/kéo nặng</td></tr>
-          <tr><td>T3</td><td><span class="dot plate-red"></span> Lower A</td><td>Squat</td></tr>
-          <tr><td>T4</td><td>Chạy</td><td>30–40 phút, nói chuyện được (118–137 bpm)</td></tr>
-          <tr><td>T5</td><td><span class="dot plate-yellow"></span> Upper B</td><td>Phì đại</td></tr>
-          <tr><td>T6</td><td><span class="dot plate-green"></span> Lower B</td><td>Gập hông. Bận thì dời sang T7</td></tr>
-          <tr><td>T7</td><td>Nghỉ</td><td>Đi bộ, đủ 8k bước</td></tr>
-          <tr><td>CN</td><td>Cầu lông</td><td>Khởi động vai trước khi đánh</td></tr>
-        </tbody>
-      </table></div>
+  <h2>Tính pace</h2>
+  <section class="card" id="pace-calc"></section>
 
-      <h2>Các giai đoạn</h2>
-      <div class="tw"><table>
-        <thead><tr><th>Tuần</th><th>Giai đoạn</th><th>Set</th><th>RIR compound</th><th>RIR cô lập</th></tr></thead>
-        <tbody id="phase-table"></tbody>
-      </table></div>
-      <p class="small muted">Compound: bài nhiều khớp (squat, press, row, RDL…). Cô lập: bài một khớp (curl, lateral raise, leg curl…), được tập sát giới hạn hơn vì ít mỏi toàn thân và ít rủi ro.</p>
+  <h2>Lịch 20/11 → 6/12</h2>
+  <div id="race-plan"></div>
+  <p class="xs muted">Buổi chạy tự đánh dấu xong khi bạn ghi số km ở tab Hôm nay. Buổi nghỉ bấm vòng tròn để đánh dấu.</p>
 
+  <details class="card"><summary>Phân tích buổi 5 km ngày 18/11</summary>
+    <div class="targets">
+      <div class="tgt"><b>5,01 km</b><span>41:48</span></div>
+      <div class="tgt"><b>8:20</b><span>pace TB /km</span></div>
+      <div class="tgt"><b>156 / 187</b><span>HR TB / max</span></div>
+      <div class="tgt"><b>146 spm</b><span>guồng chân TB</span></div>
+    </div>
+    <ul class="small">
+      <li>24 phút đầu chạy xen đi bộ, sau đó chạy liên tục và tăng tốc, nhịp tim leo tới 187 ở 32–33°C. Garmin xếp là tempo, không phải chạy nhẹ.</li>
+      <li>Kỹ thuật trung bình–khá, không xấu đi khi tăng tốc. Mục tiêu: guồng chân ~165 spm (bước ngắn, nhanh hơn), tiếp đất ≤ 280 ms, dao động dọc ≤ 9%.</li>
+      <li>Ưu tiên trong 2 tuần: sức bền dài, kỷ luật nhịp tim, tập ăn gel và uống nước, chuẩn bị ngày đua. Tốc độ và thể lực nền không thay đổi kịp.</li>
+    </ul>
+  </details>
+  <details class="card"><summary>Cài đặt đồng hồ Garmin</summary>
+    <ul class="small">
+      <li><b>Vùng công suất cài quá cao:</b> vùng 1 bắt đầu 274 W trong khi TB là 208 W. Cập nhật ngưỡng hoặc bật tự phát hiện.</li>
+      <li><b>HR max</b> ghi nhận 187, sát mức cài 188. Từng đo cao hơn thì cập nhật.</li>
+      <li>Cài màn hình race: nhịp tim, pace trung bình vòng, quãng đường, thời gian. Bật cảnh báo HR &gt; 160.</li>
+      <li>Hẹn giờ chạy/đi bộ 5:00 / 1:00 (Run/Walk) cho km 6–15.</li>
+    </ul>
+  </details>
+  <details class="card"><summary>Checklist tuần race</summary>
+    <div class="stack-s" id="race-check"></div>
+  </details>
+  <details class="card"><summary>Sau race (7/12 → 13/12)</summary>
+    <ul class="small">
+      <li>T2–T4: đi bộ 20–30 phút, giãn cơ nhẹ. Không chạy, không tập chân.</li>
+      <li>T3 8/12 tập Upper A bình thường. T5 10/12 Upper B. T6 11/12 Lower B bớt 1 set, RIR 3 (RDL bắt đầu 40–50 kg).</li>
+      <li>T7 12/12 chạy rất nhẹ 20–30 phút nếu chân hết ê. CN 13/12 cầu lông nhẹ.</li>
+      <li>Ăn lại theo khung giảm mỡ từ T2 7/12. Cân sẽ cao hơn 0,5–1,5 kg vài ngày do glycogen và nước: không tính vào xu hướng tuần đó.</li>
+    </ul>
+  </details>
+</div>
 
-      <h2>Khối lượng mỗi nhóm cơ</h2>
-      <p class="small muted">Số set khó mỗi tuần, tuần thường. Set gián tiếp tính ½ (vd row cũng làm tay trước, nên mỗi set row tính ½ set tay trước).</p>
-      <div class="tw"><table>
-        <thead><tr><th>Nhóm cơ</th><th>Trực tiếp</th><th>Tính cả gián tiếp</th></tr></thead>
-        <tbody>
-          <tr><td>Ngực</td><td class="n">10</td><td class="n">10</td></tr>
-          <tr><td><b>Lưng (xô + lưng giữa)</b></td><td class="n"><b>17</b></td><td class="n"><b>18,5</b></td></tr>
-          <tr><td>Vai giữa</td><td class="n">8</td><td class="n">9,5</td></tr>
-          <tr><td>Vai sau</td><td class="n">5</td><td class="n">9,5</td></tr>
-          <tr><td>Vai trước</td><td class="n">3</td><td class="n">7</td></tr>
-          <tr><td>Tay trước</td><td class="n">4</td><td class="n">11,5</td></tr>
-          <tr><td>Tay sau</td><td class="n">4</td><td class="n">9,5</td></tr>
-          <tr><td>Đùi trước</td><td class="n">11</td><td class="n">11</td></tr>
-          <tr><td>Đùi sau</td><td class="n">9</td><td class="n">9</td></tr>
-          <tr><td>Mông</td><td class="n">3</td><td class="n">9</td></tr>
-          <tr><td>Bắp chân</td><td class="n">6</td><td class="n">6</td></tr>
-        </tbody>
-      </table></div>
-      <p class="small muted">Mục tiêu khoảng 10 set cho mỗi nhóm cơ lớn, riêng lưng được ưu tiên khoảng 17 set (ngồi nhiều, vai tròn, hình chữ V). Tuần 7–27/12 thêm 1 set ở bài chính, ngực lên 12 và lưng lên 19. Tuần 9–15/11 bớt 1 set mỗi bài để gân và khớp làm quen lại.</p>
+<!-- ================= ĂN UỐNG ================= -->
+<div id="v-an-uong" class="view" hidden>
+  <header class="hdr"><div><p class="eyebrow">Phương pháp bàn tay · không cân thức ăn</p><h1>Ăn uống</h1></div></header>
 
+  <section id="eat-today"></section>
 
-      <h2>Đủ các kiểu chuyển động</h2>
-      <div class="tw"><table>
-        <thead><tr><th>Chuyển động</th><th>Bài trong lịch</th></tr></thead>
-        <tbody>
-          <tr><td>Đẩy ngang</td><td>Chest press / bench, incline DB press, pec deck fly</td></tr>
-          <tr><td>Đẩy lên</td><td>Machine shoulder press</td></tr>
-          <tr><td>Kéo ngang</td><td>Row có đệm ngực, 1-arm DB row, seated cable row</td></tr>
-          <tr><td>Kéo xuống</td><td>Lat pulldown, pull-up có hỗ trợ, straight-arm pulldown</td></tr>
-          <tr><td>Squat (gối chủ đạo)</td><td>Back squat, leg press</td></tr>
-          <tr><td>Gập hông</td><td>RDL (tuần đầu: back extension), hip thrust</td></tr>
-          <tr><td>Một chân</td><td>Bulgarian split squat</td></tr>
-          <tr><td>Gập gối / duỗi gối</td><td>Leg curl ngồi + nằm / leg extension</td></tr>
-          <tr><td>Bắp chân</td><td>Calf raise đứng + ngồi</td></tr>
-          <tr><td>Mang vác</td><td>Farmer carry</td></tr>
-          <tr><td>Core chống ưỡn / chống xoay / chống nghiêng</td><td>Dead bug, McGill curl-up / plank chạm vai / side plank, farmer carry</td></tr>
-          <tr><td>Vai sau, chóp xoay, bả vai</td><td>Face pull, rear delt fly, external rotation tay trái</td></tr>
-          <tr><td>Tay</td><td>EZ curl, incline curl, pushdown, overhead extension</td></tr>
-          <tr><td>Tim mạch</td><td>Chạy Zone 2 (T4), cầu lông (CN)</td></tr>
-        </tbody>
-      </table></div>
-      <p class="small muted">Cố ý không có: deadlift sàn (lưng từng co rút), xoay thân có tạ như woodchop (plank chạm vai đã đủ cho core chống xoay, ít rủi ro cho lưng), bật nhảy (cầu lông đã có).</p>
+  <section class="card">
+    <h3>Một bữa chính</h3>
+    <div class="plate">
+      <div><i>✋</i><b>Đạm 1,5–2 lòng bàn tay</b><span>thịt, cá, trứng, đậu hũ. Dày bằng lòng bàn tay</span></div>
+      <div><i>🍚</i><b>1 chén cơm</b><span>chén nhà mình hay dùng, đơm bình thường</span></div>
+      <div><i>🥬</i><b>1–2 nắm tay rau</b><span>luộc, xào ít dầu, canh</span></div>
+      <div><i>👍</i><b>Béo ~1 ngón cái</b><span>dầu, mỡ, đậu phộng. Nhà nấu đã có sẵn</span></div>
+    </div>
+    <p class="small muted">1 lòng bàn tay thịt/cá chín ≈ 20–30 g protein. Mục tiêu mỗi ngày: <b>5–6 lòng bàn tay đạm</b> (≈ 150 g protein), 3 bữa chính + 1 phần đạm phụ.</p>
+    <p class="src">Protein: tối thiểu 1,6 g/kg/ngày, lý tưởng tới 2,2 g/kg khi đang giảm mỡ (Morton et al. 2018; Helms et al. 2014). Đo bằng bàn tay là ước lượng thô, sai số lớn; cân nặng trung bình tuần mới là thước đo cuối.</p>
+  </section>
 
-      <h2 id="chon-ta">Chọn mức tạ</h2>
-      <div class="card" id="guide"></div>
+  <h2>Theo loại ngày</h2>
+  <div class="tw"><table><thead><tr><th>Ngày</th><th>Cơm / tinh bột</th><th>Ghi chú</th></tr></thead><tbody>
+    <tr><td><b>Ngày tạ</b></td><td>3 bữa × 1 chén + bữa xế trước tập (bánh mì hoặc 1 chén + chuối)</td><td>Đạm mỗi bữa 1,5–2 bàn tay</td></tr>
+    <tr><td><b>Ngày nghỉ</b></td><td>3 bữa × 1 chén, bỏ tinh bột bữa xế</td><td>Xế chỉ đạm + trái cây</td></tr>
+    <tr><td><b>Chạy nhẹ ≤ 60 phút</b></td><td>Như ngày tạ</td><td>Không cần ăn trong lúc chạy</td></tr>
+    <tr><td><b>Chạy dài 10–14 km</b></td><td>Tối hôm trước +1 chén. Trước chạy 60–90 phút: 2 chuối hoặc bánh mì không. Sau chạy: bữa đầy đủ +1 chén</td><td>Tập ăn gel như race. Không thâm hụt ngày này</td></tr>
+  </tbody></table></div>
+  <p class="src">Chạy tốn khoảng 1 kcal/kg/km (Margaria et al. 1963), tức ~1.000 kcal cho 13 km ở 78 kg, nên ngày chạy dài phải ăn thêm.</p>
 
-      <h2>Khởi động (8–10 phút)</h2>
-      <div class="card">
-        <ol>
-          <li>Xe đạp hoặc đi dốc 3 phút.</li>
-          <li>Vai: band external rotation 2×15 (tay trái thêm 1 set), band pull-apart ×15, wall slide ×10.</li>
-          <li>Lưng–hông: cat-camel ×6, giãn gập hông quỳ 1 gối 30 giây/bên, dead bug ×8/bên, bird dog ×8/bên.</li>
-          <li>Bài chính: 2–3 set khởi động tăng dần (50% → 70% → 85% mức tạ làm việc).</li>
-        </ol>
+  <h2>Chế độ tối thiểu (tuần bận)</h2>
+  <section class="mode busy">
+    <p><b>Chỉ cần giữ 3 điều. Không đạt cũng không nhịn bù.</b></p>
+    <ol>
+      <li><b>Mỗi bữa có 1 lòng bàn tay đạm trở lên</b>, kể cả bữa ăn ngoài (phở gọi thêm thịt, cơm gà bỏ da, bánh mì thêm trứng).</li>
+      <li><b>Thêm 1 phần đạm tiện mỗi ngày</b>: 2 trứng luộc, 1 hộp sữa tươi không đường + 1 chuối, hoặc ức gà luộc mang theo.</li>
+      <li><b>Uống nước, hạn chế nước ngọt và bia</b>. Về muộn sau 21h: đạm + rau + nửa chén cơm.</li>
+    </ol>
+    <p class="small muted">Áp dụng cho 5 ngày làm việc đầu tháng và tuần nào quá bận. Đủ đạm thì vẫn giữ được cơ khi thâm hụt.</p>
+  </section>
+
+  <h2>Đổi món</h2>
+  <details class="card"><summary>Phần đạm (mỗi dòng ≈ 1 lòng bàn tay ≈ 25–30 g protein)</summary>
+    <div class="tw"><table><thead><tr><th>Món</th><th>Lượng</th><th>Ghi chú</th></tr></thead><tbody>
+      <tr><td>Ức gà, thăn heo, bò nạc, cá trắng, tôm</td><td>1 lòng bàn tay</td><td>Ít béo nhất</td></tr>
+      <tr><td>Đùi gà bỏ da, nạc vai</td><td>1 lòng bàn tay</td><td>Béo vừa</td></tr>
+      <tr><td>Cá thu, cá hồi</td><td>1 lòng bàn tay</td><td>Béo tốt, 2 bữa/tuần thì bỏ omega-3</td></tr>
+      <tr><td>Trứng</td><td>3 quả</td><td>~18–20 g protein</td></tr>
+      <tr><td>Đậu hũ</td><td>2 bìa</td><td>~20 g protein</td></tr>
+      <tr><td>Sữa tươi không đường</td><td>2 hộp 180 ml</td><td>~11 g protein</td></tr>
+    </tbody></table></div>
+    <p class="small"><b>Ba chỉ, sườn, da gà, lòng:</b> cùng cỡ nhưng calo gấp 3–4 lần, đạm ít. Có ăn thì 1/2 lòng bàn tay và bớt nửa chén cơm.</p>
+  </details>
+  <details class="card"><summary>Phần tinh bột (mỗi dòng ≈ 1 chén cơm)</summary>
+    <div class="tw"><table><thead><tr><th>Món</th><th>Lượng</th></tr></thead><tbody>
+      <tr><td>Cơm trắng / gạo lứt</td><td>1 chén</td></tr>
+      <tr><td>Bún, phở</td><td>1 chén đầy</td></tr>
+      <tr><td>Xôi</td><td>2/3 chén</td></tr>
+      <tr><td>Bánh mì</td><td>1 ổ nhỏ</td></tr>
+      <tr><td>Khoai lang</td><td>1 củ cỡ nắm tay</td></tr>
+      <tr><td>Chuối</td><td>2 trái</td></tr>
+    </tbody></table></div>
+    <p class="small muted">Mì gói không đổi ngang: 1 gói ≈ 350 kcal, nhiều béo.</p>
+  </details>
+  <details class="card"><summary>Ăn ngoài (ước tính quán Việt)</summary>
+    <div class="tw"><table><thead><tr><th>Món</th><th>kcal</th><th>Protein</th><th>Cách chọn</th></tr></thead><tbody>
+      <tr><td>Phở bò</td><td class="n">450–550</td><td class="n">25–30 g</td><td>Thêm thịt, bớt bánh, không chan nước béo</td></tr>
+      <tr><td>Bún bò</td><td class="n">550–650</td><td class="n">25–30 g</td><td>Bỏ mỡ nổi, ít chả</td></tr>
+      <tr><td>Cơm gà luộc</td><td class="n">600–700</td><td class="n">35–40 g</td><td>Bỏ da, cơm trắng</td></tr>
+      <tr><td>Cơm tấm sườn</td><td class="n">650–750</td><td class="n">30–35 g</td><td>Sườn + trứng, bỏ mỡ hành. Sườn bì chả 850–1.000</td></tr>
+      <tr><td>Bánh mì thịt</td><td class="n">400–500</td><td class="n">15–20 g</td><td>Thêm 2 trứng luộc hoặc 1 hộp sữa</td></tr>
+      <tr><td>Bia 330 ml</td><td class="n">~150/lon</td><td class="n">0</td><td>5 lon ≈ 1 bữa chính</td></tr>
+    </tbody></table></div>
+  </details>
+  <details class="card"><summary>Cơm nhà, tiệc, rượu bia</summary>
+    <ol class="small">
+      <li>Gắp đạm trước cho đủ phần, rồi tới rau và cơm.</li>
+      <li>Chấm ít, không chan nước kho, nước béo.</li>
+      <li>Khoảng 80% bữa theo khung, 20% thoải mái mà không cần bù.</li>
+      <li>Không uống rượu bia tối sau buổi chân, và <b>không uống từ 3/12 đến hết race</b>.</li>
+      <li>Bữa lệch: hôm sau ăn bình thường, đi bộ nhiều hơn, không nhịn bù.</li>
+    </ol>
+  </details>
+  <details class="card"><summary>Calo tham khảo</summary>
+    <div class="stat">
+      <div><span class="small muted">Calo</span><b>~2.200</b><span class="small muted">kcal ngày tạ</span></div>
+      <div><span class="small muted">Protein</span><b>150–170</b><span class="small muted">g</span></div>
+      <div><span class="small muted">Béo</span><b>60–70</b><span class="small muted">g</span></div>
+    </div>
+    <p class="small muted">Mục tiêu giảm 0,4–0,6 kg/tuần, quyết định theo cân trung bình 2–3 tuần. Đến 6/12 tạm ưu tiên chạy: không cố thâm hụt ngày chạy dài và 2 ngày trước race.</p>
+  </details>
+  <details class="card"><summary>Supplement</summary>
+    <div class="tw"><table><thead><tr><th>Loại</th><th>Làm gì</th></tr></thead><tbody>
+      <tr><td>Creatine</td><td class="lvl-ok">Giữ, 3–5 g/ngày, cả ngày nghỉ. Không cần ngưng trước race</td></tr>
+      <tr><td>Omega-3</td><td>Giữ nếu ăn cá béo dưới 2 bữa/tuần</td></tr>
+      <tr><td>D3K2</td><td>Giữ, 1.000–2.000 IU/ngày</td></tr>
+      <tr><td>Cà phê</td><td>Race: ~3 mg/kg khoảng 60 phút trước xuất phát, <b>chỉ khi đã thử trong buổi dài</b> (Guest et al. 2021)</td></tr>
+      <tr><td>Gel, điện giải</td><td>Mua đúng loại sẽ dùng race, thử ở buổi 22/11 và 29/11</td></tr>
+      <tr><td>BCAA</td><td class="lvl-bad">Bỏ. Vô ích khi đã đủ protein</td></tr>
+    </tbody></table></div>
+  </details>
+</div>
+
+<!-- ================= CHECK-IN ================= -->
+<div id="v-check-in" class="view" hidden>
+  <header class="hdr"><div class="row">
+    <div class="grow"><p class="eyebrow" id="ci-eyebrow">Check-in</p><h1 id="ci-title">Tuần</h1></div>
+    <div class="daynav">
+      <button class="iconbtn" id="ci-prev" aria-label="Tuần trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="iconbtn" id="ci-next" aria-label="Tuần sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+  </div></header>
+
+  <section class="card" id="ci-summary"></section>
+
+  <section class="card">
+    <p class="eyebrow">Cân sáng (kg)</p>
+    <div class="wgrid" id="ci-weights"></div>
+    <div class="stat" id="ci-stat"></div>
+    <div class="chart" id="ci-chart"></div>
+  </section>
+
+  <section class="card">
+    <p class="eyebrow">Bước chân</p>
+    <div class="wgrid steps" id="ci-stepgrid"></div>
+    <div class="stat" id="ci-stepstat"></div>
+  </section>
+
+  <section class="card">
+    <p class="eyebrow">Chỉ số tuần</p>
+    <div class="inline">
+      <div class="field"><label for="ci-waist">Vòng eo (cm)</label><input type="text" inputmode="decimal" id="ci-waist" data-wk="waist"></div>
+      <div class="field"><label for="ci-sleepH">Ngủ TB (giờ)</label><input type="text" inputmode="decimal" id="ci-sleepH" data-wk="sleepH"></div>
+      <div class="field"><label for="ci-sleepQ">Chất lượng ngủ 1–5</label><input type="text" inputmode="numeric" id="ci-sleepQ" data-wk="sleepQ"></div>
+    </div>
+    <div class="inline">
+      <div class="field"><label for="ci-stress">Stress 1–5</label><input type="text" inputmode="numeric" id="ci-stress" data-wk="stress"></div>
+      <div class="field"><label for="ci-energy">Năng lượng 1–5</label><input type="text" inputmode="numeric" id="ci-energy" data-wk="energy"></div>
+      <div class="field"><label for="ci-hunger">Đói 1–5</label><input type="text" inputmode="numeric" id="ci-hunger" data-wk="hunger"></div>
+    </div>
+    <div class="inline">
+      <div class="field"><label for="ci-adh">Bám kế hoạch ăn (%)</label><input type="text" inputmode="numeric" id="ci-adh" data-wk="adherence"></div>
+      <div class="field"><label for="ci-prot">Ngày đủ đạm (/7)</label><input type="text" inputmode="numeric" id="ci-prot" data-wk="proteinDays"></div>
+    </div>
+    <div class="field"><label for="ci-off">Rượu bia, bữa lệch</label><input type="text" id="ci-off" data-wk="offplan"></div>
+    <div class="field"><label for="ci-note">Ghi chú, câu hỏi cho PT</label><textarea id="ci-note" data-wk="note"></textarea></div>
+  </section>
+
+  <section class="card"><p class="eyebrow">Buổi đã ghi trong tuần</p><div id="ci-sessions" class="stack-s small"></div></section>
+  <section class="card"><p class="eyebrow">Ăn ngoài trong tuần</p><div id="ci-meals" class="stack-s small"></div></section>
+
+  <button class="btn block" id="ci-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Sao chép báo cáo tuần</button>
+  <p class="xs muted" style="text-align:center">Dán báo cáo vào chat với PT mỗi Chủ nhật.</p>
+  <textarea id="ci-fallback" hidden rows="10" aria-label="Báo cáo tuần"></textarea>
+
+  <details class="card"><summary>Sao lưu dữ liệu</summary>
+    <div class="stack">
+      <p class="small muted">Dữ liệu chỉ nằm trên trình duyệt của máy này. Mở bằng máy hoặc trình duyệt khác sẽ không thấy. Nên tải file sao lưu mỗi tuần.</p>
+      <div class="row">
+        <button class="btn ghost sm" id="bk-file">Tải file sao lưu (.json)</button>
+        <button class="btn ghost sm" id="bk-copy">Sao chép bản sao lưu</button>
+        <label class="btn ghost sm" style="cursor:pointer">Mở file sao lưu<input type="file" id="bk-open" accept=".json,application/json" hidden></label>
       </div>
-
-      <h2>Quy tắc đau</h2>
-      <div class="tw"><table>
-        <thead><tr><th>Đau 0–10</th><th>Xử lý</th></tr></thead>
-        <tbody>
-          <tr><td class="lvl-ok">0–3, sáng hôm sau không tệ hơn</td><td>Tiếp tục, được tăng tạ</td></tr>
-          <tr><td class="lvl-warn">4–5, hoặc sáng hôm sau tệ hơn</td><td>Giữ tạ hoặc giảm 10–20%, giảm biên độ</td></tr>
-          <tr><td class="lvl-bad">Trên 5, hoặc kéo dài quá 24 giờ</td><td>Dừng bài, thay biến thể, báo PT</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card"><p><b>Đau ngực kèm khó thở, lan ra tay hoặc hàm, vã mồ hôi, chóng mặt:</b> dừng tập và đi khám ngay.</p></div>
-
-      <h2>Tăng tạ</h2>
-      <div class="card">
-        <p>Khi <b>mọi set</b> chạm đỉnh dải rep (vd 8–10 thì đạt 10) với RIR đúng và kỹ thuật chuẩn, buổi sau tăng tạ: thân dưới +5 kg, thân trên +2.5 kg, tạ đơn lên bậc kế tiếp. Rồi tập lại từ đáy dải.</p>
-        <p class="muted small">Đang ăn thâm hụt nên giữ được mức tạ đã là tốt. Tăng được là thắng lớn.</p>
-      </div>
-
-      <h2>Cầu lông Chủ nhật</h2>
-      <div class="card">
-        <ul>
-          <li>Bạn đánh tay trái, đúng bên vai yếu. Khởi động vai 5 phút trước khi đánh.</li>
-          <li>Đến hết 29/11: hạn chế đập cầu liên tục, đánh tối đa 90 phút.</li>
-          <li>Sáng T2 vai trái đau hơn hôm CN thì bỏ machine shoulder press và giảm face pull còn 2 set.</li>
-        </ul>
-      </div>
-
-      <h2>Ngoài giờ tập</h2>
-      <div class="card">
-        <ul>
-          <li>Bước chân: mỗi tuần thêm 1.000 cho tới khi đạt <b>8.000/ngày</b>.</li>
-          <li>Ngồi làm việc: cứ 45–60 phút đứng dậy 2 phút.</li>
-          <li>Ngủ đủ 7–8 tiếng, giờ ngủ ổn định.</li>
-        </ul>
-      </div>
-    </section>
-  </div>
-
-  <!-- ====== ĂN UỐNG ====== -->
-  <div id="v-an-uong" class="view" hidden>
-    <section>
-      <div><p class="eyebrow">Mục tiêu hằng ngày · tính trung bình theo tuần</p><h1>Ăn uống</h1></div>
-      <div class="card">
-        <div class="stat">
-          <div><span class="small muted">Calo</span><b>~2.200</b><span class="small muted">kcal</span></div>
-          <div><span class="small muted">Protein</span><b>150–170</b><span class="small muted">g · ưu tiên số 1</span></div>
-          <div><span class="small muted">Chất béo</span><b>60–70</b><span class="small muted">g</span></div>
-          <div><span class="small muted">Carb</span><b>230–250</b><span class="small muted">g</span></div>
-        </div>
-        <p class="small muted">Mục tiêu giảm 0,4–0,6 kg/tuần. Số calo dưới đây là ước tính, sai số khoảng 10–15%. Cân nặng thực tế mỗi tuần mới là thước đo cuối cùng.</p>
-      </div>
-
-      <h2>Cân đo thế nào</h2>
-      <div class="card">
-        <ul>
-          <li>Mua 1 cân điện tử nhà bếp (khoảng 100–150k). Chỉ cần cân kỹ <b>2 tuần đầu</b> để quen mắt, sau đó ước lượng.</li>
-          <li><b>Thịt, cá:</b> số gram trong bảng là <b>khối lượng sống</b>. Ăn mâm chung, đã nấu chín: thịt nạc chín ≈ 70% khối lượng sống, cá chín ≈ 80%. Ví dụ 180 g thịt sống ≈ 125 g thịt chín.</li>
-          <li><b>Cơm:</b> số gram là <b>cơm chín</b>. Đơm cái chén bạn hay dùng như bình thường rồi cân 1 lần để biết chén đó bao nhiêu gram. Thường 1 chén vừa ≈ 150–180 g.</li>
-          <li><b>Dầu ăn:</b> 1 muỗng canh ≈ 120 kcal. Đây là phần khó đếm nhất của cơm nhà, nên bảng đã chừa sẵn khoảng 200 kcal dư cho dầu, nước chấm, trái cây.</li>
-        </ul>
-      </div>
-
-      <h2>Ngày tập</h2>
-      <div class="tw"><table>
-        <thead><tr><th>Giờ</th><th>Ăn gì</th><th>kcal</th><th>Protein</th></tr></thead>
-        <tbody>
-          <tr><td class="n">08:30</td><td>Cà phê đen</td><td class="n">0</td><td class="n">0</td></tr>
-          <tr><td class="n">12:00</td><td><b>Trưa:</b> cơm <b>200 g</b> · thịt/cá nạc <b>180 g sống</b> · rau <b>200 g</b> · canh</td><td class="n">~630</td><td class="n">~45 g</td></tr>
-          <tr><td class="n">16:30<br>–17:30</td><td><b>Xế, trước tập</b>, chọn 1:<br>(A) cơm <b>150 g</b> · ức gà <b>130 g sống</b> · 1 trái chuối<br>(B) mang đi: 1 ổ bánh mì kẹp ức gà <b>100 g sống</b> (hoặc 2 trứng luộc) · 1 hộp sữa tươi không đường 180 ml</td><td class="n">~450<br>–480</td><td class="n">25–35 g</td></tr>
-          <tr><td class="n">21:00<br>–21:30</td><td><b>Tối, sau tập:</b> cơm <b>200 g</b> · thịt/cá nạc <b>200 g sống</b> · rau <b>200 g</b></td><td class="n">~660</td><td class="n">~49 g</td></tr>
-          <tr><td class="n">Tuỳ</td><td><b>Phụ</b>, chọn 1:<br>(A) ức gà <b>100 g sống</b>, luộc hoặc áp chảo, ăn kèm dưa leo<br>(B) sinh tố 1 trái chuối + 1 hộp sữa tươi không đường 180 ml, kèm 2 trứng luộc</td><td class="n">~150<br>–300</td><td class="n">19–23 g</td></tr>
-          <tr><td class="n">—</td><td>Dư cho dầu nấu, nước chấm, trái cây</td><td class="n">~200</td><td class="n">—</td></tr>
-          <tr><td></td><td><b>Tổng</b></td><td class="n"><b>~2.150</b></td><td class="n"><b>~155–160 g</b></td></tr>
-        </tbody>
-      </table></div>
-      <div class="card">
-        <p><b>Ngày nghỉ</b> (T4, T7, CN): bữa xế bỏ phần cơm hoặc bánh mì, chỉ ăn đạm + trái cây. Tổng khoảng 1.950 kcal.</p>
-        <p class="small muted">Chạy T4 và cầu lông CN tốn thêm khoảng 300–500 kcal, nên hôm đó ăn như ngày tập cũng được.</p>
-      </div>
-
-      <h2>Đổi món: phần đạm</h2>
-      <p class="small muted">Mỗi dòng ≈ 30 g protein. Muốn đổi thịt trong bữa, cứ lấy một dòng thay cho một dòng.</p>
-      <div class="tw"><table>
-        <thead><tr><th>Món (sống)</th><th>Lượng</th><th>kcal</th></tr></thead>
-        <tbody>
-          <tr><td>Ức gà bỏ da</td><td class="n">130 g</td><td class="n">~155</td></tr>
-          <tr><td>Tôm bóc vỏ</td><td class="n">150 g</td><td class="n">~135</td></tr>
-          <tr><td>Cá basa, rô phi, cá lóc</td><td class="n">170 g</td><td class="n">~170</td></tr>
-          <tr><td>Thăn heo, bò nạc (thăn, bắp)</td><td class="n">150 g</td><td class="n">~210</td></tr>
-          <tr><td>Đùi gà bỏ da</td><td class="n">160 g</td><td class="n">~215</td></tr>
-          <tr><td>Trứng</td><td class="n">3 quả + 3 lòng trắng</td><td class="n">~260</td></tr>
-          <tr><td>Đậu hũ</td><td class="n">350 g</td><td class="n">~260</td></tr>
-          <tr><td>Cá thu, cá hồi (nhiều béo tốt)</td><td class="n">150 g</td><td class="n">~290</td></tr>
-          <tr><td>Nạc vai heo</td><td class="n">160 g</td><td class="n">~290</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card"><p><b>Thịt nhiều mỡ:</b> 100 g ba chỉ ≈ 500 kcal nhưng chỉ khoảng 9 g protein, gấp 3–4 lần calo của thăn heo. Sườn, da gà, lòng cũng vậy. Có ăn thì tối đa 50 g và bớt 100 g cơm ở bữa đó.</p></div>
-
-      <h2>Đổi món: phần tinh bột</h2>
-      <p class="small muted">Mỗi dòng ≈ 50 g carb, khoảng 200–230 kcal, tương đương 180 g cơm.</p>
-      <div class="tw"><table>
-        <thead><tr><th>Món</th><th>Lượng</th></tr></thead>
-        <tbody>
-          <tr><td>Cơm trắng hoặc gạo lứt (chín)</td><td class="n">180 g</td></tr>
-          <tr><td>Bún tươi</td><td class="n">200 g</td></tr>
-          <tr><td>Bánh phở tươi</td><td class="n">160 g</td></tr>
-          <tr><td>Xôi</td><td class="n">110 g</td></tr>
-          <tr><td>Bánh mì</td><td class="n">1 ổ nhỏ (~80 g)</td></tr>
-          <tr><td>Khoai lang (sống)</td><td class="n">250 g</td></tr>
-          <tr><td>Yến mạch (khô)</td><td class="n">65 g</td></tr>
-          <tr><td>Chuối</td><td class="n">2 trái</td></tr>
-        </tbody>
-      </table></div>
-      <p class="small muted">Mì gói không tính là đổi ngang: 1 gói khoảng 350 kcal, trong đó nhiều chất béo.</p>
-
-      <h2>Ăn ngoài (ước tính quán Việt)</h2>
-      <div class="tw"><table>
-        <thead><tr><th>Món</th><th>kcal</th><th>Protein</th><th>Cách chọn</th></tr></thead>
-        <tbody>
-          <tr><td>Phở bò tô thường</td><td class="n">450–550</td><td class="n">25–30 g</td><td>Gọi thêm thịt, ăn bớt bánh, không chan nước béo</td></tr>
-          <tr><td>Bún bò</td><td class="n">550–650</td><td class="n">25–30 g</td><td>Bỏ mỡ nổi, ít chả</td></tr>
-          <tr><td>Cơm gà luộc</td><td class="n">600–700</td><td class="n">35–40 g</td><td>Bỏ da, cơm trắng thay cơm chiên</td></tr>
-          <tr><td>Cơm tấm sườn</td><td class="n">650–750</td><td class="n">30–35 g</td><td>Sườn + trứng, bỏ mỡ hành. Sườn bì chả lên tới 850–1.000</td></tr>
-          <tr><td>Bánh mì thịt</td><td class="n">400–500</td><td class="n">15–20 g</td><td>Thêm 2 trứng luộc hoặc 1 hộp sữa tươi không đường cho đủ đạm</td></tr>
-          <tr><td>Bia 330 ml</td><td class="n">~150/lon</td><td class="n">0</td><td>5 lon ≈ 1 bữa chính</td></tr>
-        </tbody>
-      </table></div>
-
-      <h2>Cơm nhà, tiệc, rượu bia</h2>
-      <div class="card">
-        <ol>
-          <li>Gắp đạm trước cho đủ phần, rồi mới tới rau và cơm.</li>
-          <li>Ưu tiên luộc, hấp, kho, canh. Nhờ người nhà bớt dầu khi xào.</li>
-          <li>Nước chấm, nước kho, nước béo: chấm ít, không chan.</li>
-          <li>Khoảng 80% bữa theo khung, 20% ăn thoải mái mà không cần bù.</li>
-          <li>Bữa nhậu: không uống vào tối sau buổi tập chân. Ăn đồ nướng, luộc trước, hạn chế đồ chiên. Bớt cơm bữa trước đó. Hôm sau ăn bình thường, đi bộ nhiều hơn, không nhịn ăn bù.</li>
-        </ol>
-      </div>
-
-      <h2>Tuần bận đầu tháng</h2>
-      <div class="card">
-        <ul>
-          <li>Mang bữa xế (B) lên công ty, ăn lúc 17–18h.</li>
-          <li>Về muộn sau 21h: thịt/cá 150–200 g sống + rau + 100 g cơm. Đủ protein là được.</li>
-        </ul>
-      </div>
-
-      <h2>Supplement</h2>
-      <div class="tw"><table>
-        <thead><tr><th>Loại</th><th>Làm gì</th></tr></thead>
-        <tbody>
-          <tr><td>Creatine</td><td class="lvl-ok">Giữ. 3–5 g/ngày, giờ nào cũng được, cả ngày nghỉ</td></tr>
-          <tr><td>Omega-3</td><td>Giữ nếu ăn cá béo dưới 2 bữa/tuần</td></tr>
-          <tr><td>D3K2</td><td>Giữ, 1.000–2.000 IU/ngày</td></tr>
-          <tr><td>Kẽm</td><td class="lvl-warn">Không cần hằng ngày. Ăn nhiều thịt đỏ là đủ</td></tr>
-          <tr><td>BCAA</td><td class="lvl-bad">Bỏ. Vô ích khi đã đủ protein, tiền đó mua ức gà, trứng</td></tr>
-        </tbody>
-      </table></div>
-    </section>
-  </div>
-
-  <!-- ====== CHECK-IN ====== -->
-  <div id="v-check-in" class="view" hidden>
-    <section>
-      <div class="row" style="justify-content:space-between">
-        <div><p class="eyebrow" id="ci-eyebrow">Check-in</p><h1 id="ci-title">Tuần</h1></div>
-        <div class="row">
-          <button class="iconbtn" id="ci-prev" aria-label="Tuần trước">‹</button>
-          <button class="iconbtn" id="ci-next" aria-label="Tuần sau">›</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <p class="eyebrow">Cân sáng (kg)</p>
-        <div class="wgrid" id="ci-weights"></div>
-        <div class="stat" id="ci-stat"></div>
-      </div>
-
-      <div class="card">
-        <p class="eyebrow">Bước chân</p>
-        <div class="wgrid steps" id="ci-stepgrid"></div>
-        <div class="stat" id="ci-stepstat"></div>
-      </div>
-
-      <div class="card">
-        <div class="inline">
-          <div class="field"><label for="ci-waist">Vòng eo (cm)</label><input type="text" inputmode="decimal" id="ci-waist" data-wk="waist"></div>
-        </div>
-        <div class="inline">
-          <div class="field"><label for="ci-sleepH">Ngủ TB (giờ)</label><input type="text" inputmode="decimal" id="ci-sleepH" data-wk="sleepH"></div>
-          <div class="field"><label for="ci-sleepQ">Chất lượng ngủ 1–5</label><input type="text" inputmode="numeric" id="ci-sleepQ" data-wk="sleepQ"></div>
-        </div>
-        <div class="inline">
-          <div class="field"><label for="ci-stress">Stress 1–5</label><input type="text" inputmode="numeric" id="ci-stress" data-wk="stress"></div>
-          <div class="field"><label for="ci-energy">Năng lượng 1–5</label><input type="text" inputmode="numeric" id="ci-energy" data-wk="energy"></div>
-          <div class="field"><label for="ci-hunger">Đói 1–5</label><input type="text" inputmode="numeric" id="ci-hunger" data-wk="hunger"></div>
-        </div>
-        <div class="inline">
-          <div class="field"><label for="ci-adh">Bám kế hoạch ăn (%)</label><input type="text" inputmode="numeric" id="ci-adh" data-wk="adherence"></div>
-          <div class="field"><label for="ci-prot">Ngày đủ protein (/7)</label><input type="text" inputmode="numeric" id="ci-prot" data-wk="proteinDays"></div>
-        </div>
-        <div class="field"><label for="ci-off">Rượu bia, bữa lệch</label><input type="text" id="ci-off" data-wk="offplan"></div>
-        <div class="field"><label for="ci-note">Ghi chú, câu hỏi cho PT</label><textarea id="ci-note" data-wk="note"></textarea></div>
-      </div>
-
-      <div class="card">
-        <p class="eyebrow">Buổi tập đã ghi trong tuần</p>
-        <div id="ci-sessions" class="stack small"></div>
-      </div>
-
-      <div class="card">
-        <p class="eyebrow">Ăn ngoài trong tuần</p>
-        <div id="ci-meals" class="stack small"></div>
-      </div>
-
-      <button class="btn" id="ci-copy">Sao chép báo cáo tuần</button>
-      <p class="small muted">Dán báo cáo vào chat với PT mỗi Chủ nhật.</p>
-      <textarea id="ci-fallback" hidden rows="10" aria-label="Báo cáo tuần"></textarea>
-
-      <details class="card">
-        <summary>Sao lưu dữ liệu</summary>
-        <div class="stack">
-          <p class="small muted">Dữ liệu chỉ nằm trên trình duyệt của máy này. Xoá dữ liệu trình duyệt hoặc mở bằng trình duyệt khác sẽ không thấy. Thỉnh thoảng sao lưu và gửi cho PT.</p>
-          <button class="btn ghost" id="bk-copy">Sao chép bản sao lưu</button>
-          <textarea id="bk-text" rows="4" placeholder="Dán bản sao lưu vào đây để khôi phục" aria-label="Bản sao lưu"></textarea>
-          <button class="btn ghost" id="bk-restore">Khôi phục từ bản sao lưu</button>
-        </div>
-      </details>
-    </section>
-  </div>
+      <textarea id="bk-text" rows="3" placeholder="Hoặc dán bản sao lưu vào đây để khôi phục" aria-label="Bản sao lưu"></textarea>
+      <button class="btn ghost sm" id="bk-restore">Khôi phục từ bản sao lưu</button>
+      <p class="xs muted" id="bk-info"></p>
+    </div>
+  </details>
+</div>
 </main>
 
 <nav class="tabs" aria-label="Mục">
   <div class="in">
-    <a href="#hom-nay" data-v="hom-nay">Hôm nay</a>
-    <a href="#lich" data-v="lich">Lịch</a>
-    <a href="#an-uong" data-v="an-uong">Ăn uống</a>
-    <a href="#check-in" data-v="check-in">Check-in</a>
+    <a href="#hom-nay" data-v="hom-nay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Hôm nay</a>
+    <a href="#lich" data-v="lich"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Lịch</a>
+    <a href="#race" data-v="race"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>Race</a>
+    <a href="#an-uong" data-v="an-uong"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h16a8 8 0 0 1-16 0zM8 9c0-2 2-2 2-4M13 9c0-2 2-2 2-4"/></svg>Ăn uống</a>
+    <a href="#check-in" data-v="check-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M21 19H3"/></svg>Check-in</a>
   </div>
 </nav>
-<div class="toast" id="toast" hidden></div>
+<div class="timer" id="timer" hidden role="timer" aria-live="polite"><span class="xs">Nghỉ</span><b id="timer-t">0:00</b><button id="timer-add">+30s</button><button id="timer-x" aria-label="Tắt hẹn giờ">✕</button></div>
+<div class="toast" id="toast" hidden role="status"></div>
 
 <script>
 (function(){
-const K='pt-log-v1';
-let S={sessions:{},weights:{},weeks:{},meals:{},steps:{}};
-try{const raw=localStorage.getItem(K); if(raw){const o=JSON.parse(raw); S=Object.assign(S,o);}}catch(e){}
-function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
-
-/* ---------- program ---------- */
+'use strict';
 const PROGRAM={
  UA:{name:'Upper A',sub:'Đẩy/kéo nặng',plate:'blue',ex:[
   {id:'ua1',name:'Machine chest press',sets:4,reps:'6–8',top:8,rest:'nghỉ 2–3 phút',main:true,yt:'machine chest press proper form',note:'Không hạ quá sâu: dừng khi khuỷu ngang thân.',
@@ -660,37 +786,6 @@ const MACH={
  lb6:{n:'Thảm',gq:'dead bug exercise'},lb7:{n:'Thảm',gq:'mcgill curl up'}
 };
 PHOTO.ub10=PHOTO.ub6;
-function howBlock(ex,useV){
- const key=(useV&&MACH[ex.id+'v'])?ex.id+'v':ex.id;
- const mk=MACH[key]; const ph=PHOTO[key];
- if(!ex.how&&!mk) return '';
- let s='<details class="how"><summary>Máy nào, tập thế nào</summary>';
- if(ph) s+='<figure class="photo"><img src="img/'+ph.f+'" alt="'+esc(mk?mk.n:ex.name)+'" loading="lazy" width="'+ph.w+'" height="'+ph.h+'"><figcaption>Ảnh: '+esc(ph.a)+' · '+esc(ph.l)+' · <a href="'+ph.p+'" target="_blank" rel="noopener">'+ph.s+'</a></figcaption></figure>';
- if(mk){
-  s+='<dl class="mk"><dt>Dụng cụ</dt><dd>'+esc(mk.n)+'</dd>'+(mk.id?'<dt>Nhận diện</dt><dd>'+esc(mk.id)+'</dd>':'')+(mk.no?'<dt>Đừng nhầm</dt><dd>'+esc(mk.no)+'</dd>':'')+(mk.alt?'<dt>Thay thế</dt><dd>'+esc(mk.alt)+'</dd>':'')+'</dl>';
- }
- if(ex.how) s+='<p class="eyebrow">Cách tập</p><ul>'+ex.how.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
- s+='<div class="links">';
- if(mk&&mk.more) mk.more.forEach(m=>{s+='<a href="https://www.google.com/search?tbm=isch&q='+encodeURIComponent(m[1])+'" target="_blank" rel="noopener">'+esc(m[0])+' ↗</a>';});
- if(mk&&mk.gq) s+='<a href="https://www.google.com/search?tbm=isch&q='+encodeURIComponent(mk.gq)+'" target="_blank" rel="noopener">'+(ph?'Thêm ảnh máy':'Xem ảnh máy thật')+' ↗</a>';
- if(ex.yt) s+='<a href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.yt)+'" target="_blank" rel="noopener">Video mẫu ↗</a>';
- return s+'</div></details>';
-}
-const OTHER={
- RUN:{name:'Chạy Zone 2',body:'<p>30–40 phút, tốc độ vẫn nói chuyện được. Nhịp tim khoảng 118–137 bpm.</p><p class="muted small">Chạy nhẹ giữa hai buổi chân để chân kịp hồi phục và gần như không cản trở tăng cơ.</p>'},
- BAD:{name:'Cầu lông',body:'<ul><li>Khởi động vai 5 phút: band external rotation 2×15, internal rotation ×15, pull-apart ×15, xoay tay rộng dần.</li><li>Đến hết 29/11: hạn chế đập cầu liên tục, tối đa 90 phút.</li><li>Sáng mai tự kiểm tra vai trái trước buổi Upper A.</li></ul>'},
- REST:{name:'Nghỉ',body:'<p>Đi bộ cho đủ bước chân. Ngủ sớm nếu được.</p><p class="muted small">Buổi Lower B bị lỡ hôm T6 thì chọn Lower B ở trên để tập bù hôm nay.</p>'}
-};
-const CHIP_ORDER=['UA','LA','UB','LB','FB','RUN','BAD','REST'];
-
-const PHASES=[
- {from:'2026-11-09',to:'2026-11-15',wk:'W46',name:'Quay lại tập 1',rir:'3–4',rirI:'2–3',mode:'minus1',setTxt:'Bớt 1 set mỗi bài'},
- {from:'2026-11-16',to:'2026-11-22',wk:'W47',name:'Quay lại tập 2',rir:'3',rirI:'2',mode:'normal',setTxt:'Như chương trình'},
- {from:'2026-11-23',to:'2026-11-29',wk:'W48',name:'Xây dựng',rir:'2',rirI:'1–2',mode:'normal',setTxt:'Như chương trình'},
- {from:'2026-11-30',to:'2026-12-06',wk:'W49',name:'Tuần bận đầu tháng',rir:'2–3',rirI:'2',mode:'busy',setTxt:'2 buổi full-body 40 phút'},
- {from:'2026-12-07',to:'2026-12-27',wk:'W50–52',name:'Tăng dần',rir:'1–2',rirI:'0–1',mode:'plus',setTxt:'+1 set ở bài chính'},
- {from:'2026-12-28',to:'2027-01-03',wk:'W53',name:'Deload, checkpoint 31/12',rir:'3–4',rirI:'3',mode:'deload',setTxt:'Bớt khoảng 40% số set'}
-];
 const GUIDE='<p><b>RIR</b> là số rep bạn còn làm thêm được với kỹ thuật chuẩn khi dừng set. RPE = 10 − RIR.</p>'+
  '<div class="tw"><table><thead><tr><th>RIR</th><th>RPE</th><th>Dấu hiệu ở rep cuối</th></tr></thead><tbody>'+
  '<tr><td class="n">4</td><td class="n">6</td><td>Tốc độ vẫn đều, còn dư nhiều</td></tr>'+
@@ -707,202 +802,573 @@ const GUIDE='<p><b>RIR</b> là số rep bạn còn làm thêm được với k�
  '<p><b>Nghỉ giữa set:</b> ghi ở từng bài. Nghỉ chưa đủ mà set sau tụt quá 2 rep thì nghỉ thêm 30–60 giây.</p>'+
  '<p><b>Superset:</b> làm 1 set bài thứ nhất, chuyển ngay sang 1 set bài thứ hai, nghỉ sau khi xong cả cặp, rồi lặp lại. Chỉ ghép 2 bài cô lập dùng nhóm cơ khác nhau (vai giữa + tay trước, vai sau + tay sau), nên bài này nghỉ trong lúc bài kia làm. Cách này tiết kiệm khoảng 8–10 phút mỗi buổi mà số rep gần như không giảm, để buổi tập vừa 70 phút. Bài compound nặng không bao giờ ghép. Phòng đông, không giữ được 2 máy thì tập từng bài riêng, chỉ dài thêm vài phút.</p>'+
  '<p class="muted small">Người tập lâu năm thường đoán RIR lệch khoảng 1 rep, và đoán chuẩn hơn khi càng gần giới hạn. Thỉnh thoảng ở set cuối bài máy, thử tập tới khi không thêm được để kiểm tra mình đoán đúng không.</p>';
-const RPE=r=>String(r).split('–').map(x=>10-Number(x)).reverse().join('–');
-function rirFor(ex,ph){ if(ex.core) return null; return ex.iso?ph.rirI:ph.rir; }
+
+/* ================= buổi rút gọn tuần race ================= */
+const exById=id=>{for(const k in PROGRAM){const e=PROGRAM[k].ex.find(x=>x.id===id);if(e)return e;}return null;};
+PROGRAM.UT={name:'Upper rút gọn',sub:'Tuần race · 30–40 phút',plate:'blue',fixed:true,ex:[
+ Object.assign({},exById('ua1'),{sets:2,rest:'nghỉ 2 phút'}),
+ Object.assign({},exById('ua2'),{sets:2}),
+ Object.assign({},exById('ua3'),{sets:2}),
+ Object.assign({},exById('ua6'),{sets:2,ss:null,rest:'nghỉ 60 giây'}),
+ Object.assign({},exById('ua5'),{sets:2,ss:null,rest:'nghỉ 60 giây'})
+]};
+PROGRAM.FB.name='Full-body 40 phút';
+const LIFTS=['UA','LA','UB','LB'];
+const ALL_LIFT=['UA','LA','UB','LB','UT','FB'];
+const isLower=k=>k==='LA'||k==='LB';
+
+/* ================= helpers ================= */
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
+const DOW=['CN','T2','T3','T4','T5','T6','T7'];
+const DOWL=['Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+const dm=s=>{const d=parse(s);return pad(d.getDate())+'/'+pad(d.getMonth()+1);};
+const dmShort=s=>{const d=parse(s);return d.getDate()+'/'+(d.getMonth()+1);};
+function monday(ds){const d=parse(ds);d.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(d);}
+function addDays(ds,n){const d=parse(ds);d.setDate(d.getDate()+n);return ymd(d);}
+const daysBetween=(a,b)=>Math.round((parse(b)-parse(a))/86400000);
+function isoWeek(ds){const d=parse(ds);const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-day);const y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));return t.getUTCFullYear()+'-W'+pad(Math.ceil(((t-y0)/86400000+1)/7));}
+let TODAY=ymd(new Date());
+const num=v=>{if(v==null||v==='')return NaN;return parseFloat(String(v).replace(',','.'));};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=id=>document.getElementById(id);
+const stepNum=v=>{const s=String(v==null?'':v).replace(/[^\d]/g,'');return s?parseInt(s,10):NaN;};
+const fmtK=n=>Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const fmt1=n=>(Math.round(n*10)/10).toString().replace('.',',');
+function parseDur(s){if(!s)return NaN;const p=String(s).trim().split(/[:.,h' ]+/).filter(Boolean).map(Number);if(p.some(isNaN))return NaN;if(p.length===3)return p[0]*3600+p[1]*60+p[2];if(p.length===2)return p[0]*60+p[1];if(p.length===1)return p[0]*60;return NaN;}
+const parseGoal=s=>{if(!s)return NaN;const p=String(s).trim().split(/[:.,h ]+/).filter(Boolean).map(Number);if(p.some(isNaN))return NaN;if(p.length===3)return p[0]*3600+p[1]*60+p[2];if(p.length===2)return p[0]*3600+p[1]*60;if(p.length===1)return p[0]*3600;return NaN;};
+const fmtPace=sec=>{if(!isFinite(sec))return '–';const m=Math.floor(sec/60),s=Math.round(sec%60);return s===60?(m+1)+':00':m+':'+pad(s);};
+const fmtHMS=sec=>{sec=Math.round(sec);const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return h?h+':'+pad(m)+':'+pad(s):m+':'+pad(s);};
+const ICON={
+ lift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>',
+ run:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="1.8"/><path d="M8 21l3-6 3 2 1 4M6 12l3-3.5 4 1 2.5 3 3 .5M11 15l2-5.5"/></svg>',
+ rest:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
+ bad:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10l6-6M15 3l6 6M4 20l7.5-7.5"/><circle cx="7" cy="17" r="2.5"/></svg>',
+ race:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+};
+
+/* ================= storage ================= */
+const K='pt-log-v1';
+const BLANK=()=>({v:2,sessions:{},weights:{},weeks:{},meals:{},steps:{},runs:{},done:{},race:{start:'',goal:'3:00'}});
+let S=BLANK();
+function load(){try{const raw=localStorage.getItem(K);if(raw){const o=JSON.parse(raw);S=Object.assign(BLANK(),o);S.race=Object.assign({start:'',goal:'3:00'},o.race||{});S.v=2;}}catch(e){}}
+load();
+function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){toast('Không lưu được: bộ nhớ trình duyệt đầy hoặc bị chặn.');}}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+
+/* ================= phases ================= */
+const BLOCK_START='2026-11-09', BLOCK_END='2027-01-03', RACE_DAY='2026-12-06', RACE_PLAN_START='2026-11-20';
+const PHASES=[
+ {from:'2026-11-09',to:'2026-11-15',wk:'W46',name:'Quay lại tập 1',rir:'3–4',rirI:'2–3',mode:'minus1',setTxt:'Bớt 1 set mỗi bài'},
+ {from:'2026-11-16',to:'2026-11-22',wk:'W47',name:'Quay lại tập 2',rir:'3',rirI:'2',mode:'normal',setTxt:'Như chương trình'},
+ {from:'2026-11-23',to:'2026-11-29',wk:'W48',name:'Race prep · tạ duy trì',rir:'2–3',rirI:'2',mode:'race',setTxt:'Thân trên như chương trình · thân dưới bớt 1 set, RIR 3'},
+ {from:'2026-11-30',to:'2026-12-06',wk:'W49',name:'Giảm tải + race · tuần bận',rir:'3',rirI:'2–3',mode:'taper',setTxt:'1 buổi thân trên rút gọn · không tập chân'},
+ {from:'2026-12-07',to:'2026-12-13',wk:'W50',name:'Hồi phục sau race',rir:'2–3',rirI:'2',mode:'recover',setTxt:'Thân trên như chương trình · thân dưới bớt 1 set, RIR 3'},
+ {from:'2026-12-14',to:'2026-12-27',wk:'W51–52',name:'Tăng dần',rir:'1–2',rirI:'0–1',mode:'plus',setTxt:'+1 set ở bài chính'},
+ {from:'2026-12-28',to:'2027-01-03',wk:'W53',name:'Deload · checkpoint 31/12',rir:'3–4',rirI:'3',mode:'deload',setTxt:'Bớt khoảng 40% số set'}
+];
 function phaseFor(ds){
  if(ds<PHASES[0].from) return Object.assign({},PHASES[0],{pre:true});
  for(const p of PHASES){ if(ds>=p.from && ds<=p.to) return p; }
  return {wk:'Hết Block 1',name:'Gửi check-in để PT viết Block 2',rir:'2',rirI:'1–2',mode:'normal',setTxt:'Như chương trình',after:true};
 }
-function setsFor(ex,ph,fixed){
- if(fixed) return ex.sets;
- if(ph.mode==='minus1') return Math.max(1,ex.sets-1);
+const softLower=(ph,key)=>isLower(key)&&(ph.mode==='race'||ph.mode==='recover');
+function setsFor(ex,ph,prog,key){
+ if(prog.fixed) return ex.sets;
+ if(ph.mode==='minus1'||softLower(ph,key)) return Math.max(1,ex.sets-1);
  if(ph.mode==='plus') return ex.sets+(ex.main?1:0);
  if(ph.mode==='deload') return Math.max(1,Math.round(ex.sets*0.6));
  return ex.sets;
 }
+function rirFor(ex,ph,key){ if(ex.core) return null; if(softLower(ph,key)) return ex.iso?'2':'3'; if(key==='UT') return ex.iso?'2':'3'; return ex.iso?ph.rirI:ph.rir; }
 function variant(ex,ds){ return (ex.v && ds>=ex.v.from)? Object.assign({},ex,ex.v) : ex; }
+const RPE=r=>String(r).split('–').map(x=>10-Number(x)).reverse().join('–');
 
-/* ---------- dates ---------- */
-const pad=n=>String(n).padStart(2,'0');
-const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
-const DOW=['CN','T2','T3','T4','T5','T6','T7'];
-const dm=s=>{const d=parse(s);return pad(d.getDate())+'/'+pad(d.getMonth()+1);};
-function monday(ds){const d=parse(ds);d.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(d);}
-function addDays(ds,n){const d=parse(ds);d.setDate(d.getDate()+n);return ymd(d);}
-function isoWeek(ds){const d=parse(ds);const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-day);const y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));return t.getUTCFullYear()+'-W'+pad(Math.ceil(((t-y0)/86400000+1)/7));}
-let TODAY=ymd(new Date());
-const num=v=>{if(v==null||v==='')return NaN;return parseFloat(String(v).replace(',','.'));};
-const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ================= kế hoạch theo ngày ================= */
+const R=(title,o)=>Object.assign({k:'RUN',title},o);
+const EASY_TPL=()=>R('Chạy nhẹ 30–40 phút',{kmTxt:'4–5',pace:'nói chuyện được',hr:'126–146',hrMax:146,detail:['Vùng 2: thở bằng mũi được, nói thành câu được.','Chạy giữa hai buổi chân giúp hồi phục, gần như không cản trở tăng cơ.']});
+const PLAN={
+ '2026-11-20':[{k:'REST',title:'Nghỉ hoặc đi bộ 30 phút'}],
+ '2026-11-21':[{k:'UB',note:'Thay buổi chạy nhẹ 4 km trong plan: thân trên không ảnh hưởng chân cho buổi chạy dài mai. Tối nay thêm 1 chén cơm, ngủ sớm.'}],
+ '2026-11-22':[R('Chạy dài 12–14 km',{km:13,kmTxt:'12–14',pace:'8:45–9:15',hr:'140–155',hrMax:155,long:true,note:'Thay cầu lông. Ăn sáng 60–90 phút trước: 2 chuối hoặc bánh mì không.',detail:['Chạy 5 phút, đi bộ 1 phút ngay từ km 1.','Thử gel ở km 5 và km 10, đúng loại sẽ dùng ngày race.','Mang nước hoặc chạy vòng có chỗ mua nước. Uống vài ngụm mỗi 15–20 phút.','Nhịp tim liên tục trên 160 dù đã chạy chậm: đi bộ, ghi lại, và mục tiêu race đổi thành "về đích trong cut-off".']})],
+ '2026-11-23':[{k:'UA',note:'Thân trên, chân được nghỉ sau buổi chạy dài. Giữ mức tạ lần trước, RIR 2–3.'}],
+ '2026-11-24':[R('5 km nhẹ + 4 lần tăng tốc 20 giây',{km:5,kmTxt:'5',pace:'9:00',hr:'< 146',hrMax:146,detail:['Chạy nhẹ cả buổi, nói chuyện được.','Cuối buổi: 4 lần tăng tốc 20 giây, guồng chân 165–170, đi bộ 60–90 giây giữa các lần.']})],
+ '2026-11-25':[R('Pace race 4 km',{km:6,kmTxt:'1 + 4 + 1',pace:'8:20–8:30',hr:'150–158',hrMax:158,detail:['1 km khởi động thật chậm.','4 km ở pace race, nhịp tim 150–158. Vượt 158 thì chậm lại, đừng cố giữ pace.','1 km thả lỏng.']})],
+ '2026-11-26':[{k:'LA',note:'Lower A rút gọn: mỗi bài bớt 1 set, RIR 3, giữ mức tạ cũ. Cách buổi 10 km 3 ngày.'}],
+ '2026-11-27':[R('Chạy nhẹ 5 km',{km:5,kmTxt:'5',pace:'9:00–9:30',hr:'< 146',hrMax:146,detail:['Chạy hoàn toàn nhẹ. Chân còn ê sau Lower A là bình thường.']})],
+ '2026-11-28':[{k:'UB',opt:true,note:'Tuỳ chọn. Bận hoặc mệt thì nghỉ, đi bộ. Không tập bài chân.'}],
+ '2026-11-29':[R('Chạy dài 10 km: 6 nhẹ + 4 pace race',{km:10,kmTxt:'6 + 4',pace:'8:45 → 8:20',hr:'< 150 → ≤ 158',hrMax:158,long:true,note:'Buổi tổng duyệt. Thay cầu lông.',detail:['Chạy vào giờ xuất phát của giải nếu được, ăn sáng y như sáng race.','6 km đầu nhẹ, nhịp tim dưới 150. 4 km cuối pace race, nhịp tim tối đa 158.','Mặc đúng giày, tất, quần áo sẽ mặc race. Gel ở km 5 và km 10.']})],
+ '2026-11-30':[{k:'UT',opt:true,note:'Tuần bận đầu tháng + giảm tải: buổi tạ duy nhất trong tuần, 30–40 phút, tuỳ chọn. Không tập chân tới sau race.'}],
+ '2026-12-01':[R('5 km nhẹ + 4 lần tăng tốc 20 giây',{km:5,kmTxt:'5',pace:'9:00',hr:'< 146',hrMax:146,detail:['Như buổi 24/11.']})],
+ '2026-12-02':[{k:'REST',title:'Nghỉ',sub:'Đi bộ, ngủ đủ'}],
+ '2026-12-03':[R('2 km nhẹ + 2 km pace race',{km:4,kmTxt:'2 + 2',pace:'8:30',hr:'≤ 155',hrMax:155,detail:['Ngắn để chân nhớ pace race, không mệt.']})],
+ '2026-12-04':[{k:'REST',title:'Nghỉ · nhận BIB',sub:'Nhận vật phẩm 4–5/12. Bắt đầu nạp carb từ bữa tối.'}],
+ '2026-12-05':[{k:'REST',title:'Nghỉ hoặc 2 km rất nhẹ',sub:'Nạp carb cả ngày, chuẩn bị đồ, ngủ sớm.'}],
+ '2026-12-06':[{k:'RACE',title:'Half Marathon 21,1 km',sub:'Theo chiến thuật ở tab Race',km:21.1,kmTxt:'21,1',pace:'8:30–9:00',hr:'< 150 → 160',hrMax:160}],
+ '2026-12-07':[{k:'REST',title:'Hồi phục: đi bộ 20–30 phút',sub:'Không chạy, không tập chân'}],
+ '2026-12-08':[{k:'UA'}],
+ '2026-12-09':[{k:'REST',title:'Đi bộ 20–30 phút',sub:'Chưa chạy'}],
+ '2026-12-10':[{k:'UB'}],
+ '2026-12-11':[{k:'LB',note:'Sau race: mỗi bài bớt 1 set, RIR 3. Lâu chưa tập Lower B nên RDL bắt đầu 40–50 kg.'}],
+ '2026-12-12':[R('Chạy rất nhẹ 20–30 phút',{opt:true,kmTxt:'3–4',pace:'tự do',hr:'< 140',hrMax:140,detail:['Chỉ chạy nếu chân hết ê. Không thì đi bộ.']})],
+ '2026-12-13':[{k:'BAD',note:'Quay lại cầu lông: nhẹ, tối đa 60 phút.'}]
+};
+function busyDay(ds){const d=parse(ds);if(d.getDay()===0||d.getDay()===6)return false;let c=0;for(let i=1;i<=d.getDate();i++){const x=new Date(d.getFullYear(),d.getMonth(),i).getDay();if(x!==0&&x!==6)c++;}return c<=5;}
+function loggedLift(ds){for(const k of ALL_LIFT){if(hasData(S.sessions[ds+'|'+k]))return k;}return null;}
+function runLogged(ds){const r=S.runs[ds];return !!(r&&num(r.km)>0);}
+let MEMO={};
+function liftOn(ds){ // buổi tạ của ngày (đã ghi > kế hoạch)
+ const l=loggedLift(ds); if(l) return l;
+ if(ds<TODAY) return null;
+ const it=planFor(ds).find(x=>ALL_LIFT.includes(x.k)); return it?it.k:null;
+}
+function rotationPick(ds){
+ const last={}; let prev=null;
+ for(let d=addDays(ds,-1),i=0;d>=BLOCK_START&&i<120;d=addDays(d,-1),i++){
+  const k=liftOn(d); if(!k) continue; if(i===0)prev=k;
+  const base=k==='UT'?'UA':k; if(LIFTS.includes(base)&&!last[base]) last[base]=d;
+ }
+ const order=LIFTS.slice().sort((a,b)=>(last[a]||'').localeCompare(last[b]||'')||LIFTS.indexOf(a)-LIFTS.indexOf(b));
+ if(prev&&isLower(prev)){const up=order.find(k=>!isLower(k)); if(up) return up;}
+ return order[0];
+}
+function planFor(ds){
+ if(MEMO[ds]) return MEMO[ds];
+ let items;
+ if(PLAN[ds]) items=PLAN[ds].map(x=>Object.assign({},x));
+ else if(ds<BLOCK_START||ds>BLOCK_END) items=[];
+ else{
+  const dow=parse(ds).getDay(); const busy=busyDay(ds);
+  if(dow===3) items=[Object.assign(EASY_TPL(),busy?{opt:true}:{})];
+  else if(dow===0) items=[{k:'BAD'}];
+  else if(dow===6) items=[{k:'REST',title:'Nghỉ · đi bộ 8k bước',sub:'Lỡ 1 buổi tạ trong tuần thì tập bù hôm nay'}];
+  else { MEMO[ds]=[{k:'LIFT'}]; const k=rotationPick(ds); items=[{k,auto:true}];
+   if(busy) items[0]=Object.assign(items[0],{opt:true,note:'5 ngày làm việc đầu tháng: chế độ tối thiểu. Tập được thì tốt, không thì đi bộ và ăn đủ đạm, không tập bù.'}); }
+ }
+ MEMO[ds]=items; return items;
+}
+function itemTitle(it){
+ if(PROGRAM[it.k]) return PROGRAM[it.k].name;
+ if(it.title) return it.title;
+ if(it.k==='BAD') return 'Cầu lông';
+ if(it.k==='REST') return 'Nghỉ';
+ return it.k;
+}
+function itemKind(it){return ALL_LIFT.includes(it.k)?'lift':it.k==='RUN'?'run':it.k==='RACE'?'race':it.k==='BAD'?'bad':'rest';}
+function itemColor(it){const kd=itemKind(it);if(kd==='lift')return 'var(--p-'+(PROGRAM[it.k].plate)+')';if(kd==='run')return 'var(--run)';if(kd==='race')return 'var(--race)';if(kd==='bad')return 'var(--p-green)';return 'var(--p-grey)';}
+function itemDone(ds,it,idx){
+ const kd=itemKind(it);
+ if(kd==='lift') return !!loggedLift(ds);
+ if(kd==='run'||kd==='race') return runLogged(ds);
+ return !!S.done[ds+'|'+(idx||0)];
+}
+function dayDone(ds){const its=planFor(ds);return its.length>0&&its.every((it,i)=>itemDone(ds,it,i)||it.opt);}
+function dayAnyDone(ds){return planFor(ds).some((it,i)=>itemDone(ds,it,i));}
 
-/* ---------- log helpers ---------- */
-function hasData(sess){ if(!sess) return false; if(sess.exNote&&Object.values(sess.exNote).some(x=>x&&x.trim())) return true; if(!sess.ex) return false; return Object.values(sess.ex).some(a=>a.some(s=>s&&(s[0]||s[1]))); }
-function lastNote(exId,ds){
- const keys=Object.keys(S.sessions).filter(k=>k.split('|')[0]<ds).sort().reverse();
- for(const k of keys){const n=S.sessions[k].exNote&&S.sessions[k].exNote[exId]; if(n&&n.trim()) return {date:k.split('|')[0],note:n.trim()};}
- return null;
-}
-const stepNum=v=>{const s=String(v==null?'':v).replace(/[^\d]/g,'');return s?parseInt(s,10):NaN;};
-const fmtK=n=>Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-function stepAvg(mon){const v=[];for(let i=0;i<7;i++){const x=stepNum(S.steps[addDays(mon,i)]);if(!isNaN(x))v.push(x);}return v.length?{avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length}:null;}
-function stepAvgText(mon){const a=stepAvg(mon);return a?'TB tuần này: '+fmtK(a.avg)+' bước ('+a.n+' ngày). Mục tiêu 8.000.':'Ghi số bước trên điện thoại/đồng hồ trước khi ngủ.';}
-const mealsOf=ds=>(S.meals[ds]||[]).filter(m=>m&&(m.t||(m.f&&m.f.trim())));
-const fmtMeal=m=>(m.t||'??:??')+' '+(m.f||'').trim();
-function sessionsInWeek(mon){
- const end=addDays(mon,6);
- return Object.keys(S.sessions).filter(k=>{const d=k.split('|')[0];return d>=mon&&d<=end&&(hasData(S.sessions[k])||S.sessions[k].note);}).sort();
-}
-function defaultType(ds){
- const ph=phaseFor(ds); const dow=parse(ds).getDay();
- if(dow===3) return 'RUN'; if(dow===0) return 'BAD';
- if(ph.mode==='busy') return 'FB';
- if(dow===1) return 'UA'; if(dow===2) return 'LA'; if(dow===4) return 'UB'; if(dow===5) return 'LB';
- const mon=monday(ds);
- const lbDone=sessionsInWeek(mon).some(k=>k.endsWith('|LB')&&k.split('|')[0]<ds);
- return lbDone?'REST':'LB';
-}
+/* ================= log helpers ================= */
+function hasData(sess){ if(!sess) return false; if(sess.exNote&&Object.values(sess.exNote).some(x=>x&&x.trim())) return true; if(!sess.ex) return false; return Object.values(sess.ex).some(a=>a&&a.some(s=>s&&(s[0]||s[1]))); }
 function lastLog(exId,ds){
  const keys=Object.keys(S.sessions).filter(k=>k.split('|')[0]<ds).sort().reverse();
  for(const k of keys){const a=S.sessions[k].ex&&S.sessions[k].ex[exId]; if(a&&a.some(s=>s&&(s[0]||s[1]))) return {date:k.split('|')[0],sets:a.filter(s=>s&&(s[0]||s[1]))};}
  return null;
 }
+function lastNote(exId,ds){
+ const keys=Object.keys(S.sessions).filter(k=>k.split('|')[0]<ds).sort().reverse();
+ for(const k of keys){const n=S.sessions[k].exNote&&S.sessions[k].exNote[exId]; if(n&&n.trim()) return {date:k.split('|')[0],note:n.trim()};}
+ return null;
+}
 const fmtSet=s=>(s[0]?s[0]:'–')+'×'+(s[1]?s[1]:'–');
 function painLvl(v){return v<=3?'lvl-ok':(v<=5?'lvl-warn':'lvl-bad');}
+const mealsOf=ds=>(S.meals[ds]||[]).filter(m=>m&&(m.t||(m.f&&m.f.trim())));
+const fmtMeal=m=>(m.t||'??:??')+' '+(m.f||'').trim();
+function sessionsInWeek(mon){const end=addDays(mon,6);return Object.keys(S.sessions).filter(k=>{const d=k.split('|')[0];return d>=mon&&d<=end&&(hasData(S.sessions[k])||S.sessions[k].note);}).sort();}
+function weekAvg(mon){const v=[];for(let i=0;i<7;i++){const x=num(S.weights[addDays(mon,i)]);if(!isNaN(x))v.push(x);}return v.length?{avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length}:null;}
+function stepAvg(mon){const v=[];for(let i=0;i<7;i++){const x=stepNum(S.steps[addDays(mon,i)]);if(!isNaN(x))v.push(x);}return v.length?{avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length}:null;}
+function latestWeight(){const ks=Object.keys(S.weights).filter(k=>!isNaN(num(S.weights[k]))).sort();return ks.length?num(S.weights[ks[ks.length-1]]):null;}
+function weekStats(mon){
+ let liftPlan=0,liftDone=0,kmPlan=0,kmDone=0;
+ for(let i=0;i<7;i++){const ds=addDays(mon,i);planFor(ds).forEach(it=>{const kd=itemKind(it);if(kd==='lift'&&!it.opt)liftPlan++;if((kd==='run'||kd==='race')&&it.km)kmPlan+=it.km;});
+  if(loggedLift(ds))liftDone++; const r=S.runs[ds]; if(r&&num(r.km)>0)kmDone+=num(r.km);}
+ return {liftPlan,liftDone,kmPlan,kmDone};
+}
+function restSec(t){
+ if(!t) return 0; const s=String(t);
+ if(/^chuyển ngay/.test(s)) return 0;
+ const m=s.match(/(\d+)(?:–(\d+))?\s*(phút|giây)/); if(!m) return 0;
+ const a=+m[1], b=m[2]?+m[2]:a; const v=(a+b)/2; return m[3]==='phút'?Math.round(v*60):Math.round(v);
+}
 
-/* ---------- TODAY view ---------- */
-let curDate=TODAY, curType=defaultType(TODAY);
-const $=id=>document.getElementById(id);
-
+/* ================= TODAY ================= */
+let curDate=TODAY, curType=null;
+function defaultType(ds){
+ const l=loggedLift(ds); if(l) return l;
+ if(runLogged(ds)) return 'RUN';
+ const its=planFor(ds); if(!its.length) return 'REST';
+ const k=its[0].k; return k==='RACE'?'RUN':k;
+}
+curType=defaultType(curDate);
+function chipLabel(t){return t==='FB'?'Full-body (bận)':t==='RUN'?'Chạy':t==='BAD'?'Cầu lông':t==='REST'?'Nghỉ':PROGRAM[t].name;}
 function renderToday(){
- $('pick-date').value=curDate;
+ MEMO={};
  const d=parse(curDate); const ph=phaseFor(curDate);
- $('today-label').textContent=(curDate===TODAY?'Hôm nay · ':'')+DOW[d.getDay()]+' '+dm(curDate)+' · '+isoWeek(curDate);
- const meta=PROGRAM[curType]||OTHER[curType];
- $('today-title').textContent=meta.name;
- let pb='<span class="eyebrow">'+esc(ph.wk)+(ph.pre?' · bắt đầu T2 09/11':'')+'</span><b>'+esc(ph.name)+'</b><span class="small">RIR compound '+esc(ph.rir)+' · cô lập '+esc(ph.rirI)+' · '+esc(ph.setTxt)+'</span>';
- if(ph.mode==='busy') pb+='<span class="small">Tập được 2 buổi full-body là đủ. Không tập được thì đi bộ 8k bước và ăn đủ protein, không tập bù dồn.</span>';
- $('phase-box').innerHTML=pb;
-
- const w=S.weights[curDate]; $('w-today').value=w==null?'':w;
- $('w-today').previousElementSibling.textContent='Cân sáng '+DOW[d.getDay()]+' '+dm(curDate)+' (kg)';
- const mon=monday(curDate); const vals=[];for(let i=0;i<7;i++){const v=num(S.weights[addDays(mon,i)]);if(!isNaN(v))vals.push(v);}
- $('w-today-avg').textContent=vals.length?('TB tuần này: '+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2)+' kg ('+vals.length+' ngày)'):'Cân mỗi sáng sau khi đi vệ sinh, trước khi ăn uống.';
- const st=S.steps[curDate]; $('st-today').value=st==null?'':st;
- $('st-today').previousElementSibling.textContent='Bước chân '+DOW[d.getDay()]+' '+dm(curDate);
- $('st-today-avg').textContent=stepAvgText(mon);
-
- $('type-chips').innerHTML=CHIP_ORDER.filter(t=>t!=='FB'||ph.mode==='busy'||d.getDate()<=7||curType==='FB').map(t=>{const m=PROGRAM[t]||OTHER[t];const dot=PROGRAM[t]?'<span class="dot plate-'+m.plate+'"></span>':'';
-  return '<button class="chip" data-type="'+t+'" aria-pressed="'+(t===curType)+'">'+dot+esc(t==='FB'?'Full-body (tuần bận)':m.name)+'</button>';}).join('');
-
+ $('pick-date').value=curDate;
+ $('today-label').textContent=(curDate===TODAY?'Hôm nay · ':'')+isoWeek(curDate).replace(/^\d+-/,'')+' · '+ph.name;
+ $('today-title').textContent=DOWL[d.getDay()]+', '+dm(curDate);
+ renderWeekStrip();
+ renderBanner();
+ renderPlanCard();
+ const chips=['UA','LA','UB','LB','RUN','BAD','REST'];
+ if(ph.mode==='taper'||curType==='UT') chips.splice(4,0,'UT');
+ if(busyDay(curDate)||ph.mode==='taper'||curType==='FB') chips.splice(chips.indexOf('RUN'),0,'FB');
+ $('type-chips').innerHTML=chips.map(t=>{const dot=PROGRAM[t]?'<span class="dot plate-'+PROGRAM[t].plate+'"></span>':t==='RUN'?'<span class="dot plate-run"></span>':'';
+  return '<button class="chip" data-type="'+t+'" aria-pressed="'+(t===curType)+'">'+dot+esc(chipLabel(t))+'</button>';}).join('');
+ renderSession();
+ renderBody();
  renderMeals();
- if(!PROGRAM[curType]){ $('session').innerHTML='<div class="card">'+OTHER[curType].body+'</div>'; return; }
- const prog=PROGRAM[curType]; const key=curDate+'|'+curType; const sess=S.sessions[key]||{};
- let h='<details class="card"><summary>Khởi động 8–10 phút</summary><ol class="small"><li>Xe đạp hoặc đi dốc 3 phút.</li><li>Band external rotation 2×15 (tay trái thêm 1 set), pull-apart ×15, wall slide ×10.</li><li>Cat-camel ×6, giãn gập hông 30 giây/bên, dead bug ×8/bên, bird dog ×8/bên.</li><li>Bài chính: 2–3 set khởi động 50% → 70% → 85%.</li></ol></details>';
- h+='<details class="card"><summary>Cách chọn mức tạ và đọc RIR</summary>'+GUIDE+'</details>';
- h+='<div class="stack">';
+}
+function renderWeekStrip(){
+ const mon=monday(curDate); let h='';
+ for(let i=0;i<7;i++){const ds=addDays(mon,i);const d=parse(ds);const its=planFor(ds);const col=its.length?itemColor(its[0]):'var(--line2)';const done=dayAnyDone(ds);
+  h+='<button class="wd'+(ds===curDate?' sel':'')+'" data-day="'+ds+'"'+(ds===TODAY?' aria-current="date"':'')+' aria-label="'+DOWL[d.getDay()]+' '+dm(ds)+(its.length?': '+esc(itemTitle(its[0])):'')+(done?', đã xong':'')+'">'+
+   '<span class="l">'+DOW[d.getDay()]+'</span><span class="c'+(done?' done':'')+(ds===TODAY?' today':'')+'" style="'+(done?'background:'+col:'border-color:'+col)+'">'+d.getDate()+'</span></button>';}
+ $('week-strip').innerHTML=h;
+}
+function renderBanner(){
+ const b=$('race-banner'); const left=daysBetween(TODAY,RACE_DAY);
+ if(left<0||curDate>RACE_DAY){b.hidden=true;return;}
+ let tot=0,dn=0; for(let ds=RACE_PLAN_START;ds<=RACE_DAY;ds=addDays(ds,1)){planFor(ds).forEach((it,i)=>{const kd=itemKind(it);if(kd==='run'){tot++;if(itemDone(ds,it,i))dn++;}});}
+ b.hidden=false;
+ b.innerHTML='<div class="big num">'+(left===0?'HÔM NAY':left)+(left?'<small>ngày nữa</small>':'<small>race day</small>')+'</div><div class="grow stack-s"><b>Half Marathon Techcombank · 6/12</b><span class="small muted">Buổi chạy trong plan: '+dn+'/'+tot+' · mục tiêu '+esc(S.race.goal||'3:00')+'</span><div class="bar"><i style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></i></div></div>';
+}
+function targetsHTML(it){
+ let h='<div class="targets">';
+ if(it.kmTxt) h+='<div class="tgt"><b>'+esc(it.kmTxt)+'</b><span>km</span></div>';
+ if(it.pace) h+='<div class="tgt"><b>'+esc(it.pace)+'</b><span>pace /km</span></div>';
+ if(it.hr) h+='<div class="tgt"><b>'+esc(it.hr)+'</b><span>nhịp tim bpm</span></div>';
+ return h+'</div>';
+}
+function renderPlanCard(){
+ const its=planFor(curDate); const ph=phaseFor(curDate);
+ let h='<div class="card-head"><p class="eyebrow">Kế hoạch '+(curDate===TODAY?'hôm nay':DOW[parse(curDate).getDay()]+' '+dm(curDate))+'</p><span class="tag">'+esc(ph.wk)+'</span></div>';
+ if(!its.length) h+='<p class="muted">Ngoài Block 1. Gửi check-in để PT viết block tiếp theo.</p>';
+ its.forEach((it,i)=>{
+  const kd=itemKind(it); const done=itemDone(curDate,it,i);
+  const tag=kd==='lift'?'<span class="tag lift">Tạ</span>':kd==='run'?'<span class="tag run">Chạy</span>':kd==='race'?'<span class="tag race">Race</span>':'';
+  let sub=it.sub||'';
+  if(kd==='lift'){const p=PROGRAM[it.k];sub=p.sub+(it.auto?' · theo vòng xoay':'');}
+  if(kd==='bad'&&!it.note) sub='Khởi động vai 5 phút trước khi đánh';
+  const manual=(kd==='rest'||kd==='bad');
+  h+='<div class="pitem"><span class="pico" style="background:'+itemColor(it)+'">'+ICON[kd==='lift'?'lift':kd]+'</span><div class="stack-s" style="gap:2px"><div class="row" style="gap:6px"><h3>'+esc(itemTitle(it))+'</h3>'+tag+(it.opt?'<span class="tag">tuỳ chọn</span>':'')+'</div>'+(sub?'<span class="small muted">'+esc(sub)+'</span>':'')+'</div>'+
+   (manual?'<button class="st'+(done?' done':'')+'" data-mark="'+i+'" aria-pressed="'+done+'" aria-label="Đánh dấu xong">'+ICON.check+'</button>':'<span class="st'+(done?' done':'')+'" aria-label="'+(done?'Đã xong':'Chưa xong')+'">'+ICON.check+'</span>')+'</div>';
+  if(kd==='run'||kd==='race') h+=targetsHTML(it);
+  if(it.detail) h+='<ul class="small">'+it.detail.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
+  if(it.note) h+='<p class="callout'+(kd==='run'?' run':'')+'">'+esc(it.note)+'</p>';
+  if(kd==='lift'&&curType!==it.k&&!loggedLift(curDate)) h+='<button class="btn ghost sm" data-go="'+it.k+'">Mở '+esc(PROGRAM[it.k].name)+'</button>';
+  if((kd==='run'||kd==='race')&&curType!=='RUN') h+='<button class="btn run sm" data-go="RUN">Ghi buổi chạy</button>';
+ });
+ const ws=weekStats(monday(curDate)); const wa=weekAvg(monday(curDate)); const sa=stepAvg(monday(curDate));
+ h+='<div class="metrics" style="border-top:1px solid var(--line);padding-top:12px">'+
+  '<div class="metric"><span>Tạ tuần này</span><b>'+ws.liftDone+'<span class="muted" style="font-size:1rem">/'+ws.liftPlan+'</span></b></div>'+
+  '<div class="metric"><span>Chạy (km)</span><b>'+fmt1(ws.kmDone)+(ws.kmPlan?'<span class="muted" style="font-size:1rem">/'+fmt1(ws.kmPlan)+'</span>':'')+'</b></div>'+
+  '<div class="metric"><span>Cân TB</span><b>'+(wa?fmt1(wa.avg):'–')+'</b></div>'+
+  '<div class="metric"><span>Bước TB</span><b>'+(sa?(sa.avg/1000).toFixed(1).replace('.',',')+'k':'–')+'</b></div></div>';
+ $('plan-card').innerHTML=h;
+}
+$('plan-card').addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]'); if(g){curType=g.dataset.go;renderToday();$('session').scrollIntoView({behavior:'smooth',block:'start'});return;}
+ const m=e.target.closest('[data-mark]'); if(m){const k=curDate+'|'+m.dataset.mark; if(S.done[k])delete S.done[k]; else S.done[k]=true; save(); renderPlanCard(); renderWeekStrip();}
+});
+$('week-strip').addEventListener('click',e=>{const b=e.target.closest('[data-day]');if(!b)return;curDate=b.dataset.day;curType=defaultType(curDate);renderToday();});
+
+function renderSession(){
+ if(curType==='RUN') return renderRun();
+ if(!PROGRAM[curType]){
+  const body=curType==='BAD'?'<ul class="small"><li>Khởi động vai 5 phút: band external rotation 2×15, internal rotation ×15, pull-apart ×15, xoay tay rộng dần.</li><li>Hạn chế đập cầu liên tục. Sáng mai tự kiểm tra vai trái trước buổi tạ.</li><li>Sáng hôm sau vai trái đau hơn: bỏ machine shoulder press, face pull còn 2 set.</li></ul>':
+   '<p>Đi bộ cho đủ bước chân, giãn cơ nhẹ, ngủ sớm nếu được.</p><p class="small muted">Lỡ một buổi tạ trong tuần thì chọn buổi đó ở trên để tập bù.</p>';
+  $('session').innerHTML='<div class="card"><h3>'+esc(chipLabel(curType))+'</h3>'+body+'</div>'; return;
+ }
+ const prog=PROGRAM[curType]; const ph=phaseFor(curDate); const key=curDate+'|'+curType; const sess=S.sessions[key]||{};
+ let h='<div class="card"><div class="card-head"><div><p class="eyebrow">'+esc(prog.sub)+'</p><h3 style="font-size:1.2rem">'+esc(prog.name)+'</h3></div><span class="dot plate-'+prog.plate+'" style="width:14px;height:14px"></span></div>'+
+  '<p class="small">'+(prog.fixed?'Buổi cố định':'<b>'+esc(ph.name)+'</b> · '+esc(ph.setTxt))+(softLower(ph,curType)?' · <b>giữ mức tạ, không tăng</b>':'')+'</p>'+
+  '<details><summary class="small">Khởi động 8–10 phút</summary><ol class="small"><li>Xe đạp hoặc đi dốc 3 phút.</li><li>Band external rotation 2×15 (tay trái thêm 1 set), pull-apart ×15, wall slide ×10.</li><li>Cat-camel ×6, giãn gập hông 30 giây/bên, dead bug ×8/bên, bird dog ×8/bên.</li><li>Bài chính: 2–3 set khởi động 50% → 70% → 85%.</li></ol></details>'+
+  '<details><summary class="small">Chọn mức tạ, đọc RIR</summary><div class="stack small">'+GUIDE+'</div></details></div>';
  prog.ex.forEach(ex0=>{
-  const ex=variant(ex0,curDate); const n=setsFor(ex,ph,prog.fixed);
-  const logged=(sess.ex&&sess.ex[ex.id])||[]; const rows=Math.max(n,logged.length);
+  const ex=variant(ex0,curDate); const n=setsFor(ex,ph,prog,curType);
+  const logged=(sess.ex&&sess.ex[ex.id])||[]; const ok=(sess.ok&&sess.ok[ex.id])||[]; const rows=Math.max(n,logged.length);
   const last=lastLog(ex.id,curDate);
   let hint='';
-  if(last&&last.sets.length){const allTop=last.sets.every(s=>num(s[1])>=ex.top);const kgs=last.sets.map(s=>s[0]);const same=kgs.every(k=>k&&k===kgs[0]);
-   if(allTop&&same) hint='<p class="hint">Lần trước đạt đỉnh dải ở mọi set. Hôm nay tăng tạ.</p>';}
-  h+='<article class="ex"><div class="ex-head"><h3>'+esc(ex.name)+'</h3>'+(ex.ss?'<span class="ss">Superset '+ex.ss+'</span>':'')+'</div>';
-  const rr=rirFor(ex,ph);
-  h+='<p class="meta">'+n+' × '+esc(ex.reps)+'</p>';
-  h+='<div class="row small"><span class="rir">'+(rr?'RIR '+esc(rr)+' <span class="muted">(RPE '+RPE(rr)+')</span>':'Chậm, kiểm soát, không cần sát giới hạn')+'</span><span class="muted">· '+esc(ex.rest)+'</span></div>';
+  if(last&&last.sets.length&&!softLower(ph,curType)&&prog.fixed!==true){const allTop=last.sets.every(s=>num(s[1])>=ex.top);const kgs=last.sets.map(s=>s[0]);const same=kgs.every(k=>k&&k===kgs[0]);
+   if(allTop&&same) hint='<p class="hint">Lần trước đạt đỉnh dải ở mọi set → hôm nay tăng tạ.</p>';}
+  const filled=logged.filter(s=>s&&s[0]&&s[1]).length;
+  const rr=rirFor(ex,ph,curType);
+  h+='<article class="ex'+(filled>=n?' complete':'')+'"><div class="ex-head"><h3>'+esc(ex.name)+'</h3>'+(ex.ss?'<span class="ss">Superset '+ex.ss+'</span>':'')+'</div>';
+  h+='<div class="row between"><span class="prescr">'+n+' × '+esc(ex.reps)+'</span><span class="small">'+(rr?'<span class="rir">RIR '+esc(rr)+'</span> <span class="muted">· RPE '+RPE(rr)+'</span>':'<span class="muted">Chậm, kiểm soát</span>')+'</span></div>';
+  h+='<p class="small muted">'+esc(ex.rest)+'</p>';
   if(ex.note) h+='<p class="note">'+esc(ex.note)+'</p>';
-  h+=howBlock(ex,!!(ex0.v&&curDate>=ex0.v.from));
-  if(last) h+='<p class="last">Lần trước '+dm(last.date)+': <span class="num">'+last.sets.map(fmtSet).join(' · ')+'</span></p>';
+  if(last) h+='<p class="last"><span class="muted">Lần trước '+dm(last.date)+'</span><b class="num" style="font-size:1.05rem">'+last.sets.map(fmtSet).join(' · ')+'</b></p>';
   h+=hint+'<div class="sets">';
-  for(let i=0;i<rows;i++){const s=logged[i]||['',''];const ph1=last&&last.sets[i]?last.sets[i]:(last&&last.sets.length?last.sets[last.sets.length-1]:['kg','rep']);
-   h+='<div class="set"><span class="i">'+(i+1)+'</span><input type="text" inputmode="decimal" id="s-'+ex.id+'-'+i+'-kg" data-ex="'+ex.id+'" data-i="'+i+'" data-f="0" value="'+esc(s[0])+'" placeholder="'+esc(ph1[0]||'kg')+'" aria-label="'+esc(ex.name)+' set '+(i+1)+' kg"><span class="x">×</span><input type="text" inputmode="numeric" id="s-'+ex.id+'-'+i+'-r" data-ex="'+ex.id+'" data-i="'+i+'" data-f="1" value="'+esc(s[1])+'" placeholder="'+esc(ph1[1]||'rep')+'" aria-label="'+esc(ex.name)+' set '+(i+1)+' rep"></div>';}
+  for(let i=0;i<rows;i++){const s=logged[i]||['',''];const p1=last&&last.sets[i]?last.sets[i]:(last&&last.sets.length?last.sets[last.sets.length-1]:['kg','rep']);const isOk=!!ok[i];
+   h+='<div class="set'+(isOk?' ok':'')+'"><span class="i">'+(i+1)+'</span><input type="text" inputmode="decimal" data-ex="'+ex.id+'" data-i="'+i+'" data-f="0" value="'+esc(s[0])+'" placeholder="'+esc(p1[0]||'kg')+'" aria-label="'+esc(ex.name)+' set '+(i+1)+' kg"><span class="x">×</span><input type="text" inputmode="numeric" data-ex="'+ex.id+'" data-i="'+i+'" data-f="1" value="'+esc(s[1])+'" placeholder="'+esc(p1[1]||'rep')+'" aria-label="'+esc(ex.name)+' set '+(i+1)+' rep"><button class="chk" data-ok="'+ex.id+'" data-i="'+i+'" data-rest="'+restSec(ex.rest)+'" aria-pressed="'+isOk+'" aria-label="Xong set '+(i+1)+', bắt đầu nghỉ">'+ICON.check+'</button></div>';}
   h+='</div>';
-  const ln=lastNote(ex.id,curDate);
-  if(ln) h+='<p class="lastnote">Ghi chú lần trước ('+dm(ln.date)+'): '+esc(ln.note)+'</p>';
+  const ln=lastNote(ex.id,curDate); if(ln) h+='<p class="lastnote">Ghi chú lần trước ('+dm(ln.date)+'): '+esc(ln.note)+'</p>';
   const en=(sess.exNote&&sess.exNote[ex.id])||'';
-  h+='<div class="field exnote"><label for="en-'+ex.id+'">Ghi chú bài này</label><textarea id="en-'+ex.id+'" data-exnote="'+ex.id+'" rows="1" placeholder="Nấc ghế, máy dùng, cảm giác, đau, đổi bài…">'+esc(en)+'</textarea></div>';
-  h+='</article>';
+  h+='<div class="field exnote"><label for="en-'+ex.id+'">Ghi chú bài</label><textarea id="en-'+ex.id+'" data-exnote="'+ex.id+'" rows="1" placeholder="Nấc ghế, máy, cảm giác, đau, đổi bài…">'+esc(en)+'</textarea></div>';
+  h+=howBlock(ex,!!(ex0.v&&curDate>=ex0.v.from))+'</article>';
  });
- h+='</div>';
  const p=sess.pain||{};
  h+='<div class="card"><p class="eyebrow">Đau trong buổi (0–10)</p>';
  [['vai','Vai trái'],['lung','Lưng dưới'],['nguc','Ngực']].forEach(([k,l])=>{const v=p[k]==null?0:p[k];
   h+='<div class="pain"><label for="pain-'+k+'">'+l+'</label><input type="range" min="0" max="10" step="1" id="pain-'+k+'" data-pain="'+k+'" value="'+v+'"><output class="'+painLvl(v)+'" id="po-'+k+'">'+v+'</output></div>';});
- h+='<p class="small muted" id="pain-advice"></p>';
- h+='<div class="field"><label for="sess-note">Ghi chú chung cả buổi (năng lượng, phòng đông, thời gian tập…)</label><textarea id="sess-note" data-note="1">'+esc(sess.note||'')+'</textarea></div>';
- h+='<p class="small muted">Tự động lưu trên máy này.</p></div>';
+ h+='<p class="small" id="pain-advice"></p>';
+ h+='<div class="field"><label for="sess-note">Ghi chú cả buổi (năng lượng, phòng đông, thời gian…)</label><textarea id="sess-note" data-note="1">'+esc(sess.note||'')+'</textarea></div>';
+ h+='<p class="xs muted">Tự động lưu trên máy này.</p></div>';
  $('session').innerHTML=h;
  painAdvice();
 }
+function howBlock(ex,useV){
+ const key=(useV&&MACH[ex.id+'v'])?ex.id+'v':ex.id; const mk=MACH[key]; const ph=PHOTO[key];
+ if(!ex.how&&!mk) return '';
+ let s='<details class="how"><summary>Máy nào, tập thế nào</summary>';
+ if(ph) s+='<figure class="photo"><img src="img/'+ph.f+'" alt="'+esc(mk?mk.n:ex.name)+'" loading="lazy" width="'+ph.w+'" height="'+ph.h+'"><figcaption>Ảnh: '+esc(ph.a)+' · '+esc(ph.l)+' · <a href="'+ph.p+'" target="_blank" rel="noopener">'+ph.s+'</a></figcaption></figure>';
+ if(mk) s+='<dl class="mk"><dt>Dụng cụ</dt><dd>'+esc(mk.n)+'</dd>'+(mk.id?'<dt>Nhận diện</dt><dd>'+esc(mk.id)+'</dd>':'')+(mk.no?'<dt>Đừng nhầm</dt><dd>'+esc(mk.no)+'</dd>':'')+(mk.alt?'<dt>Thay thế</dt><dd>'+esc(mk.alt)+'</dd>':'')+'</dl>';
+ if(ex.how) s+='<p class="eyebrow">Cách tập</p><ul>'+ex.how.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
+ s+='<div class="links">';
+ if(mk&&mk.more) mk.more.forEach(m=>{s+='<a href="https://www.google.com/search?tbm=isch&q='+encodeURIComponent(m[1])+'" target="_blank" rel="noopener">'+esc(m[0])+' ↗</a>';});
+ if(mk&&mk.gq) s+='<a href="https://www.google.com/search?tbm=isch&q='+encodeURIComponent(mk.gq)+'" target="_blank" rel="noopener">'+(ph?'Thêm ảnh máy':'Xem ảnh máy')+' ↗</a>';
+ if(ex.yt) s+='<a href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.yt)+'" target="_blank" rel="noopener">Video mẫu ↗</a>';
+ return s+'</div></details>';
+}
 function painAdvice(){
  const el=$('pain-advice'); if(!el) return;
- const sess=S.sessions[curDate+'|'+curType]||{}; const p=sess.pain||{};
- const mx=Math.max(p.vai||0,p.lung||0,p.nguc||0);
+ const p=curType==='RUN'?((S.runs[curDate]||{}).pain||{}):((S.sessions[curDate+'|'+curType]||{}).pain||{});
+ const mx=Math.max(0,...Object.values(p).map(Number));
  el.className='small '+painLvl(mx);
- el.textContent=mx<=3?'Trong vùng an toàn. Tiếp tục bình thường.':(mx<=5?'Giữ nguyên tạ hoặc giảm 10–20%. Sáng mai theo dõi lại.':'Dừng bài gây đau, thay biến thể và báo PT.');
+ el.textContent=mx<=3?'Trong vùng an toàn. Tiếp tục bình thường.':(mx<=5?'Giữ nguyên hoặc giảm 10–20%. Sáng mai theo dõi lại.':'Dừng bài/buổi gây đau, thay biến thể và báo PT.');
 }
-function ensureSess(){const k=curDate+'|'+curType;if(!S.sessions[k])S.sessions[k]={ex:{},pain:{},note:''};if(!S.sessions[k].ex)S.sessions[k].ex={};if(!S.sessions[k].pain)S.sessions[k].pain={};if(!S.sessions[k].exNote)S.sessions[k].exNote={};return S.sessions[k];}
+function ensureSess(){const k=curDate+'|'+curType;const s=S.sessions[k]||(S.sessions[k]={});s.ex=s.ex||{};s.pain=s.pain||{};s.exNote=s.exNote||{};s.ok=s.ok||{};if(s.note==null)s.note='';return s;}
 
-/* ăn ngoài theo ngày: S.meals[ngày] = [{t:'12:30', f:'phở bò'}] */
-function renderMeals(){
- $('meals-title').textContent=curDate===TODAY?'Ăn ngoài hôm nay':'Ăn ngoài '+DOW[parse(curDate).getDay()]+' '+dm(curDate);
- const list=S.meals[curDate]||[];
- $('meals').innerHTML=list.length?list.map((m,i)=>'<div class="meal"><input type="time" data-mi="'+i+'" data-mf="t" value="'+esc(m.t||'')+'" aria-label="Giờ ăn"><input type="text" data-mi="'+i+'" data-mf="f" value="'+esc(m.f||'')+'" placeholder="Ăn gì, bao nhiêu" aria-label="Món ăn"><button class="iconbtn" data-mdel="'+i+'" aria-label="Xoá bữa này">×</button></div>').join(''):'<p class="small muted">Hôm nay ăn ở nhà theo khung. Có ăn ngoài thì bấm thêm.</p>';
+/* ---- chạy ---- */
+function runTarget(ds){return planFor(ds).find(x=>x.k==='RUN'||x.k==='RACE')||EASY_TPL();}
+function renderRun(){
+ const t=runTarget(curDate); const r=S.runs[curDate]||{}; const p=r.pain||{};
+ let h='<article class="card"><div class="card-head"><div><p class="eyebrow">Ghi buổi chạy</p><h3 style="font-size:1.2rem">'+esc(t.title||'Chạy')+'</h3></div><span class="pico" style="background:var(--run);width:36px;height:36px">'+ICON.run+'</span></div>';
+ h+='<div class="inline"><div class="field"><label for="r-km">Quãng đường (km)</label><input type="text" inputmode="decimal" id="r-km" data-run="km" class="big-in" value="'+esc(r.km||'')+'" placeholder="'+esc(t.km||'5')+'"></div>'+
+  '<div class="field"><label for="r-time">Thời gian (h:mm:ss)</label><input type="text" inputmode="numeric" id="r-time" data-run="time" class="big-in" value="'+esc(r.time||'')+'" placeholder="41:48"></div></div>';
+ h+='<div class="inline"><div class="field"><label for="r-hr">HR TB</label><input type="text" inputmode="numeric" id="r-hr" data-run="hr" value="'+esc(r.hr||'')+'"></div>'+
+  '<div class="field"><label for="r-hrmax">HR max</label><input type="text" inputmode="numeric" id="r-hrmax" data-run="hrMax" value="'+esc(r.hrMax||'')+'"></div>'+
+  '<div class="field"><label for="r-cad">Guồng chân (spm)</label><input type="text" inputmode="numeric" id="r-cad" data-run="cad" value="'+esc(r.cad||'')+'"></div></div>';
+ h+='<div class="inline"><div class="field"><label for="r-rpe">Mức mệt 1–10</label><input type="text" inputmode="numeric" id="r-rpe" data-run="rpe" value="'+esc(r.rpe||'')+'"></div>'+
+  '<div class="field" style="flex:2 1 180px"><label for="r-fuel">Gel, nước, nhiệt độ</label><input type="text" id="r-fuel" data-run="fuel" value="'+esc(r.fuel||'')+'" placeholder="gel km5, km10 · 500 ml · 30°C"></div></div>';
+ h+='<div id="run-calc"></div>';
+ h+='<p class="eyebrow" style="margin-top:4px">Đau (0–10)</p>';
+ [['goi','Gối'],['ong','Ống/bắp chân'],['lung','Lưng dưới'],['nguc','Ngực']].forEach(([k,l])=>{const v=p[k]==null?0:p[k];
+  h+='<div class="pain"><label for="rp-'+k+'">'+l+'</label><input type="range" min="0" max="10" step="1" id="rp-'+k+'" data-rpain="'+k+'" value="'+v+'"><output class="'+painLvl(v)+'" id="rpo-'+k+'">'+v+'</output></div>';});
+ h+='<p class="small" id="pain-advice"></p>';
+ h+='<div class="field"><label for="r-note">Ghi chú (cảm giác, đi bộ bao nhiêu, bụng với gel…)</label><textarea id="r-note" data-run="note">'+esc(r.note||'')+'</textarea></div>';
+ h+='<p class="xs muted">Số liệu lấy từ Garmin Connect. Tự động lưu.</p></article>';
+ $('session').innerHTML=h; runCalc(); painAdvice();
 }
-$('meal-add').addEventListener('click',()=>{
- const l=S.meals[curDate]||(S.meals[curDate]=[]);
- const n=new Date(); l.push({t:curDate===TODAY?pad(n.getHours())+':'+pad(n.getMinutes()):'',f:''}); save(); renderMeals();
- const ins=$('meals').querySelectorAll('input[data-mf="f"]'); if(ins.length) ins[ins.length-1].focus();
-});
-$('meals').addEventListener('input',e=>{const t=e.target;if(t.dataset.mi==null)return;const l=S.meals[curDate];if(!l||!l[+t.dataset.mi])return;l[+t.dataset.mi][t.dataset.mf]=t.value;save();});
-$('meals').addEventListener('click',e=>{const b=e.target.closest('[data-mdel]');if(!b)return;const l=S.meals[curDate];if(!l)return;l.splice(+b.dataset.mdel,1);if(!l.length)delete S.meals[curDate];save();renderMeals();});
+function runCalc(){
+ const el=$('run-calc'); if(!el) return; const r=S.runs[curDate]||{}; const t=runTarget(curDate);
+ const km=num(r.km), sec=parseDur(r.time), hr=num(r.hr);
+ let h='';
+ if(km>0&&sec>0){h+='<div class="targets"><div class="tgt"><b>'+fmtPace(sec/km)+'</b><span>pace TB /km</span></div><div class="tgt"><b>'+fmtHMS(sec)+'</b><span>tổng thời gian</span></div>'+(t.pace?'<div class="tgt"><b>'+esc(t.pace)+'</b><span>pace mục tiêu</span></div>':'')+'</div>';}
+ if(hr>0&&t.hrMax){h+=hr>t.hrMax?'<p class="callout warn">Nhịp tim TB '+hr+' cao hơn trần '+t.hrMax+' của buổi này. Buổi sau chạy chậm hơn hoặc đi bộ sớm hơn, nhịp tim quan trọng hơn pace.</p>':'<p class="callout eat">Nhịp tim TB '+hr+' trong mức của buổi (≤ '+t.hrMax+'). Tốt.</p>';}
+ const cad=num(r.cad); if(cad>0&&cad<160) h+='<p class="small muted">Guồng chân '+cad+' spm: thử bước ngắn và nhanh hơn, hướng tới ~165.</p>';
+ el.innerHTML=h;
+}
+function ensureRun(){const r=S.runs[curDate]||(S.runs[curDate]={});r.pain=r.pain||{};return r;}
 
 $('session').addEventListener('input',e=>{
  const t=e.target;
+ if(t.dataset.run){const r=ensureRun();r[t.dataset.run]=t.value.trim();save();runCalc();renderPlanCard();renderWeekStrip();return;}
+ if(t.dataset.rpain){const r=ensureRun();const v=+t.value;r.pain[t.dataset.rpain]=v;const o=$('rpo-'+t.dataset.rpain);o.textContent=v;o.className=painLvl(v);painAdvice();save();return;}
  if(t.dataset.exnote){const s=ensureSess();const v=t.value;if(v.trim())s.exNote[t.dataset.exnote]=v;else delete s.exNote[t.dataset.exnote];save();}
- else if(t.dataset.ex){const s=ensureSess();const a=s.ex[t.dataset.ex]||(s.ex[t.dataset.ex]=[]);const i=+t.dataset.i;a[i]=a[i]||['',''];a[i][+t.dataset.f]=t.value.trim();save();}
+ else if(t.dataset.ex){const s=ensureSess();const a=s.ex[t.dataset.ex]||(s.ex[t.dataset.ex]=[]);const i=+t.dataset.i;a[i]=a[i]||['',''];a[i][+t.dataset.f]=t.value.trim();save();
+  const art=t.closest('.ex'); if(art){const n=art.querySelectorAll('.set').length;const f=(s.ex[t.dataset.ex]||[]).filter(x=>x&&x[0]&&x[1]).length;art.classList.toggle('complete',f>=n);} renderWeekStripLight();}
  else if(t.dataset.pain){const s=ensureSess();const v=+t.value;s.pain[t.dataset.pain]=v;const o=$('po-'+t.dataset.pain);o.textContent=v;o.className=painLvl(v);painAdvice();save();}
  else if(t.dataset.note){const s=ensureSess();s.note=t.value;save();}
+});
+let stripT; function renderWeekStripLight(){clearTimeout(stripT);stripT=setTimeout(()=>{MEMO={};renderWeekStrip();renderPlanCard();},600);}
+$('session').addEventListener('click',e=>{
+ const b=e.target.closest('[data-ok]'); if(!b) return;
+ const s=ensureSess(); const a=s.ok[b.dataset.ok]||(s.ok[b.dataset.ok]=[]); const i=+b.dataset.i; a[i]=!a[i]; save();
+ b.setAttribute('aria-pressed',String(!!a[i])); b.closest('.set').classList.toggle('ok',!!a[i]);
+ if(a[i]){const sec=+b.dataset.rest; if(sec>0) startTimer(sec); else toast('Superset: chuyển ngay sang bài kế.');}
 });
 $('type-chips').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;curType=b.dataset.type;renderToday();});
 $('pick-date').addEventListener('change',e=>{if(!e.target.value)return;curDate=e.target.value;curType=defaultType(curDate);renderToday();});
 function goDay(n){curDate=addDays(curDate,n);curType=defaultType(curDate);renderToday();}
 $('day-prev').addEventListener('click',()=>goDay(-1));
 $('day-next').addEventListener('click',()=>goDay(1));
-$('w-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.weights[curDate]=v;else delete S.weights[curDate];save();
- const mon=monday(curDate);const vals=[];for(let i=0;i<7;i++){const x=num(S.weights[addDays(mon,i)]);if(!isNaN(x))vals.push(x);}
- $('w-today-avg').textContent=vals.length?('TB tuần này: '+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2)+' kg ('+vals.length+' ngày)'):'';});
 
-$('st-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.steps[curDate]=v;else delete S.steps[curDate];save();$('st-today-avg').textContent=stepAvgText(monday(curDate));});
+/* ---- cân, bước ---- */
+function renderBody(){
+ const d=parse(curDate); const lab=curDate===TODAY?'':' '+DOW[d.getDay()]+' '+dm(curDate);
+ $('body-title').textContent=curDate===TODAY?'Cơ thể hôm nay':'Cơ thể'+lab;
+ $('w-label').textContent='Cân sáng (kg)'; $('st-label').textContent='Bước chân';
+ const w=S.weights[curDate]; $('w-today').value=w==null?'':w;
+ const st=S.steps[curDate]; $('st-today').value=st==null?'':st;
+ bodyAvg();
+}
+function bodyAvg(){
+ const mon=monday(curDate); const a=weekAvg(mon), b=weekAvg(addDays(mon,-7)), sa=stepAvg(mon);
+ let t=a?'Cân TB tuần: '+a.avg.toFixed(2)+' kg ('+a.n+' ngày)'+(b?', '+((a.avg-b.avg)>0?'+':'')+(a.avg-b.avg).toFixed(2)+' so tuần trước':''):'Cân mỗi sáng sau khi đi vệ sinh, trước khi ăn uống.';
+ t+=' · '+(sa?'Bước TB: '+fmtK(sa.avg)+' (mục tiêu 8.000)':'Ghi số bước trước khi ngủ.');
+ $('body-avg').textContent=t;
+}
+$('w-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.weights[curDate]=v;else delete S.weights[curDate];save();bodyAvg();});
+$('st-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.steps[curDate]=v;else delete S.steps[curDate];save();bodyAvg();});
 
-/* ---------- LỊCH: phase table ---------- */
-$('phase-table').innerHTML=PHASES.map(p=>'<tr class="'+(TODAY>=p.from&&TODAY<=p.to?'now':'')+'"><td class="n">'+p.wk+'<br><span class="small muted" style="font-family:var(--f-body)">'+dm(p.from)+'–'+dm(p.to)+'</span></td><td>'+esc(p.name)+'</td><td>'+esc(p.setTxt)+'</td><td class="n">'+p.rir+'</td><td class="n">'+p.rirI+'</td></tr>').join('');
+/* ---- ăn ngoài ---- */
+function renderMeals(){
+ $('meals-title').textContent=curDate===TODAY?'Ăn ngoài hôm nay':'Ăn ngoài '+DOW[parse(curDate).getDay()]+' '+dm(curDate);
+ const list=S.meals[curDate]||[];
+ $('meals').innerHTML=list.length?list.map((m,i)=>'<div class="meal"><input type="time" data-mi="'+i+'" data-mf="t" value="'+esc(m.t||'')+'" aria-label="Giờ ăn"><input type="text" data-mi="'+i+'" data-mf="f" value="'+esc(m.f||'')+'" placeholder="Ăn gì, bao nhiêu" aria-label="Món ăn"><button class="iconbtn" data-mdel="'+i+'" aria-label="Xoá bữa này">×</button></div>').join(''):'<p class="small muted">Ăn ở nhà theo khung. Có ăn ngoài thì bấm Thêm.</p>';
+}
+$('meal-add').addEventListener('click',()=>{const l=S.meals[curDate]||(S.meals[curDate]=[]);const n=new Date();l.push({t:curDate===TODAY?pad(n.getHours())+':'+pad(n.getMinutes()):'',f:''});save();renderMeals();const ins=$('meals').querySelectorAll('input[data-mf="f"]');if(ins.length)ins[ins.length-1].focus();});
+$('meals').addEventListener('input',e=>{const t=e.target;if(t.dataset.mi==null)return;const l=S.meals[curDate];if(!l||!l[+t.dataset.mi])return;l[+t.dataset.mi][t.dataset.mf]=t.value;save();});
+$('meals').addEventListener('click',e=>{const b=e.target.closest('[data-mdel]');if(!b)return;const l=S.meals[curDate];if(!l)return;l.splice(+b.dataset.mdel,1);if(!l.length)delete S.meals[curDate];save();renderMeals();});
+
+/* ================= REST TIMER ================= */
+let tEnd=0,tInt=null;
+function startTimer(sec){tEnd=Date.now()+sec*1000;$('timer').hidden=false;$('timer').classList.remove('over');tick();clearInterval(tInt);tInt=setInterval(tick,250);}
+function tick(){const left=Math.round((tEnd-Date.now())/1000);
+ if(left<=0){$('timer-t').textContent='Vào set';if(!$('timer').classList.contains('over')){$('timer').classList.add('over');try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(e){}}
+  if(left<-20){stopTimer();}return;}
+ $('timer-t').textContent=Math.floor(left/60)+':'+pad(left%60);}
+function stopTimer(){clearInterval(tInt);$('timer').hidden=true;}
+$('timer-add').addEventListener('click',()=>{if(tEnd<Date.now())tEnd=Date.now();tEnd+=30000;$('timer').classList.remove('over');tick();});
+$('timer-x').addEventListener('click',stopTimer);
+
+/* ================= LỊCH ================= */
+let calRange='next';
+function calRow(ds){
+ const d=parse(ds); const its=planFor(ds);
+ let items=its.map((it,i)=>{const done=itemDone(ds,it,i);let t=itemTitle(it);const kd=itemKind(it);
+  if(kd==='lift'){const l=loggedLift(ds);if(l&&l!==it.k)t=PROGRAM[l].name+' (thay '+PROGRAM[it.k].name+')';}
+  if((kd==='run'||kd==='race')&&runLogged(ds)){const r=S.runs[ds];t+=' · '+fmt1(num(r.km))+' km'+(parseDur(r.time)>0?' @ '+fmtPace(parseDur(r.time)/num(r.km)):'');}
+  return '<span class="it"><span class="dot" style="background:'+itemColor(it)+'"></span><span>'+esc(t)+(it.opt?' <span class="muted">(tuỳ chọn)</span>':'')+'</span></span>';}).join('');
+ if(!its.length){const l=loggedLift(ds);items='<span class="it muted"><span>'+(l?PROGRAM[l].name:'—')+'</span></span>';}
+ const done=dayAnyDone(ds)||!!loggedLift(ds); const past=ds<TODAY; const miss=past&&!done&&its.some(x=>!x.opt&&itemKind(x)!=='rest'&&itemKind(x)!=='bad');
+ return '<button class="cday'+(ds===TODAY?' today':'')+(past?' past':'')+'" data-day="'+ds+'"><span class="d"><span>'+DOW[d.getDay()]+'</span><b>'+d.getDate()+'</b><span>Th'+(d.getMonth()+1)+'</span></span><span class="items">'+items+'</span><span class="st'+(done?' done':'')+(miss?' miss':'')+'">'+ICON.check+'</span></button>';
+}
+function calHTML(from,to){
+ let h='<div class="cal">', lastPh='';
+ for(let ds=from;ds<=to;ds=addDays(ds,1)){const ph=phaseFor(ds);if(ph.name!==lastPh){lastPh=ph.name;h+='<div class="cal-ph"><span class="eyebrow">'+esc(ph.wk)+'</span><b>'+esc(ph.name)+'</b><span class="xs muted">'+esc(ph.setTxt)+'</span></div>';} h+=calRow(ds);}
+ return h+'</div>';
+}
+function renderCal(){
+ MEMO={};
+ const from=calRange==='next'?TODAY:BLOCK_START, to=calRange==='next'?addDays(TODAY,15):BLOCK_END;
+ $('cal').innerHTML=calHTML(from,to);
+ document.querySelectorAll('#cal-range .chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.r===calRange)));
+}
+$('cal-range').addEventListener('click',e=>{const b=e.target.closest('[data-r]');if(!b)return;calRange=b.dataset.r;renderCal();});
+function openDay(e){const b=e.target.closest('[data-day]');if(!b)return;curDate=b.dataset.day;curType=defaultType(curDate);location.hash='hom-nay';}
+$('cal').addEventListener('click',openDay);
+$('phase-table').innerHTML=PHASES.map(p=>'<tr class="'+(TODAY>=p.from&&TODAY<=p.to?'now':'')+'"><td class="n">'+p.wk+'<br><span class="xs muted" style="font-family:var(--f-body)">'+dm(p.from)+'–'+dm(p.to)+'</span></td><td>'+esc(p.name)+'</td><td>'+esc(p.setTxt)+'</td><td class="n">'+p.rir+'</td><td class="n">'+p.rirI+'</td></tr>').join('');
 $('guide').innerHTML=GUIDE;
+const CHANGELOG=[
+ ['21/11/2026','Thêm half marathon 6/12 vào lịch 20/11–13/12. CN 22/11 và 29/11 chạy dài thay cầu lông; cầu lông nghỉ tới 13/12.'],
+ ['21/11/2026','W48 thân dưới bớt 1 set, RIR 3, không tăng tạ. W49 chỉ 1 buổi thân trên rút gọn (tuỳ chọn), không tập chân. W50 hồi phục. "Tăng dần" rút còn 14–27/12. Căn cứ: giảm tải giữ cường độ, giảm 40–60% khối lượng (Bosquet et al. 2007); giữ sức mạnh với khối lượng thấp nếu giữ cường độ (Spiering et al. 2021).'],
+ ['21/11/2026','Ngày tạ ngoài lịch race chuyển sang vòng xoay (buổi lâu chưa tập nhất làm trước), vì thực tế mới tập được Upper A + Lower A.'],
+ ['21/11/2026','Dinh dưỡng: bỏ cân thức ăn, dùng bàn tay + chén cơm. Thêm chế độ tối thiểu 3 điều. Ngày chạy dài và 2 ngày trước race không cố thâm hụt; nạp carb 4–5/12.'],
+ ['21/11/2026','Race: gel km 5, 10, 15 thay vì km 7 và 14 (cần 30–60 g carb/giờ; Thomas et al. 2016).'],
+ ['16/11/2026','RDL đòn thay back extension ở Lower B. Bench đòn là lựa chọn ở Upper A khi đau ngực 0–1/10.'],
+ ['09/11/2026','Bắt đầu Block 1.']
+];
+$('changelog').innerHTML=CHANGELOG.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('');
 
-/* ---------- CHECK-IN ---------- */
+/* ================= RACE ================= */
+const RACE_CHECK=['Đăng ký và thử gel, điện giải ở buổi 22/11 và 29/11','Giày, tất, quần áo race đã chạy thử ≥ 10 km','Cài vùng công suất, HR max, màn hình race và Run/Walk 5:00/1:00 trên Garmin','Nhận BIB 4–5/12, gắn BIB và chip vào áo từ tối 5/12','Kiểm tra giờ xuất phát, điểm xuất phát, cách đi tới đó (đường cấm)','Chuẩn bị: 3–4 gel, băng dán/vaseline chống phồng, đồng hồ sạc đầy','Ăn sáng race đúng món đã thử, đặt báo thức 2 cái','Không bia rượu từ 3/12, ngủ sớm tối 4/12 (đêm 5/12 thường khó ngủ, không sao)'];
+function raceFuelHTML(){
+ const w=latestWeight();
+ const g=(a,b)=>w?'≈ '+Math.round(a*w)+'–'+Math.round(b*w)+' g':a+'–'+b+' g/kg';
+ const bowls=(a,b)=>w?' (khoảng '+Math.round(a*w/50)+'–'+Math.round(b*w/50)+' "chén" tinh bột cả ngày)':'';
+ return '<ul class="small">'+
+  '<li><b>4–5/12 nạp carb:</b> 7–8 g carb/kg/ngày '+g(7,8)+bowls(7,8)+'. 1 chén cơm ≈ 1 ổ bánh mì nhỏ ≈ 2 chuối ≈ 50 g carb. Mỗi bữa 2–3 chén cơm (hoặc tô bún/phở lớn), thêm xôi/bánh mì buổi sáng, chuối, nước mía hoặc nước cam buổi xế. Đạm giữ 1 bàn tay mỗi bữa. Giảm rau sống, đồ béo, đồ cay; không thử món lạ.</li>'+
+  '<li>Cân sáng 6/12 tăng 1–2 kg là glycogen và nước, đúng như mong muốn.</li>'+
+  '<li><b>Sáng race:</b> 1–2 g carb/kg '+g(1,2)+' trước xuất phát 1,5–3 giờ: bánh mì không + chuối + mật ong, hoặc xôi nhỏ. Uống 400–600 ml nước khoảng 2 giờ trước. Cà phê chỉ khi đã thử.</li>'+
+  '<li><b>Trong race:</b> gel km 5, 10, 15 (mang thêm 1 dự phòng), vài ngụm nước mỗi trạm theo cảm giác khát, điện giải nếu trạm có.</li>'+
+  '<li><b>Sau race:</b> trong 1–2 giờ ăn đạm + tinh bột (sữa + bánh mì, rồi bữa chính).</li></ul>'+
+  '<p class="src">Nguồn: Thomas, Erdman & Burke 2016 (khuyến nghị 10–12 g/kg cho sự kiện &gt; 90 phút; 7–8 g/kg là mức vừa phải PT chọn để bụng chịu được, bằng chứng cho mức này ở half marathon yếu hơn); Burke et al. 2011; Sawka et al. 2007 (nước); Guest et al. 2021 (caffeine).'+(w?'':' Chưa có cân nặng nên hiển thị theo g/kg.')+'</p>';
+}
+function renderRace(){
+ MEMO={};
+ const left=daysBetween(TODAY,RACE_DAY);
+ let tot=0,dn=0,next=null;
+ for(let ds=RACE_PLAN_START;ds<=RACE_DAY;ds=addDays(ds,1)){planFor(ds).forEach((it,i)=>{const kd=itemKind(it);if(kd==='run'){tot++;if(itemDone(ds,it,i))dn++;}if((kd==='run'||kd==='race')&&ds>=TODAY&&!next&&!itemDone(ds,it,i))next={ds,it};});}
+ let h='<div class="row between"><div><div class="num" style="font-size:3.4rem;font-weight:700;line-height:.9;color:var(--race)">'+(left>0?left:left===0?'Hôm nay':'Xong')+'</div><span class="eyebrow">'+(left>0?'ngày tới race':'')+'</span></div>'+
+  '<div style="text-align:right"><span class="eyebrow">Mục tiêu</span><div class="num" style="font-size:1.8rem;font-weight:600">'+esc(S.race.goal||'3:00')+'</div><span class="xs muted">khoảng 2:55–3:10</span></div></div>';
+ h+='<div class="stack-s"><div class="row between small"><span>Buổi chạy trong plan</span><b>'+dn+'/'+tot+'</b></div><div class="bar"><i style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></i></div></div>';
+ if(next) h+='<p class="callout run">Buổi kế: <b>'+DOW[parse(next.ds).getDay()]+' '+dm(next.ds)+' · '+esc(itemTitle(next.it))+'</b>'+(next.it.pace?' · pace '+esc(next.it.pace)+', HR '+esc(next.it.hr):'')+'</p>';
+ if(S.race.start){const [hh,mm]=S.race.start.split(':').map(Number);const at=m=>{let t=hh*60+mm+m;t=(t+1440)%1440;return pad(Math.floor(t/60))+':'+pad(t%60);};
+  h+='<div class="stack-s"><p class="eyebrow">Sáng 6/12</p><div class="targets"><div class="tgt"><b>'+at(-150)+'</b><span>dậy, uống nước</span></div><div class="tgt"><b>'+at(-120)+'</b><span>ăn sáng</span></div><div class="tgt"><b>'+at(-60)+'</b><span>cà phê (nếu đã thử)</span></div><div class="tgt"><b>'+at(-30)+'</b><span>vào khu xuất phát</span></div><div class="tgt"><b>'+S.race.start+'</b><span>xuất phát</span></div><div class="tgt"><b>'+at(Math.round((parseGoal(S.race.goal)||10800)/60))+'</b><span>về đích dự kiến</span></div></div></div>';}
+ $('race-hero').innerHTML=h;
+ $('race-start').value=S.race.start||''; $('race-goal').value=S.race.goal||'';
+ $('race-info').innerHTML='Thời gian giới hạn 21 km: <b>4 giờ</b> theo FAQ của BTC (vài trang bán vé ghi 3:30, mục tiêu của bạn đều nằm trong cả hai). Giờ xuất phát chưa thấy BTC công bố chính thức: xem email/Race Kit rồi nhập vào ô trên để app tính giờ dậy, giờ ăn. Nhận vật phẩm 4–5/12.';
+ renderPace();
+ $('race-plan').innerHTML=calHTML(RACE_PLAN_START,RACE_DAY);
+ $('race-check').innerHTML=RACE_CHECK.map((t,i)=>{const k='rc-'+i;const on=!!S.done[k];return '<label class="row" style="gap:10px;align-items:flex-start"><input type="checkbox" data-rc="'+k+'"'+(on?' checked':'')+' style="width:20px;height:20px;margin-top:2px;accent-color:var(--race)"><span class="small">'+esc(t)+'</span></label>';}).join('');
+}
+function renderPace(){
+ const goal=parseGoal(S.race.goal)||10800; const pk=goal/21.0975;
+ const splits=[5,10,15,21.0975].map(k=>'<div class="tgt"><b>'+fmtHMS(pk*k)+'</b><span>km '+(k>21?'21,1':k)+'</span></div>').join('');
+ $('pace-calc').innerHTML='<div class="targets"><div class="tgt"><b>'+fmtPace(pk)+'</b><span>pace TB cần /km</span></div>'+splits+'</div><p class="small muted">Pace trung bình đã gồm cả đoạn đi bộ. Chạy 5 phút / đi bộ 1 phút, đoạn chạy cần nhanh hơn trung bình khoảng 30–45 giây/km. Đổi mục tiêu ở ô trên.</p><details><summary class="small">Dinh dưỡng race</summary>'+raceFuelHTML()+'</details>';
+}
+$('race-start').addEventListener('change',e=>{S.race.start=e.target.value;save();renderRace();});
+$('race-goal').addEventListener('change',e=>{const v=e.target.value.trim();if(v&&!(parseGoal(v)>3600)){toast('Nhập dạng h:mm, vd 3:00');return;}S.race.goal=v||'3:00';save();renderRace();});
+$('race-check').addEventListener('change',e=>{const k=e.target.dataset.rc;if(!k)return;if(e.target.checked)S.done[k]=true;else delete S.done[k];save();});
+$('race-plan').addEventListener('click',e=>{const st=e.target.closest('.st');const b=e.target.closest('[data-day]');if(!b)return;
+ if(st){const ds=b.dataset.day;const its=planFor(ds);const i=its.findIndex(x=>['rest','bad'].includes(itemKind(x)));if(i>=0){const k=ds+'|'+i;if(S.done[k])delete S.done[k];else S.done[k]=true;save();renderRace();return;}}
+ openDay(e);});
+
+/* ================= ĂN UỐNG ================= */
+function renderEat(){
+ MEMO={};
+ const ds=TODAY, its=planFor(ds), tom=planFor(addDays(ds,1));
+ const longToday=its.some(x=>x.long), longTom=tom.some(x=>x.long);
+ let cls='eat', title='Hôm nay: ngày thường', body='<p class="small">3 bữa theo khung bên dưới + 1 phần đạm phụ. Ăn ngoài thì ghi ở tab Hôm nay.</p>';
+ if(ds==='2026-12-04'||ds==='2026-12-05'){cls='race';title='Hôm nay: nạp carb cho race';body=raceFuelHTML();}
+ else if(ds===RACE_DAY){cls='race';title='Race day';body=raceFuelHTML();}
+ else if(longToday){cls='run';title='Hôm nay: chạy dài';body='<ul class="small"><li>Trước chạy 60–90 phút: 2 chuối hoặc 1 ổ bánh mì không + nước.</li><li>Trong lúc chạy: gel km 5 và km 10, vài ngụm nước mỗi 15–20 phút.</li><li>Sau chạy trong 1–2 giờ: bữa đủ đạm + thêm 1 chén cơm so với thường. Hôm nay không cố thâm hụt.</li></ul>';}
+ else if(longTom){cls='run';title='Mai chạy dài';body='<p class="small">Tối nay thêm 1 chén cơm, ít đồ béo và đồ cay, ngủ sớm. Chuẩn bị sẵn chuối/bánh mì cho sáng mai.</p>';}
+ else if(busyDay(ds)){cls='busy';title='Hôm nay: chế độ tối thiểu';body='<p class="small">Chỉ cần 3 điều ở mục "Chế độ tối thiểu" bên dưới.</p>';}
+ else if(its.some(x=>ALL_LIFT.includes(x.k))) body='<p class="small">Ngày tạ: 3 bữa × 1 chén + bữa xế trước tập (bánh mì kẹp trứng/ức gà, hoặc 1 chén + chuối). Đạm mỗi bữa 1,5–2 bàn tay.</p>';
+ else if(its.some(x=>x.k==='REST')) body='<p class="small">Ngày nghỉ: 3 bữa × 1 chén, bữa xế chỉ đạm + trái cây.</p>';
+ let raceNote='';
+ if(ds<=RACE_DAY&&cls!=='race') raceNote='<details class="card"><summary>Dinh dưỡng tuần race (4–6/12)</summary>'+raceFuelHTML()+'</details>';
+ $('eat-today').innerHTML='<div class="mode '+cls+'"><p class="eyebrow">'+DOW[parse(ds).getDay()]+' '+dm(ds)+'</p><h3 style="font-size:1.15rem">'+title+'</h3>'+body+'</div>'+raceNote;
+ $('eat-today').className='stack';
+}
+
+/* ================= CHECK-IN ================= */
 let ciMon=monday(TODAY);
-function weekAvg(mon){const v=[];for(let i=0;i<7;i++){const x=num(S.weights[addDays(mon,i)]);if(!isNaN(x))v.push(x);}return v.length?{avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length}:null;}
 function renderCheckin(){
+ MEMO={};
  const end=addDays(ciMon,6); const ph=phaseFor(ciMon);
  $('ci-eyebrow').textContent=isoWeek(ciMon)+' · '+ph.name;
- $('ci-title').textContent='Check-in '+dm(ciMon)+'–'+dm(end);
- let g='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const d=parse(ds);const v=S.weights[ds];
-  g+='<div class="d"><span>'+DOW[d.getDay()]+'</span><input type="text" inputmode="decimal" id="cw-'+i+'" data-wd="'+ds+'" value="'+esc(v==null?'':v)+'" aria-label="Cân '+DOW[d.getDay()]+' '+dm(ds)+'"></div>';}
+ $('ci-title').textContent='Tuần '+dm(ciMon)+'–'+dm(end);
+ const ws=weekStats(ciMon), a=weekAvg(ciMon), b=weekAvg(addDays(ciMon,-7)), sa=stepAvg(ciMon);
+ $('ci-summary').innerHTML='<div class="metrics"><div class="metric"><span>Buổi tạ</span><b>'+ws.liftDone+'<span class="muted" style="font-size:1rem">/'+ws.liftPlan+'</span></b></div><div class="metric"><span>Chạy km</span><b>'+fmt1(ws.kmDone)+(ws.kmPlan?'<span class="muted" style="font-size:1rem">/'+fmt1(ws.kmPlan)+'</span>':'')+'</b></div><div class="metric"><span>Cân TB</span><b>'+(a?a.avg.toFixed(1).replace('.',','):'–')+'</b><span>'+(a&&b?((a.avg-b.avg)>0?'+':'')+(a.avg-b.avg).toFixed(2)+' kg':'')+'</span></div><div class="metric"><span>Bước TB</span><b>'+(sa?fmtK(sa.avg):'–')+'</b></div></div>';
+ let g='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const d=parse(ds);const v=S.weights[ds];g+='<div class="d"><span>'+DOW[d.getDay()]+'</span><input type="text" inputmode="decimal" data-wd="'+ds+'" value="'+esc(v==null?'':v)+'" aria-label="Cân '+DOW[d.getDay()]+' '+dm(ds)+'"></div>';}
  $('ci-weights').innerHTML=g;
- let sg='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const d=parse(ds);const v=S.steps[ds];
-  sg+='<div class="d"><span>'+DOW[d.getDay()]+'</span><input type="text" inputmode="numeric" data-sd="'+ds+'" value="'+esc(v==null?'':v)+'" aria-label="Bước chân '+DOW[d.getDay()]+' '+dm(ds)+'"></div>';}
+ let sg='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const d=parse(ds);const v=S.steps[ds];sg+='<div class="d"><span>'+DOW[d.getDay()]+'</span><input type="text" inputmode="numeric" data-sd="'+ds+'" value="'+esc(v==null?'':v)+'" aria-label="Bước chân '+DOW[d.getDay()]+' '+dm(ds)+'"></div>';}
  $('ci-stepgrid').innerHTML=sg;
  statCheckin();
- const wk=S.weeks[ciMon]||{};
- document.querySelectorAll('[data-wk]').forEach(el=>{el.value=wk[el.dataset.wk]||'';});
- const ks=sessionsInWeek(ciMon);
- $('ci-sessions').innerHTML=ks.length?ks.map(k=>{const [ds,t]=k.split('|');const m=PROGRAM[t];const s=S.sessions[k];const nEx=Object.values(s.ex||{}).filter(a=>a.some(x=>x&&(x[0]||x[1]))).length;
-  return '<div class="row"><span class="dot plate-'+(m?m.plate:'grey')+'"></span><span>'+DOW[parse(ds).getDay()]+' '+dm(ds)+' · '+esc(m?m.name:t)+'</span><span class="muted">'+nEx+' bài</span></div>';}).join(''):'<p class="muted">Chưa có buổi nào. Ghi set ở mục Hôm nay.</p>';
+ const wk=S.weeks[ciMon]||{}; document.querySelectorAll('[data-wk]').forEach(el=>{el.value=wk[el.dataset.wk]||'';});
+ const rows=[];
+ for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const lab=DOW[parse(ds).getDay()]+' '+dm(ds);
+  ALL_LIFT.forEach(k=>{const s=S.sessions[ds+'|'+k];if(hasData(s)||(s&&s.note)){const nEx=Object.values(s.ex||{}).filter(a=>a&&a.some(x=>x&&(x[0]||x[1]))).length;rows.push('<div class="row"><span class="dot plate-'+PROGRAM[k].plate+'"></span><span class="grow">'+lab+' · '+esc(PROGRAM[k].name)+'</span><span class="muted">'+nEx+' bài</span></div>');}});
+  const r=S.runs[ds];if(r&&num(r.km)>0){const sec=parseDur(r.time);rows.push('<div class="row"><span class="dot plate-run"></span><span class="grow">'+lab+' · Chạy '+fmt1(num(r.km))+' km</span><span class="muted">'+(sec>0?fmtPace(sec/num(r.km))+'/km':'')+(r.hr?' · HR '+esc(r.hr):'')+'</span></div>');}}
+ $('ci-sessions').innerHTML=rows.join('')||'<p class="muted">Chưa có buổi nào. Ghi ở tab Hôm nay.</p>';
  let mh='';for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const ms=mealsOf(ds);if(ms.length)mh+='<div><b>'+DOW[parse(ds).getDay()]+' '+dm(ds)+'</b><ul>'+ms.map(m=>'<li>'+esc(fmtMeal(m))+'</li>').join('')+'</ul></div>';}
- $('ci-meals').innerHTML=mh||'<p class="muted">Chưa ghi bữa ăn ngoài nào. Ghi ở mục Hôm nay.</p>';
+ $('ci-meals').innerHTML=mh||'<p class="muted">Chưa ghi bữa ăn ngoài nào.</p>';
  $('ci-fallback').hidden=true;
+ renderChart();
 }
 function statCheckin(){
  const a=weekAvg(ciMon), b=weekAvg(addDays(ciMon,-7));
@@ -914,13 +1380,32 @@ function statCheckin(){
  if(sa&&sb) sh+='<div><span class="small muted">Tuần trước</span><b>'+fmtK(sb.avg)+'</b><span class="small muted">'+sb.n+' ngày</span></div>';
  $('ci-stepstat').innerHTML=sh;
 }
+function renderChart(){
+ const pts=[]; for(let i=7;i>=0;i--){const m=addDays(ciMon,-7*i);const a=weekAvg(m);if(a)pts.push({m,v:a.avg,n:a.n});}
+ const el=$('ci-chart');
+ if(pts.length<2){el.innerHTML='<p class="xs muted">Biểu đồ cân TB theo tuần hiện khi có từ 2 tuần dữ liệu.</p>';return;}
+ const W=320,H=120,pl=8,pr=8,pt=18,pb=22; const vs=pts.map(p=>p.v); let lo=Math.min(...vs),hi=Math.max(...vs); if(hi-lo<1){const c=(hi+lo)/2;lo=c-.5;hi=c+.5;}
+ const x=i=>pl+(W-pl-pr)*(pts.length===1?0.5:i/(pts.length-1)); const y=v=>pt+(H-pt-pb)*(1-(v-lo)/(hi-lo));
+ let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Cân trung bình theo tuần"><line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+(H-pb)+'" y2="'+(H-pb)+'" stroke="var(--line)" stroke-width="1"/>';
+ s+='<polyline fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="'+pts.map((p,i)=>x(i)+','+y(p.v)).join(' ')+'"/>';
+ pts.forEach((p,i)=>{s+='<circle cx="'+x(i)+'" cy="'+y(p.v)+'" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/><rect data-pi="'+i+'" x="'+(x(i)-14)+'" y="0" width="28" height="'+H+'" fill="transparent" style="cursor:pointer"/>';
+  if(i===0||i===pts.length-1) s+='<text x="'+x(i)+'" y="'+(y(p.v)-9)+'" text-anchor="'+(i===0?'start':'end')+'" font-size="11" fill="var(--fg2)" font-family="var(--f-display)">'+p.v.toFixed(1)+'</text>';
+  s+='<text x="'+x(i)+'" y="'+(H-6)+'" text-anchor="middle" font-size="9.5" fill="var(--muted)">'+dmShort(p.m)+'</text>';});
+ s+='</svg><div class="tip" hidden></div>';
+ el.innerHTML='<p class="eyebrow" style="margin:6px 0 4px">Cân TB theo tuần</p>'+s+'<details><summary class="xs muted">Xem dạng bảng</summary><div class="tw"><table><thead><tr><th>Tuần từ</th><th>Cân TB</th><th>Số ngày</th></tr></thead><tbody>'+pts.map(p=>'<tr><td>'+dm(p.m)+'</td><td class="n">'+p.v.toFixed(2)+'</td><td class="n">'+p.n+'</td></tr>').join('')+'</tbody></table></div></details>';
+ const svg=el.querySelector('svg'), tip=el.querySelector('.tip');
+ const show=e=>{const r=e.target.closest('[data-pi]');if(!r){tip.hidden=true;return;}const i=+r.dataset.pi;const p=pts[i];const bb=svg.getBoundingClientRect();tip.style.left=(x(i)/W*bb.width)+'px';tip.style.top=(y(p.v)/H*bb.height)+'px';tip.textContent='Tuần '+dm(p.m)+': '+p.v.toFixed(2)+' kg ('+p.n+' ngày)';tip.hidden=false;};
+ svg.addEventListener('pointermove',show);svg.addEventListener('pointerdown',show);svg.addEventListener('pointerleave',()=>{tip.hidden=true;});
+}
 $('ci-stepgrid').addEventListener('input',e=>{const t=e.target;if(!t.dataset.sd)return;const v=t.value.trim();if(v)S.steps[t.dataset.sd]=v;else delete S.steps[t.dataset.sd];save();statCheckin();});
 $('ci-weights').addEventListener('input',e=>{const t=e.target;if(!t.dataset.wd)return;const v=t.value.trim();if(v)S.weights[t.dataset.wd]=v;else delete S.weights[t.dataset.wd];save();statCheckin();});
+$('ci-weights').addEventListener('change',()=>renderChart());
 document.querySelectorAll('[data-wk]').forEach(el=>el.addEventListener('input',()=>{const w=S.weeks[ciMon]||(S.weeks[ciMon]={});w[el.dataset.wk]=el.value;save();}));
 $('ci-prev').addEventListener('click',()=>{ciMon=addDays(ciMon,-7);renderCheckin();});
 $('ci-next').addEventListener('click',()=>{ciMon=addDays(ciMon,7);renderCheckin();});
 
 function buildReport(){
+ MEMO={};
  const end=addDays(ciMon,6); const ph=phaseFor(ciMon); const wk=S.weeks[ciMon]||{}; const L=[];
  L.push('CHECK-IN '+isoWeek(ciMon)+' ('+dm(ciMon)+'–'+dm(end)+') · '+ph.name);
  const ws=[];for(let i=0;i<7;i++){const ds=addDays(ciMon,i);ws.push(DOW[parse(ds).getDay()]+' '+(S.weights[ds]||'–'));}
@@ -928,22 +1413,28 @@ function buildReport(){
  L.push('Cân sáng: '+ws.join(' · '));
  L.push('TB tuần: '+(a?a.avg.toFixed(2)+' kg ('+a.n+' ngày)':'–')+(a&&b?' · so tuần trước '+((a.avg-b.avg)>0?'+':'')+(a.avg-b.avg).toFixed(2)+' kg':''));
  L.push('Eo: '+(wk.waist?wk.waist+' cm':'–'));
+ const st=weekStats(ciMon);
+ L.push('Kế hoạch: tạ '+st.liftDone+'/'+st.liftPlan+' buổi · chạy '+fmt1(st.kmDone)+'/'+fmt1(st.kmPlan)+' km');
+ const plan=[];for(let i=0;i<7;i++){const ds=addDays(ciMon,i);planFor(ds).forEach((it,j)=>{plan.push(DOW[parse(ds).getDay()]+' '+itemTitle(it)+(itemDone(ds,it,j)?' ✓':(ds<TODAY&&!it.opt?' ✗':'')));});}
+ if(plan.length)L.push('Lịch: '+plan.join(' · '));
  const ks=sessionsInWeek(ciMon);
- L.push('Buổi tập: '+ks.length);
+ L.push('Buổi tạ: '+ks.length);
  ks.forEach(k=>{const [ds,t]=k.split('|');const prog=PROGRAM[t];const s=S.sessions[k];const p=s.pain||{};
   L.push('— '+(prog?prog.name:t)+' · '+DOW[parse(ds).getDay()]+' '+dm(ds)+' | đau vai '+(p.vai||0)+', lưng '+(p.lung||0)+', ngực '+(p.nguc||0));
   if(prog) prog.ex.forEach(ex0=>{const ex=variant(ex0,ds);const arr=(s.ex&&s.ex[ex.id]||[]).filter(x=>x&&(x[0]||x[1]));const en=(s.exNote&&s.exNote[ex.id]||'').trim().replace(/\n/g,' ');
    if(arr.length||en)L.push('  '+ex.name+': '+(arr.length?arr.map(fmtSet).join(', '):'(không ghi set)')+(en?' | note: '+en:''));});
   if(s.note)L.push('  Ghi chú buổi: '+s.note.replace(/\n/g,' '));});
+ const runs=[];for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const r=S.runs[ds];if(r&&(num(r.km)>0||r.note)){const sec=parseDur(r.time);const p=r.pain||{};
+  runs.push('— '+DOW[parse(ds).getDay()]+' '+dm(ds)+': '+(r.km||'–')+' km, '+(r.time||'–')+(sec>0&&num(r.km)>0?' ('+fmtPace(sec/num(r.km))+'/km)':'')+', HR TB '+(r.hr||'–')+' / max '+(r.hrMax||'–')+', guồng '+(r.cad||'–')+', mệt '+(r.rpe||'–')+'/10'+(r.fuel?', '+r.fuel:'')+' | đau gối '+(p.goi||0)+', ống chân '+(p.ong||0)+', lưng '+(p.lung||0)+', ngực '+(p.nguc||0)+(r.note?' | '+r.note.replace(/\n/g,' '):''));}}
+ L.push('Chạy: '+(runs.length?runs.length+' buổi':'không'));runs.forEach(x=>L.push(x));
  const ml=[];for(let i=0;i<7;i++){const ds=addDays(ciMon,i);const ms=mealsOf(ds);if(ms.length)ml.push('— '+DOW[parse(ds).getDay()]+' '+dm(ds)+': '+ms.map(m=>fmtMeal(m).replace(/\n/g,' ')).join('; '));}
- L.push('Ăn ngoài: '+(ml.length?ml.length+' ngày':'không'));
- ml.forEach(x=>L.push(x));
+ L.push('Ăn ngoài: '+(ml.length?ml.length+' ngày':'không'));ml.forEach(x=>L.push(x));
  L.push('Ngủ TB: '+(wk.sleepH||'–')+' h · chất lượng '+(wk.sleepQ||'–')+'/5');
  const sa=stepAvg(ciMon);
  L.push('Bước chân: '+[0,1,2,3,4,5,6].map(i=>{const ds=addDays(ciMon,i);const x=stepNum(S.steps[ds]);return DOW[parse(ds).getDay()]+' '+(isNaN(x)?'–':fmtK(x));}).join(' · '));
  L.push('Bước TB: '+(sa?fmtK(sa.avg)+' ('+sa.n+' ngày)':(wk.steps||'–')));
  L.push('Stress '+(wk.stress||'–')+' · Năng lượng '+(wk.energy||'–')+' · Đói '+(wk.hunger||'–'));
- L.push('Bám ăn: '+(wk.adherence?wk.adherence+'%':'–')+' · Đủ protein: '+(wk.proteinDays||'–')+'/7 ngày');
+ L.push('Bám ăn: '+(wk.adherence?wk.adherence+'%':'–')+' · Đủ đạm: '+(wk.proteinDays||'–')+'/7 ngày');
  L.push('Rượu bia/bữa lệch: '+(wk.offplan||'không'));
  if(wk.note)L.push('Ghi chú: '+wk.note.replace(/\n/g,' '));
  return L.join('\n');
@@ -955,40 +1446,43 @@ function copyText(text,fb,okMsg){
 }
 $('ci-copy').addEventListener('click',()=>copyText(buildReport(),$('ci-fallback'),'Đã sao chép. Dán vào chat với PT.'));
 $('bk-copy').addEventListener('click',()=>copyText(JSON.stringify(S),$('bk-text'),'Đã sao chép bản sao lưu.'));
+$('bk-file').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='so-tap-'+TODAY+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);S.lastBackup=TODAY;save();bkInfo();});
+$('bk-open').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{$('bk-text').value=String(rd.result);toast('Đã đọc file. Bấm "Khôi phục" để ghi đè.');};rd.readAsText(f);});
+function bkInfo(){const n=Object.keys(S.sessions).length+Object.keys(S.runs).length;$('bk-info').textContent='Đang lưu '+n+' buổi, '+Object.keys(S.weights).length+' ngày cân.'+(S.lastBackup?' Sao lưu file gần nhất: '+dm(S.lastBackup)+'.':' Chưa tải file sao lưu lần nào.');}
 let armed=false;
 $('bk-restore').addEventListener('click',e=>{
  const raw=$('bk-text').value.trim(); let o;
  try{o=JSON.parse(raw);}catch(err){toast('Bản sao lưu không đọc được. Hãy dán đúng toàn bộ đoạn đã sao chép.');return;}
  if(!o||typeof o!=='object'||!o.sessions){toast('Đây không phải bản sao lưu của Sổ Tập.');return;}
  if(!armed){armed=true;e.target.textContent='Bấm lần nữa để ghi đè dữ liệu hiện tại';e.target.classList.add('danger');return;}
- S=Object.assign({sessions:{},weights:{},weeks:{},meals:{},steps:{}},o);save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
- renderToday();renderCheckin();toast('Đã khôi phục dữ liệu.');
+ S=Object.assign(BLANK(),o);S.race=Object.assign({start:'',goal:'3:00'},o.race||{});save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
+ curType=defaultType(curDate);renderToday();renderCheckin();bkInfo();toast('Đã khôi phục dữ liệu.');
 });
 
-/* ---------- routing ---------- */
-const VIEWS=['hom-nay','lich','an-uong','check-in'];
+/* ================= routing ================= */
+const VIEWS=['hom-nay','lich','race','an-uong','check-in'];
 function route(){
  const h=(location.hash||'').slice(1); const v=VIEWS.includes(h)?h:'hom-nay';
  VIEWS.forEach(x=>{$('v-'+x).hidden=(x!==v);});
  document.querySelectorAll('nav.tabs a').forEach(a=>{if(a.dataset.v===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
- if(v==='check-in')renderCheckin(); else if(v==='hom-nay')renderToday();
+ if(v==='check-in'){renderCheckin();bkInfo();} else if(v==='hom-nay')renderToday(); else if(v==='lich')renderCal(); else if(v==='race')renderRace(); else if(v==='an-uong')renderEat();
  window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route);
-/* trang để mở qua đêm: khi quay lại app mà đã sang ngày mới thì nhảy sang ngày mới */
 function rollDay(){
  const now=ymd(new Date()); if(now===TODAY) return;
  const wasToday=curDate===TODAY, wasWeek=ciMon===monday(TODAY);
- TODAY=now;
+ TODAY=now; MEMO={};
  if(wasToday){curDate=now;curType=defaultType(now);}
  if(wasWeek) ciMon=monday(now);
- renderToday(); if(!$('v-check-in').hidden) renderCheckin();
+ route();
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)rollDay();});
 window.addEventListener('focus',rollDay);
 window.addEventListener('pageshow',rollDay);
-renderToday(); route();
+route();
+if('serviceWorker' in navigator && location.protocol==='https:'){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
 })();
 </script>
-
+</body>
 </html>
