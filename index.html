@@ -273,6 +273,7 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
 .mode{border-radius:var(--r);padding:14px 16px;display:grid;gap:6px}
 .mode.eat{background:var(--eat-soft)} .mode.run{background:var(--run-soft)} .mode.race{background:var(--race-soft)} .mode.busy{background:var(--sunk)}
 .src{font-size:.74rem;color:var(--muted)}
+.weigh{border:1.5px solid var(--accent)!important}.weigh.filled{border-color:transparent!important}
 @media (max-width:420px){.plate{grid-template-columns:repeat(2,minmax(0,1fr))}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}h1{font-size:1.95rem}}
 @media (prefers-reduced-motion:no-preference){.chip,.btn,nav.tabs a,.chk,.wd{transition:background-color .15s,color .15s,border-color .15s}}
 </style>
@@ -297,6 +298,13 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
     <div class="week" id="week-strip" role="group" aria-label="Các ngày trong tuần"></div>
   </header>
 
+  <section class="card weigh" id="weigh-card">
+    <div class="inline">
+      <div class="field" style="flex:0 1 150px"><label for="w-today" id="w-label">Cân sáng nay (kg)</label><input type="text" inputmode="decimal" id="w-today" class="big-in" placeholder="78.4"></div>
+      <p class="small muted" id="body-avg" style="flex:1 1 160px"></p>
+    </div>
+  </section>
+
   <a class="race-banner" href="#race" id="race-banner" hidden></a>
 
   <section class="card plan" id="plan-card"></section>
@@ -305,12 +313,8 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
   <div id="session" class="stack"></div>
 
   <section class="card">
-    <div class="card-head"><p class="eyebrow" id="body-title">Cơ thể hôm nay</p><a href="#check-in" class="small">Check-in tuần →</a></div>
-    <div class="duo">
-      <div class="field"><label for="w-today" id="w-label">Cân sáng (kg)</label><input type="text" inputmode="decimal" id="w-today" class="big-in" placeholder="78.4"></div>
-      <div class="field"><label for="st-today" id="st-label">Bước chân</label><input type="text" inputmode="numeric" id="st-today" class="big-in" placeholder="8000"></div>
-    </div>
-    <p class="small muted" id="body-avg"></p>
+    <div class="card-head"><p class="eyebrow" id="body-title">Bước chân</p><a href="#check-in" class="small">Check-in tuần →</a></div>
+    <div class="inline"><div class="field" style="flex:0 1 160px"><label for="st-today" id="st-label">Ghi cuối ngày</label><input type="text" inputmode="numeric" id="st-today" class="big-in" placeholder="8000"></div><p class="small muted" id="st-avg" style="flex:1 1 160px"></p></div>
   </section>
 
   <section class="card" id="meals-card">
@@ -1206,18 +1210,18 @@ $('day-next').addEventListener('click',()=>goDay(1));
 
 /* ---- cân, bước ---- */
 function renderBody(){
- const d=parse(curDate); const lab=curDate===TODAY?'':' '+DOW[d.getDay()]+' '+dm(curDate);
- $('body-title').textContent=curDate===TODAY?'Cơ thể hôm nay':'Cơ thể'+lab;
- $('w-label').textContent='Cân sáng (kg)'; $('st-label').textContent='Bước chân';
+ const d=parse(curDate); const isT=curDate===TODAY;
+ $('w-label').textContent=isT?'Cân sáng nay (kg)':'Cân sáng '+DOW[d.getDay()]+' '+dm(curDate)+' (kg)';
+ $('st-label').textContent=isT?'Ghi cuối ngày':'Bước chân '+DOW[d.getDay()]+' '+dm(curDate);
  const w=S.weights[curDate]; $('w-today').value=w==null?'':w;
  const st=S.steps[curDate]; $('st-today').value=st==null?'':st;
  bodyAvg();
 }
 function bodyAvg(){
  const mon=monday(curDate); const a=weekAvg(mon), b=weekAvg(addDays(mon,-7)), sa=stepAvg(mon);
- let t=a?'Cân TB tuần: '+a.avg.toFixed(2)+' kg ('+a.n+' ngày)'+(b?', '+((a.avg-b.avg)>0?'+':'')+(a.avg-b.avg).toFixed(2)+' so tuần trước':''):'Cân mỗi sáng sau khi đi vệ sinh, trước khi ăn uống.';
- t+=' · '+(sa?'Bước TB: '+fmtK(sa.avg)+' (mục tiêu 8.000)':'Ghi số bước trước khi ngủ.');
- $('body-avg').textContent=t;
+ $('body-avg').textContent=a?'TB tuần: '+a.avg.toFixed(2)+' kg ('+a.n+' ngày)'+(b?' · '+((a.avg-b.avg)>0?'+':'')+(a.avg-b.avg).toFixed(2)+' so tuần trước':''):'Sau khi đi vệ sinh, trước khi ăn uống. Cùng cân, cùng giờ mỗi ngày.';
+ $('st-avg').textContent=sa?'TB tuần: '+fmtK(sa.avg)+' bước ('+sa.n+' ngày). Mục tiêu 8.000.':'Xem số bước trên điện thoại/đồng hồ trước khi ngủ.';
+ const wc=$('weigh-card'); if(wc) wc.classList.toggle('filled',!!S.weights[curDate]);
 }
 $('w-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.weights[curDate]=v;else delete S.weights[curDate];save();bodyAvg();});
 $('st-today').addEventListener('input',e=>{const v=e.target.value.trim();if(v)S.steps[curDate]=v;else delete S.steps[curDate];save();bodyAvg();});
