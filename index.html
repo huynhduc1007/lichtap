@@ -681,7 +681,7 @@ const PROGRAM={
    how:['Chỉnh ghế để tay cầm ngang giữa ngực. Lưng và đầu áp đệm, ép hai bả vai ra sau và xuống, giữ suốt set.','Khuỷu tạo góc khoảng 45–60° với thân, không bè ngang 90°.','Đẩy ra tới gần thẳng tay, không khoá cứng khuỷu, vai không nhô khỏi đệm.','Hạ về 2–3 giây, dừng khi khuỷu ngang thân.'],
    v:{from:'2026-11-16',name:'Bench đòn hoặc machine chest press',yt:'barbell bench press proper form',note:'Bench đòn chỉ khi tuần trước đau ngực 0–1/10. Bắt đầu 60 kg × 8, chạm ngực có kiểm soát, không nảy.',
     how:['Nằm mắt ngay dưới đòn. Bả vai ép ra sau và xuống, ngực ưỡn nhẹ, hai chân đạp chắc xuống sàn.','Tay cầm rộng hơn vai khoảng một nắm tay, cổ tay thẳng trên khuỷu.','Hạ 2 giây, chạm nhẹ vùng dưới ngực, khuỷu khoảng 45–70°. Không nảy đòn.','Đẩy lên và hơi về phía mặt, mông luôn chạm ghế. Dùng thanh an toàn hoặc người canh khi nặng.']}},
-  {id:'ua2',name:'Row có tì ngực',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',main:true,yt:'chest supported row machine form',note:'Dùng máy row có đệm tì ngực ở phòng bạn: ngồi lên ghế, ngực áp đệm. Máy bận thì làm Dumbbell chest-supported row trên ghế dốc 30–45°, cùng số set và rep.',
+  {id:'ua2',name:'Row có tì ngực',sets:3,reps:'6–10',top:10,rest:'nghỉ 2 phút',main:true,yt:'chest supported row machine form',note:'Kéo tay cầm về ngực dưới, khuỷu mở khoảng 30–45°, siết bả vai 1 giây ở cuối; khi hạ để bả vai trượt ra trước hết mức. Máy bận thì làm Dumbbell chest-supported row trên ghế dốc 30–45°, cùng số set và rep.',
    how:['Ngực tì đệm, chân đặt vững.','Mở đầu bằng kéo bả vai về sau, rồi kéo khuỷu về phía hông.','Dừng 1 giây khi khuỷu ra sau thân, siết lưng giữa.','Duỗi tay về trước 2 giây, để bả vai trượt ra trước cho lưng được giãn.']},
   {id:'ua3',name:'Lat pulldown tay trung tính',sets:3,reps:'8–10',top:10,rest:'nghỉ 2 phút',yt:'neutral grip lat pulldown form',
    how:['Chỉnh đệm đùi cho chặt. Ngả người ra sau khoảng 10–15°, ngực hướng lên.','Kéo tay cầm xuống ngực trên, nghĩ tới việc đưa khuỷu xuống túi quần sau.','Không giật người ra sau để lấy đà.','Lên lại 2 giây tới khi tay gần thẳng và thấy lưng xô được kéo giãn.']},
@@ -1111,6 +1111,12 @@ function renderSession(){
  let h='<div class="card"><div class="card-head"><div><p class="eyebrow">'+esc(prog.sub)+'</p><h3 style="font-size:1.2rem">'+esc(prog.name)+'</h3></div><span class="dot plate-'+prog.plate+'" style="width:14px;height:14px"></span></div>'+
   '<p class="small">'+(prog.fixed?'Buổi cố định':'<b>'+esc(ph.name)+'</b> · '+esc(ph.setTxt))+(softLower(ph,curType)?' · <b>giữ mức tạ, không tăng</b>':'')+'</p>'+
   '<details><summary class="small">Khởi động 8–10 phút</summary><ol class="small"><li>Xe đạp hoặc đi dốc 3 phút.</li><li>Band external rotation 2×15 (tay trái thêm 1 set), pull-apart ×15, wall slide ×10.</li><li>Cat-camel ×6, giãn gập hông 30 giây/bên, dead bug ×8/bên, bird dog ×8/bên.</li><li>Bài chính: 2–3 set khởi động 50% → 70% → 85%.</li></ol></details>'+
+  '<details><summary class="small">Máy bận?</summary><ol class="small">'+
+   '<li><b>Đổi thứ tự được.</b> Bài chính (chest press/bench, squat, RDL, leg press, row tì ngực) nên giữ ở đầu buổi. Bị dời xuống sau thì chấp nhận hụt 1–2 rep hoặc giảm ~5% tạ, ghi "làm sau" vào ghi chú bài.</li>'+
+   '<li><b>Không làm bài nhỏ trước bài lớn cùng nhóm cơ:</b> curl trước row/pulldown, tay sau trước press, leg curl/extension trước squat/RDL, lateral raise/face pull trước shoulder press.</li>'+
+   '<li><b>Core luôn để cuối</b>, không làm trước squat hay RDL.</li>'+
+   '<li><b>Superset:</b> một máy bận thì làm bài còn lại trước như bài riêng, nghỉ đủ, rồi quay lại.</li>'+
+   '<li>Đổi thứ tự rồi vẫn phải chờ quá 5 phút: dùng bài thay thế trong mục "Máy nào, tập thế nào" của bài đó.</li></ol></details>'+
   '<details><summary class="small">Chọn mức tạ, đọc RIR</summary><div class="stack small">'+GUIDE+'</div></details></div>';
  prog.ex.forEach(ex0=>{
   const ex=variant(ex0,curDate); const n=setsFor(ex,ph,prog,curType);
