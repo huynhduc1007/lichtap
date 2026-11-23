@@ -428,13 +428,14 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
   <h2>Chiến thuật</h2>
   <section class="card">
     <div class="stack-s"><div class="row between"><b class="num" style="font-size:1.2rem">Km 1–5</b><span class="tag run">8:45–9:00 /km · HR &lt; 150</span></div><p class="small">Cố tình chậm hơn cảm giác. Đám đông kéo bạn đi nhanh, đừng theo.</p></div>
-    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 6–15</b><span class="tag run">8:30–8:45 /km · HR 150–160</span></div><p class="small">Chạy 5 phút, đi bộ 1 phút. Đi bộ qua mọi trạm nước.</p></div>
-    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 16–21</b><span class="tag run">tự do · HR có thể &gt; 165</span></div><p class="small">Còn sức mới tăng tốc.</p></div>
+    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 6–15</b><span class="tag run">8:30–8:45 /km · HR 150–160</span></div><p class="small">Chạy 5 phút, đi bộ 1 phút, đi bộ qua mọi trạm nước. <b>Đoạn chạy không nhanh hơn 8:00/km</b>: ngày 22/11 đoạn chạy thực tế 7:20–7:30 rồi phải đi bộ bù, tốn sức hơn chạy đều.</p></div>
+    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 16–21</b><span class="tag run">tự do · HR có thể &gt; 165</span></div><p class="small">Còn sức mới tăng tốc. Phần dồn tốc 7:28 như cuối buổi 22/11 để dành cho đoạn này.</p></div>
   </section>
   <div class="card">
     <p class="callout run"><b>Quy tắc trần:</b> nhịp tim vượt 160 trước km 15 thì đi bộ đến khi xuống lại. Nhịp tim quan trọng hơn pace.</p>
     <p class="callout run"><b>Năng lượng:</b> gel ở <b>km 5, 10, 15</b> (plan cũ là km 7 và 14) + nước điện giải ở trạm có. Lý do: 3 tiếng chạy cần khoảng 30–60 g carb mỗi giờ; 2 gel chỉ được khoảng 15 g/giờ.</p>
-    <p class="src">Nguồn: Thomas, Erdman & Burke 2016 (ACSM/AND/DC position stand); Jeukendrup 2014.</p>
+    <p class="callout run"><b>Nước:</b> 22/11 Garmin ước ra khoảng 1,65 lít mồ hôi trong 1 giờ 48 phút. Race dài khoảng 3 giờ: uống 150–250 ml ở mọi trạm (khoảng 400–600 ml/giờ), có điện giải thì lấy. Không cần bù đủ, chỉ cần không để mất nước quá nhiều. Uống ép quá nhiều nước lọc cũng nguy hiểm.</p>
+    <p class="src">Nguồn: Thomas, Erdman & Burke 2016 (ACSM/AND/DC position stand); Jeukendrup 2014; Sawka et al. 2007 (ACSM, giữ mất nước dưới ~2% cân nặng).</p>
   </div>
 
   <h2>Tính pace</h2>
@@ -444,6 +445,19 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
   <div id="race-plan"></div>
   <p class="xs muted">Buổi chạy tự đánh dấu xong khi bạn ghi số km ở tab Hôm nay. Buổi nghỉ bấm vòng tròn để đánh dấu.</p>
 
+  <details class="card" open><summary>Buổi chạy dài 22/11</summary>
+    <div class="targets">
+      <div class="tgt"><b>11,87 km</b><span>1:48:21 tổng</span></div>
+      <div class="tgt"><b>10 km · 8:19</b><span>khối chính, pace /km</span></div>
+      <div class="tgt"><b>149</b><span>HR TB (18/11: 156)</span></div>
+      <div class="tgt"><b>165–170</b><span>guồng chân khi chạy ✓</span></div>
+    </div>
+    <ul class="small">
+      <li><b>Tốt:</b> gấp đôi quãng đường, pace giữ nguyên, nhịp tim thấp hơn 7. Garmin xếp buổi cơ bản (hiếu khí 3,1). Tiếp đất 292 ms, dao động dọc 9,2%, đều tốt hơn 18/11.</li>
+      <li><b>Cần sửa:</b> đoạn chạy thực tế 7:20–7:30 rồi đi bộ bù (~21 phút đi bộ), và 2 km cuối dồn tới 7:28, nhịp tim 185.</li>
+      <li><b>Dự báo:</b> khoảng 3:00 nếu xuất phát sáng sớm và chạy đều theo chiến thuật.</li>
+    </ul>
+  </details>
   <details class="card"><summary>Phân tích buổi 5 km ngày 18/11</summary>
     <div class="targets">
       <div class="tgt"><b>5,01 km</b><span>41:48</span></div>
@@ -896,14 +910,14 @@ const EASY_TPL=()=>R('Chạy nhẹ 30–40 phút',{kmTxt:'4–5',pace:'nói chuy
 const PLAN={
  '2026-11-20':[{k:'REST',title:'Nghỉ hoặc đi bộ 30 phút'}],
  '2026-11-21':[{k:'UB',note:'Thay buổi chạy nhẹ 4 km trong plan: thân trên không ảnh hưởng chân cho buổi chạy dài mai. Tối nay thêm 1 chén cơm, ngủ sớm.'}],
- '2026-11-22':[R('Chạy dài 12–14 km',{km:13,kmTxt:'12–14',pace:'8:45–9:15',hr:'140–155',hrMax:155,long:true,note:'Thay cầu lông. Ăn sáng 60–90 phút trước: 2 chuối hoặc bánh mì không.',detail:['Chạy 5 phút, đi bộ 1 phút ngay từ km 1.','Thử gel ở km 5 và km 10, đúng loại sẽ dùng ngày race.','Mang nước hoặc chạy vòng có chỗ mua nước. Uống vài ngụm mỗi 15–20 phút.','Nhịp tim liên tục trên 160 dù đã chạy chậm: đi bộ, ghi lại, và mục tiêu race đổi thành "về đích trong cut-off".']})],
+ '2026-11-22':[R('Chạy dài 12–14 km',{km:11.87,kmTxt:'12–14',pace:'8:45–9:15',hr:'140–155',hrMax:155,long:true,note:'Thay cầu lông. Ăn sáng 60–90 phút trước: 2 chuối hoặc bánh mì không.',detail:['Chạy 5 phút, đi bộ 1 phút ngay từ km 1.','Thử gel ở km 5 và km 10, đúng loại sẽ dùng ngày race.','Mang nước hoặc chạy vòng có chỗ mua nước. Uống vài ngụm mỗi 15–20 phút.','Nhịp tim liên tục trên 160 dù đã chạy chậm: đi bộ, ghi lại, và mục tiêu race đổi thành "về đích trong cut-off".']})],
  '2026-11-23':[{k:'UA',note:'Thân trên, chân được nghỉ sau buổi chạy dài. Giữ mức tạ lần trước, RIR 2–3.'}],
  '2026-11-24':[R('5 km nhẹ + 4 lần tăng tốc 20 giây',{km:5,kmTxt:'5',pace:'9:00',hr:'< 146',hrMax:146,detail:['Chạy nhẹ cả buổi, nói chuyện được.','Cuối buổi: 4 lần tăng tốc 20 giây, guồng chân 165–170, đi bộ 60–90 giây giữa các lần.']})],
- '2026-11-25':[R('Pace race 4 km',{km:6,kmTxt:'1 + 4 + 1',pace:'8:20–8:30',hr:'150–158',hrMax:158,detail:['1 km khởi động thật chậm.','4 km ở pace race, nhịp tim 150–158. Vượt 158 thì chậm lại, đừng cố giữ pace.','1 km thả lỏng.']})],
+ '2026-11-25':[R('Pace race 4 km, chạy liên tục',{km:6,kmTxt:'1 + 4 + 1',pace:'8:20–8:30',hr:'150–158',hrMax:158,note:'Chỉnh sau buổi 22/11: tập chạy đều thay vì chạy nhanh rồi đi bộ bù.',detail:['1 km khởi động thật chậm.','4 km liên tục ở 8:20–8:30, không đi bộ, không nhanh hơn 8:00. Nhịp tim vượt 158 thì chậm lại.','1 km thả lỏng.']})],
  '2026-11-26':[{k:'LA',note:'Lower A rút gọn: mỗi bài bớt 1 set, RIR 3, giữ mức tạ cũ. Cách buổi 10 km 3 ngày.'}],
  '2026-11-27':[R('Chạy nhẹ 5 km',{km:5,kmTxt:'5',pace:'9:00–9:30',hr:'< 146',hrMax:146,detail:['Chạy hoàn toàn nhẹ. Chân còn ê sau Lower A là bình thường.']})],
  '2026-11-28':[{k:'UB',opt:true,note:'Tuỳ chọn. Bận hoặc mệt thì nghỉ, đi bộ. Không tập bài chân.'}],
- '2026-11-29':[R('Chạy dài 10 km: 6 nhẹ + 4 pace race',{km:10,kmTxt:'6 + 4',pace:'8:45 → 8:20',hr:'< 150 → ≤ 158',hrMax:158,long:true,note:'Buổi tổng duyệt. Thay cầu lông.',detail:['Chạy vào giờ xuất phát của giải nếu được, ăn sáng y như sáng race.','6 km đầu nhẹ, nhịp tim dưới 150. 4 km cuối pace race, nhịp tim tối đa 158.','Mặc đúng giày, tất, quần áo sẽ mặc race. Gel ở km 5 và km 10.']})],
+ '2026-11-29':[R('Chạy dài 10 km: 6 nhẹ + 4 pace race',{km:10,kmTxt:'6 + 4',pace:'8:45 → 8:20',hr:'< 150 → ≤ 158',hrMax:158,long:true,note:'Buổi tổng duyệt. Thay cầu lông.',detail:['Chạy vào giờ xuất phát của giải nếu được, ăn sáng y như sáng race.','6 km đầu nhẹ, nhịp tim dưới 150. Đoạn chạy không nhanh hơn 8:30, đi bộ ít hơn buổi 22/11.','4 km cuối giữ đúng 8:20 (22/11 dồn tới 7:28). Về đích với nhịp tim dưới 160.','Mặc đúng giày, tất, quần áo sẽ mặc race. Gel ở km 5 và km 10, uống ở mỗi 2–3 km.']})],
  '2026-11-30':[{k:'UT',opt:true,note:'Tuần bận đầu tháng + giảm tải: buổi tạ duy nhất trong tuần, 30–40 phút, tuỳ chọn. Không tập chân tới sau race.'}],
  '2026-12-01':[R('5 km nhẹ + 4 lần tăng tốc 20 giây',{km:5,kmTxt:'5',pace:'9:00',hr:'< 146',hrMax:146,detail:['Như buổi 24/11.']})],
  '2026-12-02':[{k:'REST',title:'Nghỉ',sub:'Đi bộ, ngủ đủ'}],
@@ -1276,6 +1290,7 @@ $('cal').addEventListener('click',openDay);
 $('phase-table').innerHTML=PHASES.map(p=>'<tr class="'+(TODAY>=p.from&&TODAY<=p.to?'now':'')+'"><td class="n">'+p.wk+'<br><span class="xs muted" style="font-family:var(--f-body)">'+dm(p.from)+'–'+dm(p.to)+'</span></td><td>'+esc(p.name)+'</td><td>'+esc(p.setTxt)+'</td><td class="n">'+p.rir+'</td><td class="n">'+p.rirI+'</td></tr>').join('');
 $('guide').innerHTML=GUIDE;
 const CHANGELOG=[
+ ['23/11/2026','Sau buổi 22/11 (11,87 km, khối 10 km 8:19/km, HR TB 149 ở 33°C): 25/11 chạy liên tục 4 km 8:20–8:30; 29/11 4 km cuối giữ 8:20, về đích HR < 160; race km 6–15 đoạn chạy không nhanh hơn 8:00, uống ở mọi trạm + điện giải. Dự báo race ~3:00.'],
  ['21/11/2026','Thêm half marathon 6/12 vào lịch 20/11–13/12. CN 22/11 và 29/11 chạy dài thay cầu lông; cầu lông nghỉ tới 13/12.'],
  ['21/11/2026','W48 thân dưới bớt 1 set, RIR 3, không tăng tạ. W49 chỉ 1 buổi thân trên rút gọn (tuỳ chọn), không tập chân. W50 hồi phục. "Tăng dần" rút còn 14–27/12. Căn cứ: giảm tải giữ cường độ, giảm 40–60% khối lượng (Bosquet et al. 2007); giữ sức mạnh với khối lượng thấp nếu giữ cường độ (Spiering et al. 2021).'],
  ['21/11/2026','Ngày tạ ngoài lịch race chuyển sang vòng xoay (buổi lâu chưa tập nhất làm trước), vì thực tế mới tập được Upper A + Lower A.'],
