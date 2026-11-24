@@ -420,21 +420,22 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
     <div class="card-head"><h3>Thông tin giải</h3></div>
     <div class="inline">
       <div class="field"><label for="race-start">Giờ xuất phát 21 km</label><input type="time" id="race-start"></div>
-      <div class="field"><label for="race-goal">Mục tiêu (h:mm)</label><input type="text" id="race-goal" inputmode="numeric" placeholder="3:00"></div>
+      <div class="field"><label for="race-goal">Mục tiêu (h:mm)</label><input type="text" id="race-goal" inputmode="numeric" placeholder="2:45"></div>
     </div>
     <p class="small muted" id="race-info"></p>
   </section>
 
   <h2>Chiến thuật</h2>
   <section class="card">
-    <div class="stack-s"><div class="row between"><b class="num" style="font-size:1.2rem">Km 1–5</b><span class="tag run">8:45–9:00 /km · HR &lt; 150</span></div><p class="small">Cố tình chậm hơn cảm giác. Đám đông kéo bạn đi nhanh, đừng theo.</p></div>
-    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 6–15</b><span class="tag run">8:30–8:45 /km · HR 150–160</span></div><p class="small">Chạy 5 phút, đi bộ 1 phút, đi bộ qua mọi trạm nước. <b>Đoạn chạy không nhanh hơn 8:00/km</b>: ngày 22/11 đoạn chạy thực tế 7:20–7:30 rồi phải đi bộ bù, tốn sức hơn chạy đều.</p></div>
-    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 16–21</b><span class="tag run">tự do · HR có thể &gt; 165</span></div><p class="small">Còn sức mới tăng tốc. Phần dồn tốc 7:28 như cuối buổi 22/11 để dành cho đoạn này.</p></div>
+    <div class="stack-s"><div class="row between"><b class="num" style="font-size:1.2rem">Km 1–3</b><span class="tag run">8:00–8:10 /km · HR &lt; 155</span></div><p class="small">Khởi động trong race. Đám đông kéo bạn đi nhanh, đừng theo.</p></div>
+    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 4–15</b><span class="tag run">7:45–7:50 /km · HR 155–165</span></div><p class="small">Chạy liên tục, chỉ đi bộ 15–20 giây ở trạm nước. Đồng hồ thường đo dài hơn cự ly thật 200–400 m, nên <b>pace trên đồng hồ cần khoảng 7:40</b>.</p></div>
+    <div class="stack-s" style="border-top:1px solid var(--line);padding-top:12px"><div class="row between"><b class="num" style="font-size:1.2rem">Km 16–21</b><span class="tag run">7:30–7:45 /km · HR có thể &gt; 170</span></div><p class="small">Còn sức mới tăng tốc. Phần dồn tốc 7:28 như cuối buổi 22/11 để dành cho đoạn này.</p></div>
+    <p class="callout run"><b>Phương án dự phòng ~3:00</b> (8:30/km, chạy 5 phút / đi bộ 1 phút): dùng khi Kiểm tra 1 (27/11) hoặc Kiểm tra 2 (29/11) không giữ được 7:45–7:50 với nhịp tim ≤ 165 mà không đi bộ, hoặc trời nóng lúc xuất phát.</p>
   </section>
   <div class="card">
-    <p class="callout run"><b>Quy tắc trần:</b> nhịp tim vượt 160 trước km 15 thì đi bộ đến khi xuống lại. Nhịp tim quan trọng hơn pace.</p>
-    <p class="callout run"><b>Năng lượng:</b> gel ở <b>km 5, 10, 15</b> (plan cũ là km 7 và 14) + nước điện giải ở trạm có. Lý do: 3 tiếng chạy cần khoảng 30–60 g carb mỗi giờ; 2 gel chỉ được khoảng 15 g/giờ.</p>
-    <p class="callout run"><b>Nước:</b> 22/11 Garmin ước ra khoảng 1,65 lít mồ hôi trong 1 giờ 48 phút. Race dài khoảng 3 giờ: uống 150–250 ml ở mọi trạm (khoảng 400–600 ml/giờ), có điện giải thì lấy. Không cần bù đủ, chỉ cần không để mất nước quá nhiều. Uống ép quá nhiều nước lọc cũng nguy hiểm.</p>
+    <p class="callout run"><b>Quy tắc trần:</b> nhịp tim vượt 168 trước km 15 thì giảm về 8:00 trong 1 km; vượt quá 2 lần thì chuyển sang phương án ~3:00. Nhịp tim quan trọng hơn pace.</p>
+    <p class="callout run"><b>Năng lượng:</b> gel ở <b>km 5, 10, 15</b> (plan cũ là km 7 và 14) + nước điện giải ở trạm có. Lý do: chạy gần 3 tiếng cần khoảng 30–60 g carb mỗi giờ; 2 gel chỉ được khoảng 15 g/giờ.</p>
+    <p class="callout run"><b>Nước:</b> 22/11 Garmin ước ra khoảng 1,65 lít mồ hôi trong 1 giờ 48 phút. Race dài 2:45–3:00: uống 150–250 ml ở mọi trạm (khoảng 400–600 ml/giờ), có điện giải thì lấy. Không cần bù đủ, chỉ cần không để mất nước quá nhiều. Uống ép quá nhiều nước lọc cũng nguy hiểm.</p>
     <p class="src">Nguồn: Thomas, Erdman & Burke 2016 (ACSM/AND/DC position stand); Jeukendrup 2014; Sawka et al. 2007 (ACSM, giữ mất nước dưới ~2% cân nặng).</p>
   </div>
 
@@ -455,7 +456,7 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
     <ul class="small">
       <li><b>Tốt:</b> gấp đôi quãng đường, pace giữ nguyên, nhịp tim thấp hơn 7. Garmin xếp buổi cơ bản (hiếu khí 3,1). Tiếp đất 292 ms, dao động dọc 9,2%, đều tốt hơn 18/11.</li>
       <li><b>Cần sửa:</b> đoạn chạy thực tế 7:20–7:30 rồi đi bộ bù (~21 phút đi bộ), và 2 km cuối dồn tới 7:28, nhịp tim 185.</li>
-      <li><b>Dự báo:</b> khoảng 3:00 nếu xuất phát sáng sớm và chạy đều theo chiến thuật.</li>
+      <li><b>Dự báo:</b> khi thực sự chạy, pace khoảng 7:20–7:30. Mục tiêu sub 2:45 nếu chạy liên tục được ở 7:45–7:50 (xác nhận qua 2 buổi kiểm tra 27/11 và 29/11); không thì ~3:00.</li>
     </ul>
   </details>
   <details class="card"><summary>Phân tích buổi 5 km ngày 18/11</summary>
@@ -475,8 +476,8 @@ nav.tabs a[data-v="race"][aria-current="page"]{color:var(--race)}
     <ul class="small">
       <li><b>Vùng công suất cài quá cao:</b> vùng 1 bắt đầu 274 W trong khi TB là 208 W. Cập nhật ngưỡng hoặc bật tự phát hiện.</li>
       <li><b>HR max</b> ghi nhận 187, sát mức cài 188. Từng đo cao hơn thì cập nhật.</li>
-      <li>Cài màn hình race: nhịp tim, pace trung bình vòng, quãng đường, thời gian. Bật cảnh báo HR &gt; 160.</li>
-      <li>Hẹn giờ chạy/đi bộ 5:00 / 1:00 (Run/Walk) cho km 6–15.</li>
+      <li>Cài màn hình race: nhịp tim, pace trung bình vòng, quãng đường, thời gian. Bật cảnh báo HR &gt; 168.</li>
+      <li>Run/Walk 5:00 / 1:00 chỉ bật nếu chuyển sang phương án ~3:00.</li>
     </ul>
   </details>
   <details class="card"><summary>Checklist tuần race</summary>
@@ -869,9 +870,9 @@ const ICON={
 
 /* ================= storage ================= */
 const K='pt-log-v1';
-const BLANK=()=>({v:2,sessions:{},weights:{},weeks:{},meals:{},steps:{},runs:{},done:{},race:{start:'',goal:'3:00'}});
+const BLANK=()=>({v:2,sessions:{},weights:{},weeks:{},meals:{},steps:{},runs:{},done:{},race:{start:'',goal:'2:45'}});
 let S=BLANK();
-function load(){try{const raw=localStorage.getItem(K);if(raw){const o=JSON.parse(raw);S=Object.assign(BLANK(),o);S.race=Object.assign({start:'',goal:'3:00'},o.race||{});S.v=2;}}catch(e){}}
+function load(){try{const raw=localStorage.getItem(K);if(raw){const o=JSON.parse(raw);S=Object.assign(BLANK(),o);S.race=Object.assign({start:'',goal:'2:45'},o.race||{});S.v=2;}}catch(e){}}
 load();
 function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){toast('Không lưu được: bộ nhớ trình duyệt đầy hoặc bị chặn.');}}
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
@@ -912,19 +913,19 @@ const PLAN={
  '2026-11-21':[{k:'UB',note:'Thay buổi chạy nhẹ 4 km trong plan: thân trên không ảnh hưởng chân cho buổi chạy dài mai. Tối nay thêm 1 chén cơm, ngủ sớm.'}],
  '2026-11-22':[R('Chạy dài 12–14 km',{km:11.87,kmTxt:'12–14',pace:'8:45–9:15',hr:'140–155',hrMax:155,long:true,note:'Thay cầu lông. Ăn sáng 60–90 phút trước: 2 chuối hoặc bánh mì không.',detail:['Chạy 5 phút, đi bộ 1 phút ngay từ km 1.','Thử gel ở km 5 và km 10, đúng loại sẽ dùng ngày race.','Mang nước hoặc chạy vòng có chỗ mua nước. Uống vài ngụm mỗi 15–20 phút.','Nhịp tim liên tục trên 160 dù đã chạy chậm: đi bộ, ghi lại, và mục tiêu race đổi thành "về đích trong cut-off".']})],
  '2026-11-23':[{k:'UA',note:'Thân trên, chân được nghỉ sau buổi chạy dài. Giữ mức tạ lần trước, RIR 2–3.'}],
- '2026-11-24':[R('5 km nhẹ + 4 lần tăng tốc 20 giây',{km:5,kmTxt:'5',pace:'9:00',hr:'< 146',hrMax:146,detail:['Chạy nhẹ cả buổi, nói chuyện được.','Cuối buổi: 4 lần tăng tốc 20 giây, guồng chân 165–170, đi bộ 60–90 giây giữa các lần.']})],
- '2026-11-25':[R('Pace race 4 km, chạy liên tục',{km:6,kmTxt:'1 + 4 + 1',pace:'8:20–8:30',hr:'150–158',hrMax:158,note:'Chỉnh sau buổi 22/11: tập chạy đều thay vì chạy nhanh rồi đi bộ bù.',detail:['1 km khởi động thật chậm.','4 km liên tục ở 8:20–8:30, không đi bộ, không nhanh hơn 8:00. Nhịp tim vượt 158 thì chậm lại.','1 km thả lỏng.']})],
- '2026-11-26':[{k:'LA',note:'Lower A rút gọn: mỗi bài bớt 1 set, RIR 3, giữ mức tạ cũ. Cách buổi 10 km 3 ngày.'}],
- '2026-11-27':[R('Chạy nhẹ 5 km',{km:5,kmTxt:'5',pace:'9:00–9:30',hr:'< 146',hrMax:146,detail:['Chạy hoàn toàn nhẹ. Chân còn ê sau Lower A là bình thường.']})],
- '2026-11-28':[{k:'UB',opt:true,note:'Tuỳ chọn. Bận hoặc mệt thì nghỉ, đi bộ. Không tập bài chân.'}],
- '2026-11-29':[R('Chạy dài 10 km: 6 nhẹ + 4 pace race',{km:10,kmTxt:'6 + 4',pace:'8:45 → 8:20',hr:'< 150 → ≤ 158',hrMax:158,long:true,note:'Buổi tổng duyệt. Thay cầu lông.',detail:['Chạy vào giờ xuất phát của giải nếu được, ăn sáng y như sáng race.','6 km đầu nhẹ, nhịp tim dưới 150. Đoạn chạy không nhanh hơn 8:30, đi bộ ít hơn buổi 22/11.','4 km cuối giữ đúng 8:20 (22/11 dồn tới 7:28). Về đích với nhịp tim dưới 160.','Mặc đúng giày, tất, quần áo sẽ mặc race. Gel ở km 5 và km 10, uống ở mỗi 2–3 km.']})],
- '2026-11-30':[{k:'UT',opt:true,note:'Tuần bận đầu tháng + giảm tải: buổi tạ duy nhất trong tuần, 30–40 phút, tuỳ chọn. Không tập chân tới sau race.'}],
- '2026-12-01':[R('5 km nhẹ + 4 lần tăng tốc 20 giây',{km:5,kmTxt:'5',pace:'9:00',hr:'< 146',hrMax:146,detail:['Như buổi 24/11.']})],
+ '2026-11-24':[{k:'LA',note:'Lower nhẹ (lâu chưa tập chân, tránh đau cơ cho buổi chạy mai): squat ~70% mức cũ, hip thrust, leg curl, seated row; mỗi bài 2 set, RIR 4. BỎ calf raise, không lunge, không hạ tạ chậm. Tối đa ~40 phút. 6×400 m trong plan mới bỏ tuần này.'}],
+ '2026-11-25':[R('5 km chạy liên tục',{km:5,kmTxt:'5',pace:'8:00–8:30',hr:'< 157',hrMax:157,note:'Tập chạy đều không đi bộ: sửa thói quen chạy nhanh rồi đi bộ bù của buổi 22/11. Chân hơi mỏi sau Lower là bình thường.',detail:['Chạy liên tục cả 5 km, không đi bộ.','Không nhanh hơn 8:00, không tăng tốc cuối buổi.','Nhịp tim vượt 157 thì chậm lại.']})],
+ '2026-11-26':[{k:'UB',note:'Thân trên, cách buổi Upper 23/11 đúng 72 giờ. Không tập bài chân: mai kiểm tra pace race.'}],
+ '2026-11-27':[R('Kiểm tra 1: 5 km pace race',{km:7,kmTxt:'1 + 5 + 1',pace:'7:45–7:50',hr:'155–165',hrMax:165,note:'Buổi quyết định mục tiêu sub 2:45. Cách buổi Lower 24/11 khoảng 72 giờ.',detail:['1 km khởi động chậm.','5 km liên tục ở 7:45–7:50, không đi bộ. Nhịp tim cuối buổi ≤ 165.','1 km thả lỏng.','Đạt: giữ sub 2:45. Phải đi bộ, hụt pace hoặc nhịp tim > 165: báo PT, nhiều khả năng chuyển phương án ~3:00.','Chân còn đau ≥ 3/10 từ buổi Lower: báo PT để dời hoặc gộp vào buổi 29/11.']})],
+ '2026-11-28':[{k:'REST',title:'Nghỉ hoặc đi bộ',sub:'Ăn đủ cơm, ngủ sớm cho buổi 12 km mai.'}],
+ '2026-11-29':[R('Kiểm tra 2 · chạy dài 12 km: 6 nhẹ + 6 pace race',{km:12,kmTxt:'6 + 6',pace:'8:30 → 7:50',hr:'< 150 → ≤ 165',hrMax:165,long:true,note:'Buổi tổng duyệt. Nghỉ cầu lông.',detail:['Chạy vào giờ xuất phát của giải nếu được, ăn sáng y như sáng race.','6 km đầu nhẹ ở 8:30, nhịp tim dưới 150.','6 km cuối liên tục ở 7:50, về đích với nhịp tim ≤ 165, không đi bộ.','Mặc đúng giày, tất, quần áo race. Thử gel và điện giải như ngày race.','Không đạt (phải đi bộ, hụt pace hoặc nhịp tim > 165): chuyển phương án ~3:00.']})],
+ '2026-11-30':[{k:'UT',opt:true,note:'Tuần bận đầu tháng + giảm tải: buổi tạ duy nhất trong tuần, 30–40 phút, tuỳ chọn. Không tập tạ chân tới sau race.'}],
+ '2026-12-01':[R('5 km nhẹ + 4 lần tăng tốc 20 giây',{km:5,kmTxt:'5',pace:'9:00',hr:'< 146',hrMax:146,detail:['Chạy nhẹ cả buổi, nói chuyện được.','Cuối buổi: 4 lần tăng tốc 20 giây, khoảng 90% sức, guồng chân 170+, đi bộ 60–90 giây giữa các lần.','Sau chạy (tuỳ chọn): sức mạnh tay không 2 vòng: squat 12, cầu mông 1 chân 12/bên, nhón gót 15/bên, plank 40 giây. Không tạ, không lunge.']})],
  '2026-12-02':[{k:'REST',title:'Nghỉ',sub:'Đi bộ, ngủ đủ'}],
- '2026-12-03':[R('2 km nhẹ + 2 km pace race',{km:4,kmTxt:'2 + 2',pace:'8:30',hr:'≤ 155',hrMax:155,detail:['Ngắn để chân nhớ pace race, không mệt.']})],
+ '2026-12-03':[R('2 km nhẹ + 4×1 phút nhanh + 2 km pace race',{km:5,kmTxt:'2 + 4×1′ + 2',pace:'6:30 / 7:50',hr:'≤ 170 / ≤ 160',hrMax:160,detail:['2 km nhẹ.','4 lần 1 phút ở ~6:30/km, hồi 2 phút đi bộ hoặc chạy rất chậm.','2 km ở pace race 7:50 (hoặc 8:30 nếu đã chuyển phương án ~3:00).','Giữ cảm giác tốc độ, không làm mệt.']})],
  '2026-12-04':[{k:'REST',title:'Nghỉ · nhận BIB',sub:'Nhận vật phẩm 4–5/12. Bắt đầu nạp carb từ bữa tối.'}],
  '2026-12-05':[{k:'REST',title:'Nghỉ hoặc 2 km rất nhẹ',sub:'Nạp carb cả ngày, chuẩn bị đồ, ngủ sớm.'}],
- '2026-12-06':[{k:'RACE',title:'Half Marathon 21,1 km',sub:'Theo chiến thuật ở tab Race',km:21.1,kmTxt:'21,1',pace:'8:30–9:00',hr:'< 150 → 160',hrMax:160}],
+ '2026-12-06':[{k:'RACE',title:'Half Marathon 21,1 km',sub:'Mục tiêu sub 2:45 · theo chiến thuật ở tab Race',km:21.1,kmTxt:'21,1',pace:'7:45–7:50 (đồng hồ ~7:40)',hr:'< 155 → 165',hrMax:168}],
  '2026-12-07':[{k:'REST',title:'Hồi phục: đi bộ 20–30 phút',sub:'Không chạy, không tập chân'}],
  '2026-12-08':[{k:'UA'}],
  '2026-12-09':[{k:'REST',title:'Đi bộ 20–30 phút',sub:'Chưa chạy'}],
@@ -1058,7 +1059,7 @@ function renderBanner(){
  if(left<0||curDate>RACE_DAY){b.hidden=true;return;}
  let tot=0,dn=0; for(let ds=RACE_PLAN_START;ds<=RACE_DAY;ds=addDays(ds,1)){planFor(ds).forEach((it,i)=>{const kd=itemKind(it);if(kd==='run'){tot++;if(itemDone(ds,it,i))dn++;}});}
  b.hidden=false;
- b.innerHTML='<div class="big num">'+(left===0?'HÔM NAY':left)+(left?'<small>ngày nữa</small>':'<small>race day</small>')+'</div><div class="grow stack-s"><b>Half Marathon Techcombank · 6/12</b><span class="small muted">Buổi chạy trong plan: '+dn+'/'+tot+' · mục tiêu '+esc(S.race.goal||'3:00')+'</span><div class="bar"><i style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></i></div></div>';
+ b.innerHTML='<div class="big num">'+(left===0?'HÔM NAY':left)+(left?'<small>ngày nữa</small>':'<small>race day</small>')+'</div><div class="grow stack-s"><b>Half Marathon Techcombank · 6/12</b><span class="small muted">Buổi chạy trong plan: '+dn+'/'+tot+' · mục tiêu '+esc(S.race.goal||'2:45')+'</span><div class="bar"><i style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></i></div></div>';
 }
 function targetsHTML(it){
  let h='<div class="targets">';
@@ -1296,6 +1297,7 @@ $('cal').addEventListener('click',openDay);
 $('phase-table').innerHTML=PHASES.map(p=>'<tr class="'+(TODAY>=p.from&&TODAY<=p.to?'now':'')+'"><td class="n">'+p.wk+'<br><span class="xs muted" style="font-family:var(--f-body)">'+dm(p.from)+'–'+dm(p.to)+'</span></td><td>'+esc(p.name)+'</td><td>'+esc(p.setTxt)+'</td><td class="n">'+p.rir+'</td><td class="n">'+p.rirI+'</td></tr>').join('');
 $('guide').innerHTML=GUIDE;
 const CHANGELOG=[
+ ['24/11/2026','Theo plan mới (mục tiêu sub 2:45, dự phòng ~3:00) và lịch tạ: 24/11 Lower nhẹ (2 set, RIR 4, bỏ calf raise/lunge) thay 6×400 m; 25/11 5 km liên tục 8:00–8:30; 26/11 Upper; 27/11 Kiểm tra 1 (5 km 7:45–7:50, HR ≤ 165); 29/11 Kiểm tra 2 (12 km: 6 nhẹ + 6 ở 7:50), nghỉ cầu lông; 3/12 4×1 phút ~6:30. Kiểm tra cách tạ chân ≥ 72 giờ vì tạ chân làm giảm running economy tới ~24 giờ và DOMS nặng nhất 24–72 giờ, nặng hơn khi lâu không tập (Doma & Deakin 2013; Nosaka et al. 2001). Race: km 4–15 7:45–7:50 (đồng hồ ~7:40), trần HR 168; giữ gel km 5/10/15 (Thomas, Erdman & Burke 2016).'],
  ['23/11/2026','Sau buổi 22/11 (11,87 km, khối 10 km 8:19/km, HR TB 149 ở 33°C): 25/11 chạy liên tục 4 km 8:20–8:30; 29/11 4 km cuối giữ 8:20, về đích HR < 160; race km 6–15 đoạn chạy không nhanh hơn 8:00, uống ở mọi trạm + điện giải. Dự báo race ~3:00.'],
  ['21/11/2026','Thêm half marathon 6/12 vào lịch 20/11–13/12. CN 22/11 và 29/11 chạy dài thay cầu lông; cầu lông nghỉ tới 13/12.'],
  ['21/11/2026','W48 thân dưới bớt 1 set, RIR 3, không tăng tạ. W49 chỉ 1 buổi thân trên rút gọn (tuỳ chọn), không tập chân. W50 hồi phục. "Tăng dần" rút còn 14–27/12. Căn cứ: giảm tải giữ cường độ, giảm 40–60% khối lượng (Bosquet et al. 2007); giữ sức mạnh với khối lượng thấp nếu giữ cường độ (Spiering et al. 2021).'],
@@ -1308,7 +1310,7 @@ const CHANGELOG=[
 $('changelog').innerHTML=CHANGELOG.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('');
 
 /* ================= RACE ================= */
-const RACE_CHECK=['Đăng ký và thử gel, điện giải ở buổi 22/11 và 29/11','Giày, tất, quần áo race đã chạy thử ≥ 10 km','Cài vùng công suất, HR max, màn hình race và Run/Walk 5:00/1:00 trên Garmin','Nhận BIB 4–5/12, gắn BIB và chip vào áo từ tối 5/12','Kiểm tra giờ xuất phát, điểm xuất phát, cách đi tới đó (đường cấm)','Chuẩn bị: 3–4 gel, băng dán/vaseline chống phồng, đồng hồ sạc đầy','Ăn sáng race đúng món đã thử, đặt báo thức 2 cái','Không bia rượu từ 3/12, ngủ sớm tối 4/12 (đêm 5/12 thường khó ngủ, không sao)'];
+const RACE_CHECK=['Đăng ký và thử gel, điện giải ở buổi 22/11 và 29/11','Giày, tất, quần áo race đã chạy thử ≥ 10 km','Cài vùng công suất, HR max, màn hình race, cảnh báo HR &gt; 168 trên Garmin (Run/Walk chỉ khi dùng phương án ~3:00)','Nhận BIB 4–5/12, gắn BIB và chip vào áo từ tối 5/12','Kiểm tra giờ xuất phát, điểm xuất phát, cách đi tới đó (đường cấm)','Chuẩn bị: 3–4 gel, băng dán/vaseline chống phồng, đồng hồ sạc đầy','Ăn sáng race đúng món đã thử, đặt báo thức 2 cái','Không bia rượu từ 3/12, ngủ sớm tối 4/12 (đêm 5/12 thường khó ngủ, không sao)'];
 function raceFuelHTML(){
  const w=latestWeight();
  const g=(a,b)=>w?'≈ '+Math.round(a*w)+'–'+Math.round(b*w)+' g':a+'–'+b+' g/kg';
@@ -1327,11 +1329,11 @@ function renderRace(){
  let tot=0,dn=0,next=null;
  for(let ds=RACE_PLAN_START;ds<=RACE_DAY;ds=addDays(ds,1)){planFor(ds).forEach((it,i)=>{const kd=itemKind(it);if(kd==='run'){tot++;if(itemDone(ds,it,i))dn++;}if((kd==='run'||kd==='race')&&ds>=TODAY&&!next&&!itemDone(ds,it,i))next={ds,it};});}
  let h='<div class="row between"><div><div class="num" style="font-size:3.4rem;font-weight:700;line-height:.9;color:var(--race)">'+(left>0?left:left===0?'Hôm nay':'Xong')+'</div><span class="eyebrow">'+(left>0?'ngày tới race':'')+'</span></div>'+
-  '<div style="text-align:right"><span class="eyebrow">Mục tiêu</span><div class="num" style="font-size:1.8rem;font-weight:600">'+esc(S.race.goal||'3:00')+'</div><span class="xs muted">khoảng 2:55–3:10</span></div></div>';
+  '<div style="text-align:right"><span class="eyebrow">Mục tiêu</span><div class="num" style="font-size:1.8rem;font-weight:600">'+esc(S.race.goal||'2:45')+'</div><span class="xs muted">dự phòng ~3:00</span></div></div>';
  h+='<div class="stack-s"><div class="row between small"><span>Buổi chạy trong plan</span><b>'+dn+'/'+tot+'</b></div><div class="bar"><i style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></i></div></div>';
  if(next) h+='<p class="callout run">Buổi kế: <b>'+DOW[parse(next.ds).getDay()]+' '+dm(next.ds)+' · '+esc(itemTitle(next.it))+'</b>'+(next.it.pace?' · pace '+esc(next.it.pace)+', HR '+esc(next.it.hr):'')+'</p>';
  if(S.race.start){const [hh,mm]=S.race.start.split(':').map(Number);const at=m=>{let t=hh*60+mm+m;t=(t+1440)%1440;return pad(Math.floor(t/60))+':'+pad(t%60);};
-  h+='<div class="stack-s"><p class="eyebrow">Sáng 6/12</p><div class="targets"><div class="tgt"><b>'+at(-150)+'</b><span>dậy, uống nước</span></div><div class="tgt"><b>'+at(-120)+'</b><span>ăn sáng</span></div><div class="tgt"><b>'+at(-60)+'</b><span>cà phê (nếu đã thử)</span></div><div class="tgt"><b>'+at(-30)+'</b><span>vào khu xuất phát</span></div><div class="tgt"><b>'+S.race.start+'</b><span>xuất phát</span></div><div class="tgt"><b>'+at(Math.round((parseGoal(S.race.goal)||10800)/60))+'</b><span>về đích dự kiến</span></div></div></div>';}
+  h+='<div class="stack-s"><p class="eyebrow">Sáng 6/12</p><div class="targets"><div class="tgt"><b>'+at(-150)+'</b><span>dậy, uống nước</span></div><div class="tgt"><b>'+at(-120)+'</b><span>ăn sáng</span></div><div class="tgt"><b>'+at(-60)+'</b><span>cà phê (nếu đã thử)</span></div><div class="tgt"><b>'+at(-30)+'</b><span>vào khu xuất phát</span></div><div class="tgt"><b>'+S.race.start+'</b><span>xuất phát</span></div><div class="tgt"><b>'+at(Math.round((parseGoal(S.race.goal)||9900)/60))+'</b><span>về đích dự kiến</span></div></div></div>';}
  $('race-hero').innerHTML=h;
  $('race-start').value=S.race.start||''; $('race-goal').value=S.race.goal||'';
  $('race-info').innerHTML='Thời gian giới hạn 21 km: <b>4 giờ</b> theo FAQ của BTC (vài trang bán vé ghi 3:30, mục tiêu của bạn đều nằm trong cả hai). Giờ xuất phát chưa thấy BTC công bố chính thức: xem email/Race Kit rồi nhập vào ô trên để app tính giờ dậy, giờ ăn. Nhận vật phẩm 4–5/12.';
@@ -1340,12 +1342,12 @@ function renderRace(){
  $('race-check').innerHTML=RACE_CHECK.map((t,i)=>{const k='rc-'+i;const on=!!S.done[k];return '<label class="row" style="gap:10px;align-items:flex-start"><input type="checkbox" data-rc="'+k+'"'+(on?' checked':'')+' style="width:20px;height:20px;margin-top:2px;accent-color:var(--race)"><span class="small">'+esc(t)+'</span></label>';}).join('');
 }
 function renderPace(){
- const goal=parseGoal(S.race.goal)||10800; const pk=goal/21.0975;
+ const goal=parseGoal(S.race.goal)||9900; const pk=goal/21.0975;
  const splits=[5,10,15,21.0975].map(k=>'<div class="tgt"><b>'+fmtHMS(pk*k)+'</b><span>km '+(k>21?'21,1':k)+'</span></div>').join('');
- $('pace-calc').innerHTML='<div class="targets"><div class="tgt"><b>'+fmtPace(pk)+'</b><span>pace TB cần /km</span></div>'+splits+'</div><p class="small muted">Pace trung bình đã gồm cả đoạn đi bộ. Chạy 5 phút / đi bộ 1 phút, đoạn chạy cần nhanh hơn trung bình khoảng 30–45 giây/km. Đổi mục tiêu ở ô trên.</p><details><summary class="small">Dinh dưỡng race</summary>'+raceFuelHTML()+'</details>';
+ $('pace-calc').innerHTML='<div class="targets"><div class="tgt"><b>'+fmtPace(pk)+'</b><span>pace TB cần /km</span></div>'+splits+'</div><p class="small muted">Pace trung bình đã gồm cả đoạn đi bộ ở trạm nước. Đồng hồ thường đo dài hơn 200–400 m, nên pace đồng hồ cần nhanh hơn khoảng 8–10 giây/km. Đổi mục tiêu ở ô trên.</p><details><summary class="small">Dinh dưỡng race</summary>'+raceFuelHTML()+'</details>';
 }
 $('race-start').addEventListener('change',e=>{S.race.start=e.target.value;save();renderRace();});
-$('race-goal').addEventListener('change',e=>{const v=e.target.value.trim();if(v&&!(parseGoal(v)>3600)){toast('Nhập dạng h:mm, vd 3:00');return;}S.race.goal=v||'3:00';save();renderRace();});
+$('race-goal').addEventListener('change',e=>{const v=e.target.value.trim();if(v&&!(parseGoal(v)>3600)){toast('Nhập dạng h:mm, vd 2:45');return;}S.race.goal=v||'2:45';save();renderRace();});
 $('race-check').addEventListener('change',e=>{const k=e.target.dataset.rc;if(!k)return;if(e.target.checked)S.done[k]=true;else delete S.done[k];save();});
 $('race-plan').addEventListener('click',e=>{const st=e.target.closest('.st');const b=e.target.closest('[data-day]');if(!b)return;
  if(st){const ds=b.dataset.day;const its=planFor(ds);const i=its.findIndex(x=>['rest','bad'].includes(itemKind(x)));if(i>=0){const k=ds+'|'+i;if(S.done[k])delete S.done[k];else S.done[k]=true;save();renderRace();return;}}
@@ -1480,7 +1482,7 @@ $('bk-restore').addEventListener('click',e=>{
  try{o=JSON.parse(raw);}catch(err){toast('Bản sao lưu không đọc được. Hãy dán đúng toàn bộ đoạn đã sao chép.');return;}
  if(!o||typeof o!=='object'||!o.sessions){toast('Đây không phải bản sao lưu của Sổ Tập.');return;}
  if(!armed){armed=true;e.target.textContent='Bấm lần nữa để ghi đè dữ liệu hiện tại';e.target.classList.add('danger');return;}
- S=Object.assign(BLANK(),o);S.race=Object.assign({start:'',goal:'3:00'},o.race||{});save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
+ S=Object.assign(BLANK(),o);S.race=Object.assign({start:'',goal:'2:45'},o.race||{});save();armed=false;e.target.textContent='Khôi phục từ bản sao lưu';e.target.classList.remove('danger');
  curType=defaultType(curDate);renderToday();renderCheckin();bkInfo();toast('Đã khôi phục dữ liệu.');
 });
 
